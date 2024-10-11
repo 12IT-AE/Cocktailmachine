@@ -1,36 +1,23 @@
-@extends('layout.app')
+@extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h2>Create Recipe</h2>
-    <form action="{{ route('recipes.store') }}" method="POST" enctype="multipart/form-data">
+<div class="container">
+    <h2>Create New Container</h2>
+    <form action="{{ route('container.store') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label for="glass_id">Glass</label>
-            <select class="form-control" id="glass_id" name="glass_id">
-                <option value="0">None</option>
-                @foreach($glasses as $glass)
-                    <option value="{{ $glass->id }}">{{ $glass->name }}</option>
+            <label for="liquid">Liquid:</label>
+            <select class="form-control" id="liquid" name="liquid_id" required>
+                @foreach($liquids as $liquid)
+                    <option value="{{ $liquid->id }}">{{ $liquid->name }}</option>
                 @endforeach
             </select>
         </div>
         <div class="form-group">
-            <label for="description">Description</label>
-            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            <label for="volume">Volumen (ml):</label>
+            <input type="number" class="form-control" id="volume" name="volume" value="{{ old('volume', 1000) }}" required>
         </div>
-        <div class="form-group">
-            <label for="ice">Ice</label>
-            <select class="form-control" id="ice" name="ice">
-            <option value="1">True</option>
-            <option value="0">False</option>
-            </select>
-        </div>
-        
-        <div class="form-group">
-            <label for="image">Image</label>
-            <input type="file" class="form-control-file" id="image" name="image">
-        </div>
-        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 @endsection

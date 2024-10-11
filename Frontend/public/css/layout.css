@@ -1,0 +1,39 @@
+body {
+    background: linear-gradient(180deg, #171717 0%, #3A1010 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    color: white;
+}
+
+.card {
+    background-color: #3d3d3d;
+    border: none;
+}
+
+.card-title {
+    font-family: "Jaini Purva";
+    font-size: 48px;
+    font-weight: 400;
+    line-height: 63.07px;
+    text-align: center;
+
+}
+
+.btn-produce {
+    background-color: #800000;
+    color: white;
+}
+table {
+    color: white;
+}
+th {
+    background-color: #800000;
+    color: white;
+}
+tr {
+    background-color: #3d3d3d;
+}
+td {
+    color: white;
+}

@@ -1,20 +1,15 @@
-@extends('layout.app')
+@extends('layouts.app')
 
 @section('title', 'Show Recipe')
 @section('content')
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h1>{{ $recipe->name }}</h1>
+            <h1>{{ $liquid->name }}</h1>
         </div>
         <div class="card-body">
-            <p class="card-text">{{ $recipe->description }}</p>
-            <h2>Ingredients</h2>
-            <ul class="list-group">
-                @foreach ($recipe->ingredients as $ingredient)
-                    <li class="list-group-item">{{ $ingredient->name }}</li>
-                @endforeach
-            </ul>
+            <p class="card-text">Color: {{ $liquid->color }}</p>
+            <p class="card-text">Alcoholic: {{ $liquid->alcoholic ? 'Yes' : 'No' }}</p>
         </div>
     </div>
 </div>

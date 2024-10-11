@@ -1,9 +1,9 @@
-@extends('layout.app')
+@extends('layouts.app')
 
 @section('content')
 <div class="container mt-5">
     <h2>Create Recipe</h2>
-    <form action="{{ route('recipes.store') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('recipe.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
             <label for="glass_id">Glass</label>
