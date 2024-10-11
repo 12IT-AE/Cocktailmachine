@@ -33,6 +33,11 @@ public function store(Request $request){
         'ice' => 'required|boolean',
         'image' => 'nullable|string|max:255',
     ]);
+    if (!$validatedData) {
+        return redirect()->route('recipes.create')->withErrors($validatedData)->withInput();
+    }
+    
+    
     $validatedData['image'] = "";
 
     $recipe = Recipe::create($validatedData);
