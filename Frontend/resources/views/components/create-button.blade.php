@@ -8,5 +8,5 @@
 @endphp
 
 <a href="{{ route($createRoute) }}" class="btn btn-primary mb-3">
-    Create New {{ ucfirst($model) }}
+    Neue/r {{ ucfirst($model) }} erstellen
 </a>

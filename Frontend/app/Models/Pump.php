@@ -11,6 +11,7 @@ class Pump extends Model
     protected $fillable = [
         'container_id',
     ];
+    public $displayName = "Pumpe";
 
     public function container(){
         return $this->belongsTo(Container::class);

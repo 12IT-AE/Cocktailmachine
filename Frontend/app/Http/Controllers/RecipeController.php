@@ -3,8 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Recipe;
-
+use App\Models\{Recipe, Glass, Liquid, Ingredient};
 class RecipeController extends Controller
 {
 
@@ -17,8 +16,9 @@ class RecipeController extends Controller
 
     public function create()
     {
-        $glasses = [];
-        return view('recipe.create', ['glasses' => $glasses]);
+        $glasses = Glass::all();
+        $liquids = Liquid::all();
+        return view('recipe.create', ['glasses' => $glasses, 'liquids'=> $liquids]);
     }
 
     public function show($id)
@@ -30,20 +30,40 @@ class RecipeController extends Controller
 
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $validatedRecipe = $request->validate([
             'glass_id' => 'required|integer',
+            'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
             'ice' => 'required|boolean',
             'image' => 'nullable|string|max:255',
         ]);
-        if (!$validatedData) {
-            return redirect()->route('recipe.create')->withErrors($validatedData)->withInput();
+        if (!$validatedRecipe) {
+            return redirect()->route('recipe.create')->withErrors($validatedRecipe)->withInput();
         }
 
+        $validatedRecipe['image'] = ""; //Temporary fix for image upload
+        if(!isset(request()->liquids, request()->amounts)){
+            return redirect()->route('recipe.create')->withErrors('Bitte wählen Sie eine Flüssigkeit und Menge für das Rezept aus')->withInput();
+        }
+        $liquids = $request->liquids;
+        $amounts = $request->amounts;
+        
+        $recipe = Recipe::create($validatedRecipe);
 
-        $validatedData['image'] = "";
+        $liquidAmount = array_combine($liquids, $amounts);
+        foreach($liquidAmount as $liquid => $amount) {
+            if ($liquid == 0 || $amount == 0) {
+                $recipe->delete();
+                return redirect()->route('recipe.create')->withErrors('Bitte wählen Sie eine Flüssigkeit und Menge für das Rezept aus')->withInput();
+            }
+            Ingredient::create([
+                'recipe_id' => $recipe->id,
+                'liquid_id' => $liquid,
+                'amount' => $amount,
+                'step' => 0
+            ]);
 
-        $recipe = Recipe::create($validatedData);
+        }
 
         return redirect()->route('recipe.show', ['id' => $recipe->id]);
     }

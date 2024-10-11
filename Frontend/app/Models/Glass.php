@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Glass extends Model
 {
     use HasFactory;
+
+    public $displayName = "Glas";
+
+    protected $fillable = [
+        "name",
+        'image',
+        'volume'
+    ];
 }

@@ -11,11 +11,13 @@ class Recipe extends Model
 
     protected $fillable = [
         'glass_id',
+        'name',
         'description',
         'ice',
         'image',
     ];
-
+    public $displayName = "Rezept";
+    
     public function glass()
     {
         return $this->belongsTo(Glass::class);

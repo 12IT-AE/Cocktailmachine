@@ -14,6 +14,10 @@ class Container extends Model
         "current_volume"
     ];
 
+
+    public function displayName(){
+        return "Behälter";
+    }
     public function liquid(){
         return $this->belongsTo(Liquid::class);
     }

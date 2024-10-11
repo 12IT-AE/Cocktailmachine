@@ -18,22 +18,22 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href={{ route("recipe.index") }}>Rezept</a>
+                        <a class="nav-link" href={{ route("recipe.index") }}>Rezepte</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ route("liquid.index") }}>Flüssigkeit</a>
+                        <a class="nav-link" href={{ route("liquid.index") }}>Flüssigkeiten</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href={{ route("container.index") }}>Behälter</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ route("pump.index") }}>Pumpe</a>
+                        <a class="nav-link" href={{ route("pump.index") }}>Pumpen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Zutat</a>
+                        <a class="nav-link" href={{ route('ingredient.index') }}>Zutaten</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Glas</a>
+                        <a class="nav-link" href={{ route('glass.index') }}>Gläser</a>
                     </li>
                 </ul>
             </div>

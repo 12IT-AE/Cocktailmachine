@@ -1,31 +1,16 @@
 @extends('layouts.app')
 
 @section('content')
-
-<div class="container">
-    <x-create-button model="pump" />
-
-    <div class="row">
-        @foreach($pumps as $pump)
-            <div class="col-4">
-                <div class="card mt-3">
-                    <div class="card-header">
-                        <h3>Pumpe: {{ $pump->id }}</h3>
-                        <sub>Container: {{ $pump->container->liquid->name }}</sub>
-                    </div>
-                    <div class="card-body">
+    <div class="container">
+        <x-create-button model="pump" />
+        <div class="row">
+            @foreach ($pumps as $pump)
+                <div class="col-md-12 col-lg-4">
+                    <x-card :title="'Pumpe: ' . $pump->name" :subtitle="'Container: ' . $pump->container->liquid->name" :id="$pump->id">
                         <p class="card-text">Volume: {{ $pump->container->volume }} ml</p>
                         <p class="card-text">Current Volume: {{ $pump->container->current_volume }} ml</p>
-                        <a href="{{ route('pump.show', $pump->id) }}" class="btn btn-primary">Show</a>
-                        <a href="{{ route('pump.edit', $pump->id) }}" class="btn btn-warning">Edit</a>
-                        <form action="{{ route('pump.destroy', $pump->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">Delete</button>
-                        </form>
-                    </div>
+                    </x-card>
                 </div>
-            </div>
-        @endforeach
-</div>
-@endsection
+            @endforeach
+        </div>
+    @endsection

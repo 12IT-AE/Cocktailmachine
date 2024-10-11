@@ -11,6 +11,7 @@ class CreateCocktailTables extends Migration
         Schema::create('recipes', function (Blueprint $table) {
             $table->id()->primary();
             $table->foreignId('glass_id');
+            $table->text('name');
             $table->text('description');
             $table->boolean('ice');
             $table->string('image');
@@ -31,7 +32,7 @@ class CreateCocktailTables extends Migration
             $table->string('name');
             $table->string('alternative_name')->nullable();
             $table->boolean('alcoholic');
-            $table->string('image');
+            $table->string('image')->nullable();
             $table->string('color');
             $table->timestamps();
         });

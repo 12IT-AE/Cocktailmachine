@@ -19,6 +19,6 @@ class Liquid extends Model
     protected $casts = [
         'alcoholic' => 'boolean',
     ];
-
+    public $displayName = "Flüssigkeit";
 
 }
