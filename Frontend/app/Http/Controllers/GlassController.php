@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use App\Models\Glass;
 
@@ -59,8 +60,17 @@ class GlassController extends Controller
 
     public function destroy($id)
     {
-        $glass = Glass::find($id);
-        $glass->delete();
-        return redirect()->route('glass.index');
+        try {
+            $glass = Glass::findOrFail($id);
+            $glass->delete();
+            return redirect()->route('glass.index')->with('success', 'Glas erfolgreich gelöscht.');
+        } catch (QueryException $exception) {
+            if ($exception->getCode() === '23000') {
+            return redirect()->route('glass.index')->withErrors( 'Dieses Glas kann nicht gelöscht werden, da es in einem oder mehreren Rezepten verwendet wird.');
+            }
+            
+            // Andere Ausnahmen behandeln
+            return redirect()->route('glass.index')->withErrors('Ein unerwarteter Fehler ist aufgetreten.');
+        }
     }
 }

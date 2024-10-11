@@ -65,7 +65,7 @@ class RecipeController extends Controller
 
         }
 
-        return redirect()->route('recipe.show', ['id' => $recipe->id]);
+        return redirect()->route('recipe.show', ['recipe' => $recipe->id]);
     }
     public function edit($id)
     {

@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -7,28 +8,18 @@ class CreateCocktailTables extends Migration
 {
     public function up()
     {
-        // Create Recipes table
-        Schema::create('recipes', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('glass_id');
-            $table->text('name');
-            $table->text('description');
-            $table->boolean('ice');
+
+        // Create Glasses table
+        Schema::create('glasses', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->string('image');
+            $table->integer('volume');
             $table->timestamps();
         });
-
-        // Create Orders table
-        Schema::create('orders', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('recipe_id');
-            $table->tinyInteger('status'); // 0 = pending, 1 = in progress, 2 = done, 3 = error
-            $table->timestamps();
-        });
-
         // Create Liquids table
         Schema::create('liquids', function (Blueprint $table) {
-            $table->id()->primary();
+            $table->id();
             $table->string('name');
             $table->string('alternative_name')->nullable();
             $table->boolean('alcoholic');
@@ -36,36 +27,50 @@ class CreateCocktailTables extends Migration
             $table->string('color');
             $table->timestamps();
         });
+        
 
-        // Create Glasses table
-        Schema::create('glasses', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->string('name');
+        // Create Recipes table
+        Schema::create('recipes', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('glass_id')->constrained()->onDelete('restrict');
+            $table->text('name');
+            $table->text('description');
+            $table->boolean('ice');
             $table->string('image');
-            $table->integer('volume');
-            $table->timestamps();
-        });
-
-        // Create Pumps table
-        Schema::create('pumps', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('container_id');
             $table->timestamps();
         });
 
         // Create Containers table
         Schema::create('containers', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('liquid_id');
+            $table->id();
+            $table->foreignId('liquid_id')->constrained()->onDelete('cascade');
             $table->integer('volume');
             $table->integer('current_volume');
             $table->timestamps();
         });
+        // Create Orders table
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('recipe_id')->constrained()->onDelete('cascade');
+            $table->tinyInteger('status'); // 0 = pending, 1 = in progress, 2 = done, 3 = error
+            $table->timestamps();
+        });
+
+
+
+        // Create Pumps table
+        Schema::create('pumps', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('container_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
+        });
+
+
 
         // Create Garnish table
         Schema::create('garnishes', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('recipe_id');
+            $table->id();
+            $table->foreignId('recipe_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('image')->nullable();
@@ -74,9 +79,9 @@ class CreateCocktailTables extends Migration
 
         // Create Ingredients table
         Schema::create('ingredients', function (Blueprint $table) {
-            $table->id()->primary();
-            $table->foreignId('recipe_id');
-            $table->foreignId('liquid_id');
+            $table->id();
+            $table->foreignId('recipe_id')->constrained()->onDelete('cascade');
+            $table->foreignId('liquid_id')->constrained()->onDelete('cascade');
             $table->string('step');
             $table->decimal('amount', 8, 2);
             $table->timestamps();
