@@ -38,6 +38,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href={{ route('glass.index') }}>Gläser</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('garnish.index') }}>Garnierungen</a>
+                    </li>
                 </ul>
             </div>
         </nav>

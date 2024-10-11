@@ -16,7 +16,6 @@
                     <div class="form-group">
                         <label for="glass_id">Glas</label>
                         <select class="form-control" id="glass_id" name="glass_id">
-                            <option value="0">Keins</option>
                             @foreach ($glasses as $glass)
                                 <option value="{{ $glass->id }}">{{ $glass->name }}</option>
                             @endforeach
@@ -70,6 +69,43 @@
                     });
                 });
             </script>
+
+            <div class="form-group">
+                <label>Garnierungen</label><br>
+                <button type="button" class="btn btn-secondary mt-2" id="add-garnish">Garnierung Hinzufügen</button>
+                <div id="garnishes-container"></div>
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    let garnishCount = 0;
+                    const garnishesContainer = document.getElementById('garnishes-container');
+                    const addGarnishButton = document.getElementById('add-garnish');
+
+                    addGarnishButton.addEventListener('click', function() {
+                        garnishCount++;
+                        const garnishDiv = document.createElement('div');
+                        garnishDiv.classList.add('form-group', 'mt-2');
+                        garnishDiv.innerHTML = `
+                            <div class='row'>
+                                <div class='col-4'>
+                                    <label for="garnish">Garnierung</label>
+                                    <select class="form-control" id="garnish" name="garnishes[]">
+                                        @foreach ($garnishes as $garnish)
+                                            <option value="{{ $garnish->id }}">{{ $garnish->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class='col-2 d-flex align-items-end'>
+                                    <button type="button" class="btn btn-danger remove-garnish">Entfernen</button>
+                                </div>
+                            </div>
+                        `;
+                        garnishesContainer.appendChild(garnishDiv);
+                    });
+                });
+            </script>
+
             <div class="row">
                 <div class="col-lg-4 col-md-12">
                     <div class="form-group">

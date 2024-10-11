@@ -7,7 +7,8 @@ use App\Http\Controllers\{
     PumpController,
     ContainerController,
     IngredientController,
-    GlassController
+    GlassController,
+    GarnishController
 };
 
 
@@ -17,7 +18,7 @@ Route::resource('pump', PumpController::class);
 Route::resource('container', ContainerController::class);
 Route::resource('ingredient', IngredientController::class);
 Route::resource('glass', GlassController::class);
-
+Route::resource('garnish', GarnishController::class);
 
 
 Route::get('/', function () {

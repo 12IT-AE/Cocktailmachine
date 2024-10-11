@@ -28,14 +28,12 @@ class Recipe extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function garnishes()
-    {
-        return $this->hasMany(Garnish::class);
+    public function garnishes() {
+        return $this->belongsToMany(Garnish::class, 'recipe_garnish');
     }
-
     public function ingredients()
     {
-        return $this->hasMany(Ingredient::class);
+        return $this->hasMany(Ingredient::class, 'recipe_id');
     }
 
    

@@ -8,4 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Garnish extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        "name",
+        "description"
+    ];
+
+    public function recipes()
+    {
+        return $this->belongsToMany(Recipe::class, 'recipe_garnish');
+    }
 }

@@ -12,7 +12,13 @@
             <h2>Ingredients</h2>
             <ul class="list-group">
                 @foreach ($recipe->ingredients as $ingredient)
-                    <li class="list-group-item">{{ $ingredient->name }}</li>
+                    <li>{{ $ingredient->liquid->name }}</li>
+                @endforeach
+            </ul>
+            <h2>Garnishes</h2>
+            <ul class="list-group">
+                @foreach($recipe->garnishes as $garnish)
+                    <li>{{ $garnish->name }}</li>
                 @endforeach
             </ul>
         </div>
