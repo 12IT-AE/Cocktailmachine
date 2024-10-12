@@ -37,3 +37,43 @@ tr {
 td {
     color: white;
 }
+.vertical-button {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1000;
+    width: 60px; /* Adjusted width */
+    height: 100%; /* Full height */
+}
+
+.vertical-button.left {
+    left: 0;
+}
+
+.vertical-button.right {
+    right: 0;
+}
+
+.vertical-button button {
+    width: 100%; /* Full width of the button container */
+    height: 100%; /* Adjust height for visibility */
+    background: linear-gradient(180deg, #171717 0%, #3A1010 100%);
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: block;
+    padding: 0;
+}
+
+.vertical-button button:hover {
+    border:#3d3d3d;
+
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .vertical-button {
+        width: 50px; /* Smaller width on small screens */
+    }
+}

@@ -13,7 +13,7 @@
 <body>
     <div class="container mt-5">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">DrinkPad '24</a>
+            <a class="navbar-brand" href="#">Drinkpad '24</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation umschalten">
                 <span class="navbar-toggler-icon"></span>
@@ -73,6 +73,48 @@
         </div>
         @yield('content')
     </div>
+
+    <div class="vertical-button left">
+        <button onclick="previousRoute()"><</button>
+    </div>
+    
+    <div class="vertical-button right">
+        <button onclick="nextRoute()">></button>
+    </div>
+    
 </body>
 
 </html>
+<script>
+    var routeOrder = [
+        "{{ route('recipe.index') }}",
+        "{{ route('liquid.index') }}",
+        "{{ route('container.index') }}",
+        "{{ route('pump.index') }}",
+        "{{ route('ingredient.index') }}",
+        "{{ route('glass.index') }}",
+        "{{ route('garnish.index') }}"
+    ]
+    function previousRoute() {
+        var currentRoute = window.location.href;
+        var currentIndex = routeOrder.indexOf(currentRoute);
+        if (currentIndex > 0) {
+            window.location.href = routeOrder[currentIndex - 1];
+        }
+        else{
+            window.location.href = routeOrder[routeOrder.length - 1];
+        }
+        
+    }
+
+    function nextRoute() {
+        var currentRoute = window.location.href;
+        var currentIndex = routeOrder.indexOf(currentRoute);
+        if (currentIndex < routeOrder.length - 1) {
+            window.location.href = routeOrder[currentIndex + 1];
+        }
+        else{
+            window.location.href = routeOrder[0];
+        }
+    }
+    </script>
