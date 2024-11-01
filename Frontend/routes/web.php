@@ -10,7 +10,9 @@ use App\Http\Controllers\{
     GlassController,
     GarnishController
 };
-
+Route::get('/', function () {
+    return view('index');
+});
 
 Route::resource('recipe', RecipeController::class);
 Route::resource('liquid', LiquidController::class);
@@ -20,8 +22,3 @@ Route::resource('ingredient', IngredientController::class);
 Route::resource('glass', GlassController::class);
 Route::resource('garnish', GarnishController::class);
 
-
-Route::get('/', function () {
-    redirect()->route('recipe.index');
-
-})->name('index');
