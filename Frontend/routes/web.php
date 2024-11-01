@@ -11,7 +11,7 @@ use App\Http\Controllers\{
     GarnishController
 };
 Route::get('/', function () {
-    return view('index');
+    return redirect()->route('recipe.index');
 });
 
 Route::resource('recipe', RecipeController::class);

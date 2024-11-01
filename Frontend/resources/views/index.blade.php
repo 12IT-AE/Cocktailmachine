@@ -2,7 +2,7 @@
 
 @section('title', 'Create Recipe')
 @section('content')
-<form action="{{ route('recipes.store') }}" method="POST">
+<form action="{{ route('recipe.store') }}" method="POST">
     @csrf
     <div>
         <label for="name">Recipe Name:</label>
