@@ -1,9 +1,9 @@
 # Pumpenansteuerung
-try:
-    import RPi.GPIO as GPIO
-except:
-    import Mock.GPIO as GPIO
+# try:
+#     import RPi.GPIO as GPIO
+# except:
 import time, logging
+import Mock.GPIO as GPIO
 
 pumps = [4, 17, 27, 22, 23, 24, 13, 19]
 
@@ -27,6 +27,7 @@ def stop_pump(index):
 
 def cleanPumps():
     for pump in pumps:
+        logging.info("GPIO %s: cleaning", pump)
         GPIO.setup(pump, GPIO.OUT)
         GPIO.output(pump, GPIO.LOW)
 
@@ -35,3 +36,8 @@ def cleanPumps():
     for pump in pumps:
         GPIO.setup(pump, GPIO.OUT)
         GPIO.output(pump, GPIO.HIGH)
+
+
+if __name__ == "__main__":
+    cleanPumps()
+    GPIO.cleanup()

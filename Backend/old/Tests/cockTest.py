@@ -1,7 +1,8 @@
 from IngredientStatus import IngredientStatus
 from database.models import Cocktail
 from Mixer import Mixer
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
+import Mock.GPIO as GPIO
 
 GPIO.cleanup()
 
