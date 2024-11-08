@@ -8,7 +8,8 @@ use App\Http\Controllers\{
     ContainerController,
     IngredientController,
     GlassController,
-    GarnishController
+    GarnishController,
+    OrderController
 };
 Route::get('/', function () {
     return redirect()->route('recipe.index');
@@ -21,4 +22,5 @@ Route::resource('container', ContainerController::class);
 Route::resource('ingredient', IngredientController::class);
 Route::resource('glass', GlassController::class);
 Route::resource('garnish', GarnishController::class);
+Route::resource('order', OrderController::class);
 
