@@ -2,7 +2,9 @@ import sqlite3
 from dataclasses import dataclass
 
 @dataclass
-class Order:
+class Ingredient:
     id:int 
     recipe_id:int
-    status:int
+    liquid_id:int
+    step:int
+    amount:int

@@ -2,7 +2,7 @@ import sqlite3
 from dataclasses import dataclass
 
 @dataclass
-class Order:
+class Pump:
     id:int 
-    recipe_id:int
-    status:int
+    container_id:int
+    #+ Vielleicht Pin auf Raspberry 
