@@ -1,0 +1,33 @@
+{
+    "_default": {
+        "9": {
+            "name": "WasserMilch",
+            "ingredients": [
+                { "name": "Wasser", "amount": 500 },
+                { "name": "Milch", "amount": 0 }
+            ]
+        },
+        "10": {
+            "name": "Test",
+            "ingredients": [
+                { "name": "Wasser", "amount": 50 },
+                { "name": "Vodka", "amount": 0 }
+            ]
+        },
+        "13": {
+            "name": "Irgendwas",
+            "ingredients": [
+                { "name": "Wasser", "amount": 42 },
+                { "name": "Vodka", "amount": 500 }
+            ]
+        },
+        "14": {
+            "name": "Waser",
+            "ingredients": [{ "name": "Wasser", "amount": 50 }]
+        },
+        "15": {
+            "name": "Milch",
+            "ingredients": [{ "name": "Milch", "amount": 30 }]
+        }
+    }
+}

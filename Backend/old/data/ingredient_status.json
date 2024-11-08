@@ -1,0 +1,8 @@
+{
+    "_default": {
+        "21": { "name": "Orangensaft", "pump": 3, "fillLevel": 0 },
+        "22": { "name": "Vodka", "pump": 4, "fillLevel": 0 },
+        "27": { "name": "Wasser", "pump": 1, "fillLevel": 950 },
+        "29": { "name": "Milch", "pump": 7, "fillLevel": 0 }
+    }
+}
