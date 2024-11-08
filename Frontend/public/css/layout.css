@@ -71,6 +71,36 @@ td {
 
 }
 
+.orderElement {
+    width: 30%;
+    height: 400px;
+    background-color: #7E3030;
+    opacity: 50%;
+    float: left;
+    margin: 1.666%;
+
+}
+
+.imageBlock {
+    margin: 5%;
+    width: 90%;
+    height: 280px;
+    background-color: #171717;
+}
+
+.infoBlock {
+    margin: 5%;
+    width: 90%;
+    text-align: center;
+    font-family: "Jaini Purva", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    font-size: calc(1vw + 1.2em); /* Passt die Größe an die Bildschirmbreite an */
+    white-space: nowrap; /* Verhindert, dass das Label mehrzeilig wird */
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+  
 /* Responsive adjustments */
 @media (max-width: 600px) {
     .vertical-button {
