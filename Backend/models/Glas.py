@@ -1,4 +1,4 @@
-import sqlite3
+from  sqlite4  import  SQLite4
 from dataclasses import dataclass
 
 @dataclass
