@@ -2,42 +2,57 @@
 
 @section('content')
     <div class="container">
+        <h1>DrinkPad</h1>
         <div style="width: 100%;">
-            <div class="orderElement">
+
+            <a href="{{route("recipe.show", 1)}}" class="orderElement">
                 <div class="imageBlock">
-                    <img src="" alt="">
+                    <img class="cooktailImg" src={{asset("images/mojito.png")}} alt="">
                 </div>
                 <div class="infoBlock">
-                    Continental Sour & New York Sour
+                    Mojito
                 </div>
-            </div>
-
+            </a>
             <div class="orderElement">
                 <div class="imageBlock">
-                    <img src="" alt="">
+                    <img class="cooktailImg" src={{asset("images/bloody_mary.png")}} alt="">
                 </div>
                 <div class="infoBlock">
-                    Continental Sour
+                    Bloody Mary
                 </div>
             </div>
-
-
-
-
-
-
-
-            <div class="orderElement">Test</div>
-            <div class="orderElement">Test</div>
-            <div class="orderElement">Test</div>
-            <div class="orderElement">Test</div>
-            <div class="orderElement">Test</div>
-            <div class="orderElement">Test</div>
-        </div>
-
-        <x-create-button model="order" />
-        <div class="row">
-            Test12
+            <div class="orderElement">
+                <div class="imageBlock">
+                    <img class="cooktailImg" src={{asset("images/sex_on_the_beach.png")}} alt="">
+                </div>
+                <div class="infoBlock">
+                    Sex on the Beach
+                </div>
+            </div>
+            <div class="orderElement">
+                <div class="imageBlock">
+                    <img class="cooktailImg" src={{asset("images/mojito.png")}} alt="">
+                </div>
+                <div class="infoBlock">
+                    Mojito
+                </div>
+            </div>
+            <div class="orderElement">
+                <div class="imageBlock">
+                    <img class="cooktailImg" src={{asset("images/mojito.png")}} alt="">
+                </div>
+                <div class="infoBlock">
+                    Mojito
+                </div>
+            </div>
+            <div class="orderElement">
+                <div class="imageBlock">
+                    <img class="cooktailImg" src={{asset("images/mojito.png")}} alt="">
+                </div>
+                <div class="infoBlock">
+                    Mojito
+                </div>
+            </div>
         </div>
     </div>
 @endsection

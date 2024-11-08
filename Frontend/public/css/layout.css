@@ -74,8 +74,9 @@ td {
 .orderElement {
     width: 30%;
     height: 400px;
-    background-color: #7E3030;
-    opacity: 50%;
+    background-color: rgba(126, 48, 48, 0.3);
+    border-radius: 15px;
+    opacity: 100%;
     float: left;
     margin: 1.666%;
 
@@ -85,7 +86,12 @@ td {
     margin: 5%;
     width: 90%;
     height: 280px;
-    background-color: #171717;
+    text-align: center;
+}
+
+.cooktailImg {
+    margin: 0%;
+    max-height: 90%;
 }
 
 .infoBlock {
