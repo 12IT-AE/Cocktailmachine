@@ -12,6 +12,8 @@
 
 <body>
     <div class="container mt-5">
+        
+        @if(session('admin'))
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <a class="navbar-brand" href="#">Drinkpad '24</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -44,6 +46,8 @@
                 </ul>
             </div>
         </nav>
+        @endif
+
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
