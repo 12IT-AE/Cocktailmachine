@@ -1,10 +1,6 @@
 import time
-from  sqlite4  import  SQLite4
-from models import Order,Ingredient,Liquid,Order
+from models import Order,Ingredient,Liquid,Order,Recipe
 from datetime import datetime
-
-database= SQLite4('Frontend\\database\\database.sqlite')
-database.connect()
 
 def checkOrders():
     pending = Order.Database().selectFirstByStatus(0)
@@ -14,12 +10,13 @@ def checkOrders():
         checkOrders() # recursive call
     
     if processing not in [None, []]:
+
         recipe_id = processing.recipe_id
-        recipe = database.select("recipes", condition=f'id = {recipe_id}')
-        print(recipe[0][2])
+        recipe = Recipe.Database().selectByID(recipe_id)
+        print(recipe.name)
         ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
+
         for ingredient in ingredients:
-            #liquid = database.select("liquids", condition=f'id = {ingredient[2]}')
             liquid = Liquid.Database().selectByID(ingredient.id)
             amount = ingredient.amount
             print(f"Zapfe {liquid.name} mit {amount} Ml")
@@ -36,6 +33,6 @@ def checkOrders():
         Order.Database().updateStatus(pending.id,1)
         
     checkOrders() # recursive call
-
-Order.Database().insertOrder(0,1,datetime.now(),datetime.now())
+now = datetime.now()
+Order.Database().insertOrder(0,1,now,now)
 checkOrders()
