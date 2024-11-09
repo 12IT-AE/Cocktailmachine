@@ -1,6 +1,9 @@
 from dataclasses import dataclass
 from operator import attrgetter
-from models import DBconnect
+try:
+    from models import DBconnect
+except:
+    import DBconnect
 
 @dataclass
 class Ingredient:

@@ -1,6 +1,8 @@
-
 from dataclasses import dataclass
-from models import DBconnect
+try:
+    from models import DBconnect
+except:
+    import DBconnect
 
 @dataclass
 class Pump:

@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 from typing import Optional
-from models import DBconnect
+try:
+    from models import DBconnect
+except:
+    import DBconnect
 
-#aktuell mit nichts verbunden
 
 @dataclass
 class Garnish:

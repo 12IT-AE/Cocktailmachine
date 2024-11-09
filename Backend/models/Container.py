@@ -1,5 +1,8 @@
 from dataclasses import dataclass
-from models import DBconnect
+try:
+    from models import DBconnect
+except:
+    import DBconnect
 
 @dataclass
 class Container:
@@ -25,3 +28,5 @@ class Database(DBconnect.DBconnect):
             return Container(id=first[0], liquid_id=first[1], volume=first[2], current_volume=first[3])
         else: 
             return None
+
+print(Database().selectAllFromDatabase())
