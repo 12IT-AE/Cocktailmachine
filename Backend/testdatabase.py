@@ -1,6 +1,7 @@
 import time
 from  sqlite4  import  SQLite4
 from models import Order,Ingredient,Liquid,Order
+from datetime import datetime
 
 database= SQLite4('Frontend\\database\\database.sqlite')
 database.connect()
@@ -36,5 +37,5 @@ def checkOrders():
         
     checkOrders() # recursive call
 
-Order.Database().insertOrder(0,1,"2021-06-01 12:00:00","2021-06-01 12:00:00")
+Order.Database().insertOrder(0,1,datetime.now(),datetime.now())
 checkOrders()
