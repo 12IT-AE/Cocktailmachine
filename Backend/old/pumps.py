@@ -1,11 +1,13 @@
 # Pumpenansteuerung
-# try:
-#     import RPi.GPIO as GPIO
-# except:
-import time, logging
-import Mock.GPIO as GPIO
+try:
+    import RPi.GPIO as GPIO
+except:
+    import Mock.GPIO as GPIO
 
-pumps = [4, 17, 27, 22, 23, 24, 13, 19]
+import time, logging
+
+# pumps = [4, 17, 27, 22, 23, 24, 13, 19]
+pumps = [7, 11, 13, 15, 16, 18, 35, 37]
 
 
 def start_pump(index):
@@ -31,7 +33,7 @@ def cleanPumps():
         GPIO.setup(pump, GPIO.OUT)
         GPIO.output(pump, GPIO.LOW)
 
-    time.sleep(30)
+    time.sleep(1)
 
     for pump in pumps:
         GPIO.setup(pump, GPIO.OUT)
@@ -39,5 +41,9 @@ def cleanPumps():
 
 
 if __name__ == "__main__":
+    try:
+        GPIO.setmode(GPIO.BCM)
+    except:
+        pass
     cleanPumps()
     GPIO.cleanup()
