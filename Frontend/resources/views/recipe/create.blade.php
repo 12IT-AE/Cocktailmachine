@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="container mt-5">
-        <h2>Rezept Erstellen</h2>
+        <h2>Create Recipe</h2>
         <form action="{{ route('recipe.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row">
@@ -33,78 +33,25 @@
             <div class="form-group">
                 <label>Zutaten</label><br>
                 <button type="button" class="btn btn-secondary mt-2" id="add-ingredient">Zutat Hinzufügen</button>
-                <div id="ingredients-container"></div>
+                <div id="ingredients-container">
+                    <x-liquid-input :liquids="$liquids" />
+                </div>
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    let liquidCount = 0;
-                    const ingredientsContainer = document.getElementById('ingredients-container');
-                    const addIngredientButton = document.getElementById('add-ingredient');
-
-                    addIngredientButton.addEventListener('click', function() {
-                        liquidCount++;
-                        const liquidDiv = document.createElement('div');
-                        liquidDiv.classList.add('form-group', 'mt-2');
-                        liquidDiv.innerHTML = `
-                    <div class='row'>
-                        <div class='col-4'>
-                            <label for="liquid">Flüssigkeit</label>
-                            <select class="form-control" id="liquid" name="liquids[]">
-                                @foreach ($liquids as $liquid)
-                                    <option value="{{ $liquid->id }}">{{ $liquid->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class='col-2'>
-                            <label for="amount" class="">Menge (ml)</label>
-                            <input type="number" class="form-control" id="amount" name="amounts[]" value="50">
-                        </div>
-                        <div class='col-2 d-flex align-items-end'>
-                            <button type="button" class="btn btn-danger remove-ingredient">Entfernen</button>
-                        </div>
-                    </div>
-                    `;
-                        ingredientsContainer.appendChild(liquidDiv);
-                    });
-                });
-            </script>
+            <template id="liquid-input-template">
+                <x-liquid-input :liquids="$liquids" />
+            </template>
 
             <div class="form-group">
                 <label>Garnierungen</label><br>
                 <button type="button" class="btn btn-secondary mt-2" id="add-garnish">Garnierung Hinzufügen</button>
-                <div id="garnishes-container"></div>
+                <div id="garnishes-container">
+                </div>
             </div>
 
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    let garnishCount = 0;
-                    const garnishesContainer = document.getElementById('garnishes-container');
-                    const addGarnishButton = document.getElementById('add-garnish');
-
-                    addGarnishButton.addEventListener('click', function() {
-                        garnishCount++;
-                        const garnishDiv = document.createElement('div');
-                        garnishDiv.classList.add('form-group', 'mt-2');
-                        garnishDiv.innerHTML = `
-                            <div class='row'>
-                                <div class='col-4'>
-                                    <label for="garnish">Garnierung</label>
-                                    <select class="form-control" id="garnish" name="garnishes[]">
-                                        @foreach ($garnishes as $garnish)
-                                            <option value="{{ $garnish->id }}">{{ $garnish->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class='col-2 d-flex align-items-end'>
-                                    <button type="button" class="btn btn-danger remove-garnish">Entfernen</button>
-                                </div>
-                            </div>
-                        `;
-                        garnishesContainer.appendChild(garnishDiv);
-                    });
-                });
-            </script>
+            <template id="garnish-input-template">
+                <x-garnish-input :garnishes="$garnishes" />
+            </template>
 
             <div class="row">
                 <div class="col-lg-4 col-md-12">
@@ -123,14 +70,43 @@
                 <label for="image">Bild</label>
                 <input type="file" class="form-control-file" id="image" name="image">
             </div>
-            <button type="submit" class="btn btn-primary">Erstellen</button>
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
+
     <script>
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-ingredient')) {
-                e.target.closest('.form-group').remove();
-            }
+        document.addEventListener('DOMContentLoaded', function() {
+            const ingredientsContainer = document.getElementById('ingredients-container');
+            const addIngredientButton = document.getElementById('add-ingredient');
+            const liquidInputTemplate = document.getElementById('liquid-input-template').innerHTML;
+
+            addIngredientButton.addEventListener('click', function() {
+                const newLiquidInput = document.createElement('div');
+                newLiquidInput.innerHTML = liquidInputTemplate;
+                ingredientsContainer.appendChild(newLiquidInput);
+            });
+
+            ingredientsContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-liquid')) {
+                    event.target.closest('.liquid-input').remove();
+                }
+            });
+
+            const garnishesContainer = document.getElementById('garnishes-container');
+            const addGarnishButton = document.getElementById('add-garnish');
+            const garnishInputTemplate = document.getElementById('garnish-input-template').innerHTML;
+
+            addGarnishButton.addEventListener('click', function() {
+                const newGarnishInput = document.createElement('div');
+                newGarnishInput.innerHTML = garnishInputTemplate;
+                garnishesContainer.appendChild(newGarnishInput);
+            });
+
+            garnishesContainer.addEventListener('click', function(event) {
+                if (event.target.classList.contains('remove-garnish')) {
+                    event.target.closest('.garnish-input').remove();
+                }
+            });
         });
     </script>
 @endsection

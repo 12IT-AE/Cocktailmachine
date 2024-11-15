@@ -1,7 +1,9 @@
-<div class="media mb-4 p-3 border rounded shadow-sm">
-    <img src="{{ $glass->image }}" class="mr-3 img-thumbnail" alt="{{ $glass->name }}" style="width: 150px; height: auto;">
-    <div class="media-body">
-        <h5 class="mt-0 font-weight-bold">{{ $glass->name }}</h5>
-        <p class="text-muted">Volume: {{ $glass->volume }} ml</p>
+<a href="{{ route('glass.show', $glass->id) }}" class="text-decoration-none">
+    <div class="card mb-4 shadow-sm">
+        <img src="{{ asset($glass->image) }}" class="card-img-top" alt="{{ $glass->name }}" style="height: 200px; object-fit: cover;">
+        <div class="card-body">
+            <h5 class="card-title">{{ $glass->name }}</h5>
+            <p class="card-text">Volume: {{ $glass->volume }} ml</p>
+        </div>
     </div>
-</div>
+</a>

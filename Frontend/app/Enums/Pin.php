@@ -4,21 +4,22 @@ namespace App\Enums;
 
 enum Pin: int
 {
-    case PIN_1 = 7;
-    case PIN_2 = 11;
-    case PIN_3 = 12;
-    case PIN_4 = 13;
-    case PIN_5 = 15;
-    case PIN_6 = 16;
-    case PIN_7 = 18;
-    case PIN_8 = 22;
-    case PIN_9 = 29;
-    case PIN_10 = 31;
-    case PIN_11 = 32;
-    case PIN_12 = 33;
-    case PIN_13 = 35;
-    case PIN_14 = 36;
-    case PIN_15 = 37;
-    case PIN_16 = 38;
-    case PIN_17 = 40;
+    case PIN_1 = 4;
+    case PIN_2 = 17;
+    case PIN_3 = 18;
+    case PIN_4 = 27;
+    case PIN_5 = 22;
+    case PIN_6 = 23;
+    case PIN_7 = 24;
+    case PIN_8 = 5;
+    case PIN_9 = 6;
+    case PIN_10 = 12;
+    case PIN_11 = 13;
+    case PIN_12 = 19;
+    case PIN_13 = 16;
+    case PIN_14 = 26;
+    case PIN_15 = 20;
+    case PIN_16 = 21;
+    case PIN_17 = 25;
+
 }
