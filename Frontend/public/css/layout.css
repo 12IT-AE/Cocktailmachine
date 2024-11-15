@@ -113,3 +113,13 @@ td {
         width: 50px; /* Smaller width on small screens */
     }
 }
+.list-group-item {
+    background-color: #3d3d3d;
+    border: 1px solid #800000;
+    color: white;
+}
+
+.list-group-item .badge {
+    background-color: #800000;
+    color: white;
+}

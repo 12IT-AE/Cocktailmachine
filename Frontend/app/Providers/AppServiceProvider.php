@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-use App\View\Components\{GlassMedia, LiquidCard, ContainerCard, PumpCard};
+use App\View\Components\{GlassMedia, LiquidCard, ContainerCard, PumpCard, LiquidInput, RecipeCard};
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +25,8 @@ class AppServiceProvider extends ServiceProvider
         Blade::component('liquid-card', LiquidCard::class);
         Blade::component('container-card', ContainerCard::class);
         Blade::component('pump-card', PumpCard::class);
+        Blade::component('liquid-input', LiquidInput::class);
+        Blade::component('recipe-card', RecipeCard::class);
 
     }
 }
