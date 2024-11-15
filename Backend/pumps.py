@@ -49,3 +49,11 @@ def cleanPumps():
         else:
             logging.error(f"GPIO Pin für Pumpen-Container-ID {pump.container_id} nicht gefunden!")
 
+if __name__ == "__main__":
+    try:
+        GPIO.setmode(GPIO.BCM)
+    except:
+        pass
+    cleanPumps()
+    GPIO.cleanup()
+
