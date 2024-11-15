@@ -10,6 +10,7 @@ class Pump extends Model
     use HasFactory;
     protected $fillable = [
         'container_id',
+        'pin'   
     ];
     public $displayName = "Pumpe";
 

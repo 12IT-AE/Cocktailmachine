@@ -10,6 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jaini+Purva&display=swap" rel="stylesheet">
     <link href={{ asset('css/layout.css') }} rel="stylesheet">
+    <link href={{ asset('css/cards.css') }} rel="stylesheet">
     @stack('styles')
 </head>
 
@@ -96,7 +97,7 @@
 </body>
 
 </html>
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     var routeOrder = [
         "{{ route('recipe.index') }}",
@@ -129,4 +130,5 @@
             window.location.href = routeOrder[0];
         }
     }
-    </script>
+</script>
+@stack('scripts')

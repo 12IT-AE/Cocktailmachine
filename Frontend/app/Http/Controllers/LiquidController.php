@@ -52,7 +52,6 @@ class LiquidController extends Controller
         $liquid = Liquid::find($id);
         return view('liquid/edit', ['liquid' => $liquid]);
     }
-
     public function update(Request $request, $id){
         $liquid = Liquid::find($id);
         $validatedData = $request->validate([

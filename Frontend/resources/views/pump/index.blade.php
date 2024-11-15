@@ -6,11 +6,9 @@
         <div class="row">
             @foreach ($pumps as $pump)
                 <div class="col-md-12 col-lg-4">
-                    <x-card :title="'Pumpe: ' . $pump->name" :subtitle="'Container: ' . $pump->container->liquid->name" :id="$pump->id">
-                        <p class="card-text">Volume: {{ $pump->container->volume }} ml</p>
-                        <p class="card-text">Current Volume: {{ $pump->container->current_volume }} ml</p>
-                    </x-card>
+                    <x-pump-card :pump="$pump" />
                 </div>
             @endforeach
         </div>
-    @endsection
+    </div>
+@endsection

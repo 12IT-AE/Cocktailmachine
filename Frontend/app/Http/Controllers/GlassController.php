@@ -22,16 +22,20 @@ class GlassController extends Controller
     public function store(Request $request)
     {
         
-        dd($_FILES['image']);
         $validData = $request->validate([
             'name' => 'required|string|max:255',
-            'volume' => 'required|numeric'
+            'volume' => 'required|numeric',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
         ]);
-        if(!$validData){
-            return back()->withErrors($validData)->withInput();
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('images'), $imageName);
+            $validData['image'] = 'images/' . $imageName;
+        } else {
+            $validData['image'] = "";
         }
-        dd($request);
-        // $validData['image'] = ""; //Temporary fix for image upload
+
         $glass = Glass::create($validData);
         return redirect()->route('glass.index');
     }
@@ -39,8 +43,7 @@ class GlassController extends Controller
     public function show($id)
     {
         $glass = Glass::find($id);
-        dd($glass);
-        return view('glass.show', ['glass' => $glass]);
+            return view('glass.show', ['glass' => $glass]);
     }
 
     public function edit($id)
@@ -66,15 +69,20 @@ class GlassController extends Controller
     {
         try {
             $glass = Glass::findOrFail($id);
+
+            if ($glass->image && file_exists(public_path($glass->image))) {
+                unlink(public_path($glass->image));
+            }
+
             $glass->delete();
-            return redirect()->route('glass.index')->with('success', 'Glas erfolgreich gelöscht.');
+            return redirect()->route('glass.index')->with('success', 'Glass successfully deleted.');
         } catch (QueryException $exception) {
             if ($exception->getCode() === '23000') {
-            return redirect()->route('glass.index')->withErrors( 'Dieses Glas kann nicht gelöscht werden, da es in einem oder mehreren Rezepten verwendet wird.');
+                return redirect()->route('glass.index')->withErrors('This glass cannot be deleted because it is used in one or more recipes.');
             }
-            
-            // Andere Ausnahmen behandeln
-            return redirect()->route('glass.index')->withErrors('Ein unerwarteter Fehler ist aufgetreten.');
+
+            // Handle other exceptions
+            return redirect()->route('glass.index')->withErrors('An unexpected error occurred.');
         }
     }
 }

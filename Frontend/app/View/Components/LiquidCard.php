@@ -2,21 +2,21 @@
 
 namespace App\View\Components;
 
-use App\Models\Glass;
+use App\Models\Liquid;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class GlassMedia extends Component
+class LiquidCard extends Component
 {
-    public $glass;
+    public $liquid;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(Glass $glass)
+    public function __construct(Liquid $liquid)
     {
-        $this->glass = $glass;
+        $this->liquid = $liquid;
     }
 
     /**
@@ -24,6 +24,6 @@ class GlassMedia extends Component
      */
     public function render(): View|Closure|string
     {
-        return view('components.glass-media');
+        return view('components.liquid-card');
     }
 }

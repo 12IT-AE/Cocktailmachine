@@ -81,6 +81,7 @@ class CreateCocktailTables extends Migration
         Schema::create('pumps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('container_id')->constrained()->onDelete('cascade');
+            $table->int('pin');
             $table->timestamps();
         });
 

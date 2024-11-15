@@ -7,10 +7,10 @@
 
     <div class="row">
         @foreach($glasses as $glass)
-        <div class="col-md-12 col-lg-4">
-            <x-card :title="$glass->name"  :id="$glass->id">
-                <p class="card-text">Beschreibung: {{ $glass->description }}</p>
-            </x-card>
+        <div class="col-md-4 mb-4">
+            <a href="{{ route('glass.show', $glass->id) }}" class="text-decoration-none">
+                <x-glass-media :glass="$glass" />
+            </a>
         </div>
         @endforeach
     </div>
