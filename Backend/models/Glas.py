@@ -20,7 +20,7 @@ class Glas(DBconfig.DBclass):
 class Database(DBconfig.DBconnect):
     
     def selectAllFromDatabase(self):
-        return self.selectAllFromTable(TABLE_NAME, Glas)
+        return self.selectAllFromTable(TABLE_NAME, Glas) 
         
     def selectByID(self, id):
         return self.selectByIDFromTable(TABLE_NAME, Glas, id)

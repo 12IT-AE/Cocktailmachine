@@ -26,15 +26,10 @@ class Database(DBconfig.DBconnect):
        return self.selectByIDFromTable(TABLE_NAME, Order, id)
 
     def selectFirstByStatus(self, status):
-        data = self.database.select(TABLE_NAME,condition=f'status = {status}')
-        if (len(data)>0):
-            first=data[0]
-            return Order(id=first[0], recipe_id=first[1], status=first[2],created_at=first[3],updated_at=first[4])
-        else: 
-            return None
+        return self.selectFirstByStatusFromTable(TABLE_NAME, Order,status)
     
     def updateStatus(self,id,newstatus):
-        self.updateStatusFromTable(self,id,newstatus,TABLE_NAME)
+        self.updateStatusFromTable(id,newstatus,TABLE_NAME,)
 
     def insertOrder(self,status,recipe_id,created_at,updated_at):
         self.database.insert(TABLE_NAME, {'status': status, 'recipe_id': recipe_id, 'created_at': created_at, 'updated_at': updated_at})
