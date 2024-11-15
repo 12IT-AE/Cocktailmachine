@@ -17,7 +17,7 @@
     <div class="container mt-5">
 
         <!-- Admin -->
-        @if(session('admin'))
+
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
                 <a class="navbar-brand" href="#">Drinkpad '24</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -60,7 +60,6 @@
             <div class="vertical-button right">
                 <button onclick="nextRoute()">></button>
             </div> 
-        @endif
 
 
         <!-- Errors -->
@@ -97,7 +96,7 @@
 </body>
 
 </html>
-@if(session('admin'))
+
 <script>
     var routeOrder = [
         "{{ route('recipe.index') }}",
@@ -131,4 +130,3 @@
         }
     }
     </script>
-@endif

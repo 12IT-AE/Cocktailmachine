@@ -8,19 +8,36 @@ use App\Http\Controllers\{
     ContainerController,
     IngredientController,
     GlassController,
-    GarnishController,
-    OrderController
+    GarnishController
 };
+
+
+
+
 Route::get('/', function () {
     return redirect()->route('recipe.index');
 });
 
-Route::resource('recipe', RecipeController::class);
-Route::resource('liquid', LiquidController::class);
-Route::resource('pump', PumpController::class);
-Route::resource('container', ContainerController::class);
-Route::resource('ingredient', IngredientController::class);
-Route::resource('glass', GlassController::class);
-Route::resource('garnish', GarnishController::class);
-Route::resource('order', OrderController::class);
+Route::group(['prefix' => 'admin'], function () {
+    
+    // session(['admin' => true]);
+    Route::resource('recipe', RecipeController::class);
+    Route::resource('liquid', LiquidController::class);
+    Route::resource('pump', PumpController::class);
+    Route::resource('container', ContainerController::class);
+    Route::resource('ingredient', IngredientController::class);
+    Route::resource('glass', GlassController::class);
+    Route::resource('garnish', GarnishController::class);
+});
 
+
+Route::group(['prefix' => ''], function() {
+    session(['admin' => true]);
+    Route::resource('recipe', RecipeController::class);
+    Route::resource('liquid', LiquidController::class);
+    Route::resource('pump', PumpController::class);
+    Route::resource('container', ContainerController::class);
+    Route::resource('ingredient', IngredientController::class);
+    Route::resource('glass', GlassController::class);
+    Route::resource('garnish', GarnishController::class);
+});
