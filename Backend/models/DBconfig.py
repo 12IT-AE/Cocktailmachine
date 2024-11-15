@@ -1,5 +1,6 @@
 from  sqlite4  import  SQLite4
 from dataclasses import dataclass
+from datetime import datetime
 
 @dataclass
 class DBclass:
@@ -20,3 +21,6 @@ class DBconnect:
             return model_class(*data[0])
         else:
             return None
+        
+    def updateStatusFromTable(self,id,newstatus,table_name):
+        self.database.update(table_name, {"status": f"{newstatus}","updated_at":f"{datetime.now()}"}, f"id = {id}")

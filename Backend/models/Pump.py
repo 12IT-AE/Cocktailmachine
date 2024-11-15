@@ -11,7 +11,7 @@ TABLE_NAME = 'pumps'
 @dataclass
 class Pump(DBconfig.DBclass):
     container_id:int
-    #+ Vielleicht Pin auf Raspberry
+    pin:int
     created_at:Optional[datetime]
     updated_at:Optional[datetime] 
 
@@ -25,4 +25,4 @@ class Database(DBconfig.DBconnect):
 
     def selectByID(self, id):
         return self.selectByIDFromTable(TABLE_NAME, Pump, id)
-
+    

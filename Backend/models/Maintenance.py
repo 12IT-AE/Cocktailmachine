@@ -7,21 +7,22 @@ except:
     import DBconfig
 
 
-TABLE_NAME = 'glasses'
+TABLE_NAME = 'maintenance'
 
 @dataclass
-class Glas(DBconfig.DBclass):
-    name:str
-    image:str
-    volume:int
+class Maintenance(DBconfig.DBclass):
+    pump_id:str
+    status:int
     created_at:Optional[datetime]
     updated_at:Optional[datetime]
     
 class Database(DBconfig.DBconnect):
     
     def selectAllFromDatabase(self):
-        return self.selectAllFromTable(TABLE_NAME, Glas)
+        return self.selectAllFromTable(TABLE_NAME, Maintenance)
         
     def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Glas, id)
+        return self.selectByIDFromTable(TABLE_NAME, Maintenance, id)
     
+    def updateStatus(self,id,newstatus):
+        self.updateStatusFromTable(self,id,newstatus,TABLE_NAME)

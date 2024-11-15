@@ -34,7 +34,7 @@ class Database(DBconfig.DBconnect):
             return None
     
     def updateStatus(self,id,newstatus):
-        self.database.update(TABLE_NAME, {"status": f"{newstatus}","updated_at":f"{datetime.now()}"}, f"id = {id}")
+        self.updateStatusFromTable(self,id,newstatus,TABLE_NAME)
 
     def insertOrder(self,status,recipe_id,created_at,updated_at):
         self.database.insert(TABLE_NAME, {'status': status, 'recipe_id': recipe_id, 'created_at': created_at, 'updated_at': updated_at})
