@@ -18,11 +18,15 @@ class Pump(DBconfig.DBclass):
 
 class Database(DBconfig.DBconnect):
     
-
-
     def selectAllFromDatabase(self): 
         return self.selectAllFromTable(TABLE_NAME, Pump)
 
     def selectByID(self, id):
         return self.selectByIDFromTable(TABLE_NAME, Pump, id)
+    
+    def selectPinByContainerID(self, container_id):
+        pump = self.selectByID(container_id)
+        if pump:
+            return Pump.pin
+        return None
     
