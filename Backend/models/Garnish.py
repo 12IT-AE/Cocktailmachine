@@ -1,30 +1,27 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 try:
-    from models import DBconnect
+    from models import DBconfig
 except:
-    import DBconnect
+    import DBconfig
 
+TABLE_NAME = 'garnishes'
 
 @dataclass
-class Garnish:
-    id:int 
+class Garnish(DBconfig.DBclass):
     name:str
     description: Optional[str]
     image:Optional[str]
+    created_at:Optional[datetime]
+    updated_at:Optional[datetime]
 
-class Database(DBconnect.DBconnect):
+class Database(DBconfig.DBconnect):
     
-    TABLE_NAME = 'garnishes'
+    
 
     def selectAllFromDatabase(self): 
-        data = self.database.select(self.TABLE_NAME)
-        return [Garnish(id=row[0], name=row[1], description=row[2],image=row[3]) for row in data]
+        return self.selectAllFromTable(TABLE_NAME, Garnish)
     
     def selectByID(self, id):
-        data = self.database.select(self.TABLE_NAME,condition=f'id = {id}')
-        if (len(data)>0):
-            first=data[0]
-            return Garnish(id=first[0], name=first[1], description=first[2], image=first[3])
-        else: 
-            return None
+         return self.selectByIDFromTable(TABLE_NAME, Garnish, id)

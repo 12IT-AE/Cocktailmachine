@@ -1,28 +1,21 @@
 from dataclasses import dataclass
 try:
-    from models import DBconnect
+    from models import DBconfig
 except:
-    import DBconnect
+    import DBconfig
 
+TABLE_NAME = 'recipe_garnish'
 
 @dataclass
-class RecipeGarnish:
-    id:int 
+class RecipeGarnish(DBconfig.DBclass):
     recipe_id:int
     garnish_id:int
 
-class Database(DBconnect.DBconnect):
+class Database(DBconfig.DBconnect):
     
-    TABLE_NAME = 'recipe_garnish'
-
     def selectAllFromDatabase(self): 
-        data = self.database.select(self.TABLE_NAME)
-        return [RecipeGarnish(id=row[0], recipe_id=row[1],garnish_id=row[2]) for row in data]
-    
+        return self.selectAllFromTable(TABLE_NAME, RecipeGarnish)
+       
     def selectByID(self, id):
-        data = self.database.select(self.TABLE_NAME,condition=f'id = {id}')
-        if (len(data)>0):
-            first=data[0]
-            return RecipeGarnish(id=first[0], recipe_id=first[1],garnish_id=first[2])
-        else: 
-            return None
+        return self.selectByIDFromTable(TABLE_NAME, RecipeGarnish, id)
+

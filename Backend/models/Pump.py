@@ -1,28 +1,28 @@
 from dataclasses import dataclass
+from typing import Optional
+from datetime import datetime
 try:
-    from models import DBconnect
+    from models import DBconfig
 except:
-    import DBconnect
+    import DBconfig
+
+TABLE_NAME = 'pumps'
 
 @dataclass
-class Pump:
-    id:int 
+class Pump(DBconfig.DBclass):
     container_id:int
-    #+ Vielleicht Pin auf Raspberry 
+    #+ Vielleicht Pin auf Raspberry
+    created_at:Optional[datetime]
+    updated_at:Optional[datetime] 
 
 
-class Database(DBconnect.DBconnect):
+class Database(DBconfig.DBconnect):
     
-    TABLE_NAME = 'garnishes'
+
 
     def selectAllFromDatabase(self): 
-        data = self.database.select(self.TABLE_NAME)
-        return [Pump(id=row[0], container_id=row[1]) for row in data]
-    
+        return self.selectAllFromTable(TABLE_NAME, Pump)
+
     def selectByID(self, id):
-        data = self.database.select(self.TABLE_NAME,condition=f'id = {id}')
-        if (len(data)>0):
-            first=data[0]
-            return Pump(id=first[0], container_id=first[1])
-        else: 
-            return None
+        return self.selectByIDFromTable(TABLE_NAME, Pump, id)
+

@@ -1,32 +1,28 @@
+from datetime import datetime
+from typing import Optional
 from dataclasses import dataclass
 try:
-    from models import DBconnect
+    from models import DBconfig
 except:
-    import DBconnect
+    import DBconfig
+
+TABLE_NAME = 'containers'
 
 @dataclass
-class Container:
-    id:int
+class Container(DBconfig.DBclass):
     liquid_id:int
     volume:int
     current_volume:int
+    created_at:Optional[datetime]
+    updated_at:Optional[datetime]
 
 
-
-class Database(DBconnect.DBconnect):
+class Database(DBconfig.DBconnect):
     
-    TABLE_NAME = 'containers'
+    
     
     def selectAllFromDatabase(self): 
-        data = self.database.select(self.TABLE_NAME)
-        return [Container(id=row[0], liquid_id=row[1], volume=row[2],current_volume=row[3]) for row in data]
+        return self.selectAllFromTable(TABLE_NAME, Container)
     
     def selectByID(self, id):
-        data = self.database.select(self.TABLE_NAME,condition=f'id = {id}')
-        if (len(data)>0):
-            first=data[0]
-            return Container(id=first[0], liquid_id=first[1], volume=first[2], current_volume=first[3])
-        else: 
-            return None
-
-print(Database().selectAllFromDatabase())
+        return self.selectByIDFromTable(TABLE_NAME, Container, id)
