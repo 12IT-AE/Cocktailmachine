@@ -21,6 +21,10 @@
                     <li>{{ $garnish->name }}</li>
                 @endforeach
             </ul>
+            <h2>Gläser</h2>
+            <ul class="list-group">
+                <li>{{ $recipe->glass}}</li>
+            </ul>
         </div>
     </div>
 </div>

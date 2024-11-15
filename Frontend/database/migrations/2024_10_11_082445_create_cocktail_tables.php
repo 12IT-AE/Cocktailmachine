@@ -93,6 +93,13 @@ class CreateCocktailTables extends Migration
             $table->decimal('amount', 8, 2);
             $table->timestamps();
         });
+
+        Schema::create("maintenance", function(Blueprint $table){
+            $table->id();
+            $table->foreignId("pump_id")->constrained()->onDelete("restrict");
+            $table->string("status");
+            $table->timestamps();
+        });
     }
 
     public function down()
@@ -106,5 +113,6 @@ class CreateCocktailTables extends Migration
         Schema::dropIfExists('liquids');
         Schema::dropIfExists('orders');
         Schema::dropIfExists('recipes');
+        Schema::dropIfExists('maintenance');
     }
 }

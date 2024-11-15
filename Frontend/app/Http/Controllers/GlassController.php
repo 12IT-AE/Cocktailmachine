@@ -21,6 +21,8 @@ class GlassController extends Controller
 
     public function store(Request $request)
     {
+        
+        dd($_FILES['image']);
         $validData = $request->validate([
             'name' => 'required|string|max:255',
             'volume' => 'required|numeric'
@@ -28,7 +30,8 @@ class GlassController extends Controller
         if(!$validData){
             return back()->withErrors($validData)->withInput();
         }
-        $validData['image'] = ""; //Temporary fix for image upload
+        dd($request);
+        // $validData['image'] = ""; //Temporary fix for image upload
         $glass = Glass::create($validData);
         return redirect()->route('glass.index');
     }
@@ -36,6 +39,7 @@ class GlassController extends Controller
     public function show($id)
     {
         $glass = Glass::find($id);
+        dd($glass);
         return view('glass.show', ['glass' => $glass]);
     }
 
