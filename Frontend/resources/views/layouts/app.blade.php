@@ -12,6 +12,13 @@
     <link href={{ asset('css/layout.css') }} rel="stylesheet">
     <link href={{ asset('css/cards.css') }} rel="stylesheet">
     @stack('styles')
+    <style>
+        .admin-button {
+            position: fixed;
+            bottom: 10px;
+            right: 100px;
+        }
+    </style>
 </head>
 
 <body>
@@ -19,49 +26,58 @@
 
         <!-- Admin -->
 
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <a class="navbar-brand" href="#">Drinkpad '24</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                    aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation umschalten">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('recipe.index') }}>Rezepte</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('liquid.index') }}>Flüssigkeiten</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('container.index') }}>Behälter</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('pump.index') }}>Pumpen</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('ingredient.index') }}>Zutaten</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('glass.index') }}>Gläser</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href={{ route('garnish.index') }}>Garnierungen</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-            <div class="container mt-3">
-                <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">Zurück</a>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <a class="navbar-brand" href="#">Drinkpad '24</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Navigation umschalten">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('recipe.index') }}>Rezepte</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('liquid.index') }}>Flüssigkeiten</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('container.index') }}>Behälter</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('pump.index') }}>Pumpen</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('ingredient.index') }}>Zutaten</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('glass.index') }}>Gläser</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ route('garnish.index') }}>Garnierungen</a>
+                    </li>
+                </ul>
             </div>
-            <div class="vertical-button left">
-                <button onclick="previousRoute()"><</button>
-            </div>
-            
-            <div class="vertical-button right">
-                <button onclick="nextRoute()">></button>
-            </div> 
+        </nav>
+        <div class="container mt-3">
+            <a href="{{ url()->previous() }}" class="btn btn-secondary mb-3">Zurück</a>
+        </div>
+        <div class="vertical-button left">
+            <button onclick="previousRoute()"><</button>
+        </div>
+        
+        <div class="vertical-button right">
+            <button onclick="nextRoute()">></button>
+        </div> 
 
+        <!-- Admin Button -->
+        @if (session('admin'))
+            <form method="POST" action="{{ route('logout') }}" class="admin-button">
+                @csrf
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        @else
+            <a href="{{ route('login') }}" class="btn btn-primary admin-button">Admin</a>
+        @endif
 
         <!-- Errors -->
         @if ($errors->any())
@@ -87,7 +103,6 @@
                 </ul>
             </div>
         @endif
-
 
         <!-- Content -->
         @yield('content')
