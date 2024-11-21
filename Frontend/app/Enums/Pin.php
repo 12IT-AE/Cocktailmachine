@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Enums;
+// pumps = [7, 11, 13, 15, 16, 18, 35, 37]
 
 enum Pin: int
 {

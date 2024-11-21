@@ -5,6 +5,7 @@ from models import Pump
 import Mock.GPIO as GPIO
 
 pump_db = Pump.Database()
+#pumps = [7, 11, 13, 15, 16, 18, 35, 37]
 
 def start_pump(container_id):
     print(f"Start Pump: {container_id}")
