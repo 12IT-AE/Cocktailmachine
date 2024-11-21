@@ -1,6 +1,6 @@
 import string
 from scale import Scale
-from pumps import start_pump, stop_pump 
+from Backend.pumpcontrol import start_pump, stop_pump 
 from Cocktail import Cocktail
 from IngredientStatus import IngredientStatus
 
