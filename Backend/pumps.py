@@ -27,7 +27,7 @@ def stop_pump(container_id):
     else:
         logging.error(f"GPIO Pin für Pumpen-Container-ID {container_id} nicht gefunden!")
 
-def cleanPumps(time):
+def cleanPumps():
     all_pumps = Pump.Database().selectAllFromDatabase()
     for pump in all_pumps:
         if pump.pin is not None:
@@ -37,7 +37,7 @@ def cleanPumps(time):
         else:
             logging.error(f"GPIO Pin für Pumpen-Container-ID {pump.container_id} nicht gefunden!")
 
-    time.sleep(time)
+    time.sleep(20)
 
     for pump in all_pumps:
         gpio_pin = pump.pin
@@ -52,6 +52,6 @@ if __name__ == "__main__":
         GPIO.setmode(GPIO.BCM)
     except:
         pass
-    cleanPumps(10)
+    cleanPumps()
     GPIO.cleanup()
 
