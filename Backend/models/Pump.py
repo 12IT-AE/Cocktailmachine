@@ -29,4 +29,4 @@ class Database(DBconfig.DBconnect):
         if pump:
             return Pump.pin
         return None
-    
+
