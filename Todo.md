@@ -12,7 +12,7 @@ Todo.md:
         - id
         - recipe_id hasOne
         - timestamp
-        - status (0 = pending, 1 = in progress, 2 = done, 3 = error)
+        - status (0 = pending, 1 = in progress, 2 = done, 3 = abort, 4 = error)
 
     - Flüssigkeiten/Inhaltsstoffe
         - id
@@ -51,6 +51,11 @@ Todo.md:
         - liquid_id hasOne
         - step
         - amount
+
+    -maintenance
+        -id
+        -pump_id
+        -status(0 = pending, 1 = in progress, 2 = done, 3 = abort, 4 = error)
 
 
 - Raspberry Anbindung
