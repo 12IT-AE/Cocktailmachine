@@ -17,15 +17,15 @@ def executeOrders(order):
             for ingredient in ingredientstep:
                 containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
                 if containers not in [None, []]:
-                    pumppins = []
+                    pumps = []
                     for container in containers:
                         pumpen = Pump.Database().selectPinByContainerID(container.id)
                         for pump in pumpen:
-                            pumppins.append(pump.pin)
+                            pumps.append(pump)
                     amount = getTime(ingredient.amount)
-                for pin in pumppins:
-                    Thread(target=pumpcontrol.start_pumpfor, args=(pin,amount/len(pumppins))).start()
-            
+                for pump in pumps:
+                    Thread(target=pumpcontrol.start_pumpfor, args=(pump.pin,amount/len(pumps))).start()
+                    Thread(target=Container.Database().updateCurrent_volume, args=(pump.container_id,ingredient.amount/len(pumps))).start()
             time.sleep(getTime(maxamount)+2)   
             print(f"Step {i+1} abgeschlossen")
     

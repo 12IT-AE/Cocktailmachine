@@ -30,3 +30,7 @@ class Database(DBconfig.DBconnect):
     def selectByLiquid_id(self, liquid_id):
         return self.selectByColoumnFromTable(TABLE_NAME,Container,'liquid_id',liquid_id)
         
+    def updateCurrent_volume(self,id,dispensedVolume):
+        curcontainer = self.selectByID(id)
+        newVolume = curcontainer.current_volume - dispensedVolume
+        self.database.update(TABLE_NAME, {"current_volume": f"{newVolume}","updated_at":f"{datetime.now()}"}, f"id = {id}")
