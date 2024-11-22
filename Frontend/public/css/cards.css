@@ -3,9 +3,9 @@
     transition: transform 0.2s ease-in-out;
 }
 
-.card:hover {   
+/* .card:hover {   
     transform: scale(1.02);
-}
+} */
 
 .card-body {
     padding: 20px;
