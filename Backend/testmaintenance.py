@@ -1,11 +1,12 @@
 import time
+import pumpcontrol
 from models import Maintenance
-def checkForMaintainence(DB):
-    job = Maintenance.Database().selectFirstByStatus(0)
-    if job not in [None, []]:
-        Maintenance.Database().updateStatus(job.id,1)
-        #DB.update("maintenance", {"status": 1}, f"id = {job[0]}")
 
-    time.sleep(5)
-    Maintenance.Database().updateStatus(job.id,2)
-    #DB.update("maintenance", {"status": 2}, f"id = {job[0]}")
+def checkForMaintainence():
+    jobs = Maintenance.Database().selectByStatus(0)[0]
+    for job in jobs:
+        if job not in [None, []]:
+            Maintenance.Database().updateStatus(job.id,1)
+            pumpcontrol.start_pumpfor(job.pump_id, 10)
+            time.sleep(5)
+            Maintenance.Database().updateStatus(job.id,2) 

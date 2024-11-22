@@ -4,7 +4,7 @@ from IngredientStatusRepository import IngredientStatusRepository
 from CocktailRepository import CocktailRepository
 from Cocktail import Cocktail
 from IngredientStatus import IngredientStatus
-from pumps import cleanPumps
+from Backend.pumpcontrol import cleanPumps
 from Mixer import Mixer
 import time
 

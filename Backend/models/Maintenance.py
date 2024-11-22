@@ -27,5 +27,5 @@ class Database(DBconfig.DBconnect):
     def updateStatus(self,id,newstatus):
         self.updateStatusFromTable(id,newstatus,TABLE_NAME)
 
-    def selectFirstByStatus(self, status):
-        return self.selectFirstByStatusFromTable(TABLE_NAME, Maintenance,status)
+    def selectByStatus(self, status):
+        return self.selectByStatusFromTable(TABLE_NAME, Maintenance,status)

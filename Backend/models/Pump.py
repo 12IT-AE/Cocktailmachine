@@ -25,8 +25,8 @@ class Database(DBconfig.DBconnect):
         return self.selectByIDFromTable(TABLE_NAME, Pump, id)
     
     def selectPinByContainerID(self, container_id):
-        pump = self.selectByID(container_id)
-        if pump:
-            return Pump.pin
-        return None
-    
+        data = self.database.select(TABLE_NAME,condition=f'container_id = {container_id}')
+        return [Pump(id=row[0], container_id=row[1], pin=row[2],created_at=row[3],updated_at=[4]) for row in data]
+
+
+     

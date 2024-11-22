@@ -30,6 +30,9 @@ class Database(DBconfig.DBconnect):
         
     def selectByRecipe_id(self, recipe_id):
         data = self.database.select(TABLE_NAME,condition=f'recipe_id = {recipe_id}')
-        return sorted([Ingredient(id=row[0], recipe_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data], key= attrgetter('step')) 
+        return [Ingredient(id=row[0], recipe_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data]
         
-
+    def selectByStepandRecipe_id(self, step,recipe_id):
+        data = self.database.select(TABLE_NAME,condition=f'step = {step} AND recipe_id ={recipe_id}')
+        return [Ingredient(id=row[0], recipe_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data]
+        

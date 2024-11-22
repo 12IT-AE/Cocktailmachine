@@ -26,3 +26,8 @@ class Database(DBconfig.DBconnect):
     
     def selectByID(self, id):
         return self.selectByIDFromTable(TABLE_NAME, Container, id)
+
+    def selectByLiquid_id(self, recipe_id):
+        data = self.database.select(TABLE_NAME,condition=f'liquid_id = {recipe_id}')
+        return [Container(id=row[0], liquid_id=row[1], volume=row[2],current_volume=row[3],created_at=[4],updated_at=[5]) for row in data]
+        
