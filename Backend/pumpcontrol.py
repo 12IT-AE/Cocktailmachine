@@ -45,9 +45,9 @@ def cleanPumps(sec):
             logging.error(f"GPIO Pin für Pumpen-Container-ID {pump.container_id} nicht gefunden!")
     print(f"fertig")
 
-def start_pumpfor(gpio_pin,times):
+def start_pumpfor(gpio_pin, sec):
     start_pump(gpio_pin)
-    time.sleep(times)
+    time.sleep(sec)
     stop_pump(gpio_pin)
 
 
