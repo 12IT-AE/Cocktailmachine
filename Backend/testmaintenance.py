@@ -3,7 +3,7 @@ import Backend.pumpcontrol as pumpcontrol
 from models import Maintenance
 
 def checkForMaintainence():
-    job = Maintenance.Database().selectFirstByStatus(0)
+    job = Maintenance.Database().selectByStatus(0)[0]
     if job not in [None, []]:
         Maintenance.Database().updateStatus(job.id,1)
         pumpcontrol.cleanPumps(10)

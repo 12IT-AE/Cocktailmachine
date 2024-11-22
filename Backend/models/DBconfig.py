@@ -25,9 +25,6 @@ class DBconnect:
     def updateStatusFromTable(self,id,newstatus,table_name):
         self.database.update(table_name, {"status": f"{newstatus}","updated_at":f"{datetime.now()}"}, f"id = {id}")
 
-    def selectFirstByStatusFromTable(self,table_name,model_class,status):
+    def selectByStatusFromTable(self,table_name,model_class,status):
         data = self.database.select(table_name,condition=f'status = {status}')
-        if len(data)>0:
-            return model_class(*data[0])
-        else:
-            return None
+        return [model_class(*row) for row in data]
