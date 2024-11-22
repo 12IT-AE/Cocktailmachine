@@ -24,7 +24,7 @@ def executeOrders(order):
             print(f"Keine Zutaten für Schritt {step + 1} gefunden. Überspringe.")
             continue
 
-        maxamount = max(ingredient.amount for ingredient in ingredient_step)
+        pumptimelist = [] 
                     
         # Bearbeite alle Zutaten im aktuellen Schritt
         for ingredient in ingredient_step:
@@ -41,12 +41,13 @@ def executeOrders(order):
             if not pumps:
                 print(f"Warnung: Keine Pumpen für Flüssigkeit '{liquid.name}' gefunden. Überspringe.")
                 continue
-            
-            distribute_ingredient_among_pumps(pumps, ingredient.amount, liquid.name)
-        
+            pumptime = distribute_ingredient_among_pumps(pumps, ingredient.amount, liquid.name)
+            pumptimelist.append(pumptime)
+
+        maxtime = max(pumptimelist) if pumptimelist else 0
         # Warten, bis alle Pumpen abgeschlossen sind    
-        time.sleep(getTime(maxamount)+2)   
-        print(f"Step {step+1} abgeschlossen")
+        time.sleep(maxtime+2)   
+        print(f"Step {step+1} von {maxstep+1} abgeschlossen")
     
     # Bestellung abschließen
     Order.Database().updateStatus(order.id,2)
@@ -67,13 +68,16 @@ def distribute_ingredient_among_pumps(pumps, amount, liquid_name):
 
     amount_per_pump = amount / len(pumps)
     print(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
-
+    # Die maximale Zeit, die für das Abpumpen benötigt wird
+    pumptime = getTime(amount_per_pump)
     for pump in pumps:
         Thread(target=pumpcontrol.start_pumpfor, args=(pump.pin, getTime(amount_per_pump))).start()
         Thread(
             target=Container.Database().updateCurrent_volume,
-            args=(pump.container_id, -amount_per_pump),
+            args=(pump.container_id, amount_per_pump),
         ).start()
+    return pumptime 
+
 
 
 #Berechnet die Laufzeit der Pumpe basierend auf der Menge.
