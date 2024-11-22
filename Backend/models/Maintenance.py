@@ -28,4 +28,4 @@ class Database(DBconfig.DBconnect):
         self.updateStatusFromTable(id,newstatus,TABLE_NAME)
 
     def selectByStatus(self, status):
-        return self.selectByStatusFromTable(TABLE_NAME, Maintenance,status)
+        return self.selectByColoumnFromTable(TABLE_NAME,Maintenance,'status',status)

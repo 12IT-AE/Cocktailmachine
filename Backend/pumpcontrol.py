@@ -1,8 +1,10 @@
 import time, logging
 
 from models import Pump
-
-import Mock.GPIO as GPIO
+try: 
+    import RPi.GPIO as GPIO
+except:
+    import Mock.GPIO as GPIO
  
 
 def start_pump(gpio_pin):
@@ -13,7 +15,7 @@ def start_pump(gpio_pin):
         GPIO.setup(gpio_pin, GPIO.OUT)
         GPIO.output(gpio_pin, GPIO.LOW)
     else:
-        logging.error(f"GPIO Pin für Pumpen-Container-ID {gpio_pin} nicht gefunden!")
+        logging.error(f"GPIO {gpio_pin} nicht gefunden!")
 
 def stop_pump(gpio_pin):
     print(f"Stop Pump: {gpio_pin}")
@@ -23,7 +25,7 @@ def stop_pump(gpio_pin):
         GPIO.setup(gpio_pin, GPIO.OUT)
         GPIO.output(gpio_pin, GPIO.HIGH)
     else:
-        logging.error(f"GPIO Pin für Pumpen-Container-ID {gpio_pin} nicht gefunden!")
+        logging.error(f"GPIO {gpio_pin} nicht gefunden!")
 
 def cleanPumps(sec):
     all_pumps = Pump.Database().selectAllFromDatabase()
@@ -33,7 +35,7 @@ def cleanPumps(sec):
             GPIO.setup(pump.pin, GPIO.OUT)
             GPIO.output(pump.pin, GPIO.LOW)
         else:
-            logging.error(f"GPIO Pin für Pumpen-Container-ID {pump.container_id} nicht gefunden!")
+            logging.error(f"GPIO {pump.pin} nicht gefunden!")
 
     time.sleep(sec)
 
@@ -42,7 +44,7 @@ def cleanPumps(sec):
             GPIO.setup(pump.pin, GPIO.OUT)
             GPIO.output(pump.pin, GPIO.HIGH)
         else:
-            logging.error(f"GPIO Pin für Pumpen-Container-ID {pump.container_id} nicht gefunden!")
+            logging.error(f"GPIO {pump.pin} nicht gefunden!")
     print(f"fertig")
 
 def start_pumpfor(gpio_pin, sec):
@@ -56,5 +58,5 @@ if __name__ == "__main__":
         GPIO.setmode(GPIO.BCM)
     except:
         pass
-    cleanPumps(10)
+    cleanPumps(3)
     GPIO.cleanup()

@@ -26,7 +26,7 @@ class Database(DBconfig.DBconnect):
        return self.selectByIDFromTable(TABLE_NAME, Order, id)
 
     def selectByStatus(self, status):
-        return self.selectByStatusFromTable(TABLE_NAME, Order,status)
+        return self.selectByColoumnFromTable(TABLE_NAME,Order,'status',status)
     
     def updateStatus(self,id,newstatus):
         self.updateStatusFromTable(id,newstatus,TABLE_NAME,)
