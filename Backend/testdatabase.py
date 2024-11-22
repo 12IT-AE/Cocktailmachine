@@ -27,3 +27,6 @@ def checkOrders():
 now = datetime.now()
 Order.Database().insertOrder(0,5,now,now)
 checkOrders()
+
+
+#Maintanace einbauen

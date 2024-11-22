@@ -13,6 +13,7 @@ def executeOrders(order):
         ingredientstep =  Ingredient.Database().selectByStepandRecipe_id(i,recipe_id)
         if ingredientstep not in [None, []]:
             maxamount = max(ingredient.amount for ingredient in ingredientstep)
+            #Einbau von mehreren Pumpen vllt andere Zeit?
             for ingredient in ingredientstep:
                 containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
                 if containers not in [None, []]:
