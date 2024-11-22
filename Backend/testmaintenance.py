@@ -1,5 +1,5 @@
 import time
-import Backend.pumpcontrol as pumpcontrol
+import pumpcontrol
 from models import Maintenance
 
 def checkForMaintainence():
