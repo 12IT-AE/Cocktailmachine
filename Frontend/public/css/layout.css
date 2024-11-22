@@ -11,6 +11,12 @@ body {
     border: none;
 }
 
+.order-card {
+    background-color: rgba(34, 34, 34, 0.2);
+    border-radius: 25px;
+    border: none;
+}
+
 .card-title {
     font-family: "Jaini Purva";
     font-size: 48px;
