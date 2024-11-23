@@ -51,6 +51,7 @@ def check():
 
 if __name__ == "__main__":
         abort_all_incomplete_entries()
-
         Order.Database().insertOrder(0,4)
+        #Maintenance.Database().insertMaintenance(0,0)
+        #Maintenance.Database().insertMaintenance(0,1)
         check()

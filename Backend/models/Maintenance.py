@@ -36,7 +36,7 @@ class Database(DBconfig.DBconnect):
         return self._selectByColoumnFromTable(TABLE_NAME,Maintenance,'status',status)
     
     #Fügt einen neuen Maintenance-Eintrag hinzu.
-    def insertMaintenance(self, pump_id, status):
+    def insertMaintenance(self,status,pump_id):
         current_time = datetime.now()
         self.database.insert(TABLE_NAME, {
             'pump_id': pump_id,
