@@ -1,6 +1,6 @@
 import time
 from models import Order,Maintenance
-from datetime import datetime
+
 import executeorder
 import executemaintenance 
 #Aktualisierung des Status für offene und laufende Einträge
@@ -51,6 +51,6 @@ def check():
 
 if __name__ == "__main__":
         abort_all_incomplete_entries()
-        now = datetime.now()
-        Order.Database().insertOrder(0,4,now,now)
+
+        Order.Database().insertOrder(0,4)
         check()

@@ -7,8 +7,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'ingredients'
 
+# Datenmodell für Ingredient
 @dataclass
 class Ingredient(DBconfig.DBclass):
     recipe_id:int
@@ -20,17 +22,19 @@ class Ingredient(DBconfig.DBclass):
     
 class Database(DBconfig.DBconnect):
     
-    
-
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Ingredient)
+        return self._selectAllFromTable(TABLE_NAME, Ingredient)
     
+    #Gibt einen Eintrag anhand der ID zurück. 
     def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Ingredient, id)
-        
+        return self._selectByIDFromTable(TABLE_NAME, Ingredient, id)
+    
+    #Gibt alle Einträge mit einer bestimmten Recipe_id zurück.    
     def selectByRecipe_id(self, recipe_id):
-        return self.selectByColoumnFromTable(TABLE_NAME,Ingredient,'recipe_id',recipe_id)
-        
+        return self._selectByColoumnFromTable(TABLE_NAME,Ingredient,'recipe_id',recipe_id)
+
+    #Gibt alle Einträge mit einer bestimmten Recipe_id und Step zurück.    
     def selectByStepandRecipe_id(self, step,recipe_id):
         data = self.database.select(TABLE_NAME,condition=f'step = {step} AND recipe_id ={recipe_id}')
         return [Ingredient(id=row[0], recipe_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data]

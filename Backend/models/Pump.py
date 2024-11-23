@@ -6,8 +6,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'pumps'
 
+# Datenmodell für Pump
 @dataclass
 class Pump(DBconfig.DBclass):
     container_id:int
@@ -18,13 +20,16 @@ class Pump(DBconfig.DBclass):
 
 class Database(DBconfig.DBconnect):
     
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Pump)
+        return self._selectAllFromTable(TABLE_NAME, Pump)
 
+    #Gibt einen Eintrag anhand der ID zurück.
     def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Pump, id)
+        return self._selectByIDFromTable(TABLE_NAME, Pump, id)
     
-    def selectPinByContainerID(self, container_id):
-        return self.selectByColoumnFromTable(TABLE_NAME,Pump,'container_id',container_id)
+    #Gibt alle Einträge mit einem bestimmten container_id zurück.
+    def selectByContainerID(self, container_id):
+        return self._selectByColoumnFromTable(TABLE_NAME,Pump,'container_id',container_id)
  
      

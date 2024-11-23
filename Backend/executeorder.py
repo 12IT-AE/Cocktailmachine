@@ -57,7 +57,7 @@ def executeOrders(order):
 def collect_pumps_from_containers(containers):
     pumps = []
     for container in containers:
-        container_pumps = Pump.Database().selectPinByContainerID(container.id)
+        container_pumps = Pump.Database().selectByContainerID(container.id)
         if container_pumps:
             pumps.extend(container_pumps)
     return pumps
