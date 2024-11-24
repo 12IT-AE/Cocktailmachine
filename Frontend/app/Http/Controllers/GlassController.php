@@ -25,7 +25,7 @@ class GlassController extends Controller
         $validData = $request->validate([
             'name' => 'required|string|max:255',
             'volume' => 'required|numeric',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048'
         ]);
         if ($request->hasFile('image')) {
             $image = $request->file('image');

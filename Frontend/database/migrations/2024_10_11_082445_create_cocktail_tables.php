@@ -23,6 +23,7 @@ class CreateCocktailTables extends Migration
             $table->string('name');
             $table->string('alternative_name')->nullable();
             $table->boolean('alcoholic');
+            $table->integer('volume_percent')->nullable();
             $table->string('image')->nullable();
             $table->string('color');
             $table->timestamps();
@@ -81,7 +82,7 @@ class CreateCocktailTables extends Migration
         Schema::create('pumps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('container_id')->constrained()->onDelete('cascade');
-            $table->int('pin');
+            $table->integer('pin');
             $table->timestamps();
         });
 

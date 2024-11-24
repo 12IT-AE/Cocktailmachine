@@ -29,6 +29,7 @@ class LiquidController extends Controller
             'image' => 'nullable|string|max:255',
             'color' => 'required|string|max:255',
             'alcoholic' => 'required|boolean',
+            'volume_percent' => 'required|integer',
         ]);
         if(!$validatedData){
             return redirect()->route('liquid.create')->withErrors($validatedData)->withInput();
@@ -60,6 +61,7 @@ class LiquidController extends Controller
             'image' => 'nullable|string|max:255',
             'color' => 'required|string|max:255',
             'alcoholic' => 'required|boolean',
+            'volume_percent' => 'required|interger',
         ]);
         if(!$validatedData){
             return redirect()->route('liquid.edit', ['liquid' => $liquid->id])->withErrors($validatedData)->withInput();

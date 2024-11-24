@@ -9,7 +9,14 @@ class OrderController extends Controller
 {
     public function index(){
         $recipes = Recipe::all();
-        $recipe = Recipe::first();
-        return view('order.index', ['recipes' => $recipes], ['recipe' => $recipe]);
+        // $recipe = Recipe::skip(1)->first();
+        return view('order.index', ['recipes' => $recipes]);
     }
+
+    // public function getData($id)
+    // {
+    //     $recipe = new Recipe();
+    //     $recipe = $recipe->find($id);
+    //     return ['recipe' => $recipe];
+    // }
 }
