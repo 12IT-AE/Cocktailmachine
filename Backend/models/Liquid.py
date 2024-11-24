@@ -6,8 +6,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'liquids'
 
+# Datenmodell für Liquid
 @dataclass
 class Liquid(DBconfig.DBclass):
     name:str
@@ -21,9 +23,11 @@ class Liquid(DBconfig.DBclass):
 
 class Database(DBconfig.DBconnect):
     
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Liquid)
+        return self._selectAllFromTable(TABLE_NAME, Liquid)
     
+    #Gibt einen Eintrag anhand der ID zurück. 
     def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Liquid, id)
+        return self._selectByIDFromTable(TABLE_NAME, Liquid, id)
 

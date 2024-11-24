@@ -6,8 +6,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'containers'
 
+# Datenmodell für Container
 @dataclass
 class Container(DBconfig.DBclass):
     liquid_id:int
@@ -19,15 +21,20 @@ class Container(DBconfig.DBclass):
 
 class Database(DBconfig.DBconnect):
     
-    
-    
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Container)
+        return self._selectAllFromTable(TABLE_NAME, Container)
     
+    #Gibt einen Eintrag anhand der ID zurück. 
     def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Container, id)
+        return self._selectByIDFromTable(TABLE_NAME, Container, id)
 
-    def selectByLiquid_id(self, recipe_id):
-        data = self.database.select(TABLE_NAME,condition=f'liquid_id = {recipe_id}')
-        return [Container(id=row[0], liquid_id=row[1], volume=row[2],current_volume=row[3],created_at=[4],updated_at=[5]) for row in data]
-        
+    #Gibt alle Einträge mit einer bestimmten Liquid_id zurück.    
+    def selectByLiquid_id(self, liquid_id):
+        return self._selectByColoumnFromTable(TABLE_NAME,Container,'liquid_id',liquid_id)
+
+    #Aktualisiert den aktuellen Füllstand eines Eintrags anhand seiner ID und dem ausgegeben Volumen.    
+    def updateCurrent_volume(self,id,dispensedVolume):
+        curcontainer = self.selectByID(id)
+        newVolume = curcontainer.current_volume - dispensedVolume
+        self.database.update(TABLE_NAME, {"current_volume": f"{newVolume}","updated_at":f"{datetime.now()}"}, f"id = {id}")

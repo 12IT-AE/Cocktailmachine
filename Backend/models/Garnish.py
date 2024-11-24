@@ -6,8 +6,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'garnishes'
 
+# Datenmodell für Garnish
 @dataclass
 class Garnish(DBconfig.DBclass):
     name:str
@@ -18,10 +20,10 @@ class Garnish(DBconfig.DBclass):
 
 class Database(DBconfig.DBconnect):
     
-    
-
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Garnish)
+        return self._selectAllFromTable(TABLE_NAME, Garnish)
     
+    #Gibt einen Eintrag anhand der ID zurück.       
     def selectByID(self, id):
-         return self.selectByIDFromTable(TABLE_NAME, Garnish, id)
+         return self._selectByIDFromTable(TABLE_NAME, Garnish, id)

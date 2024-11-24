@@ -6,9 +6,10 @@ try:
 except:
     import DBconfig
 
-
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'maintenance'
 
+# Datenmodell für Maintenance
 @dataclass
 class Maintenance(DBconfig.DBclass):
     pump_id:str
@@ -18,14 +19,28 @@ class Maintenance(DBconfig.DBclass):
     
 class Database(DBconfig.DBconnect):
     
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self):
-        return self.selectAllFromTable(TABLE_NAME, Maintenance)
-        
-    def selectByID(self, id):
-        return self.selectByIDFromTable(TABLE_NAME, Maintenance, id)
-    
-    def updateStatus(self,id,newstatus):
-        self.updateStatusFromTable(id,newstatus,TABLE_NAME)
+        return self._selectAllFromTable(TABLE_NAME, Maintenance)
 
+    #Gibt einen Eintrag anhand der ID zurück.    
+    def selectByID(self, id):
+        return self._selectByIDFromTable(TABLE_NAME, Maintenance, id)
+    
+    #Aktualisiert den Status eines Eintrags anhand seiner ID.
+    def updateStatus(self,id,newstatus):
+        self._updateStatusFromTable(id,newstatus,TABLE_NAME)
+
+    #Gibt alle Einträge mit einem bestimmten Status zurück.
     def selectByStatus(self, status):
-        return self.selectByStatusFromTable(TABLE_NAME, Maintenance,status)
+        return self._selectByColoumnFromTable(TABLE_NAME,Maintenance,'status',status)
+    
+    #Fügt einen neuen Maintenance-Eintrag hinzu.
+    def insertMaintenance(self,status,pump_id):
+        current_time = datetime.now()
+        self.database.insert(TABLE_NAME, {
+            'pump_id': pump_id,
+            'status': status,
+            'created_at': current_time,
+            'updated_at': current_time
+        })

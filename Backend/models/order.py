@@ -6,8 +6,10 @@ try:
 except:
     import DBconfig
 
+# Name der Tabelle in der Datenbank
 TABLE_NAME = 'orders'
 
+# Datenmodell für Order
 @dataclass
 class Order(DBconfig.DBclass):
     recipe_id:int
@@ -18,18 +20,28 @@ class Order(DBconfig.DBclass):
 class Database(DBconfig.DBconnect):
 
 
-
+    #Gibt alle Einträge aus der Tabelle zurück.
     def selectAllFromDatabase(self): 
-        return self.selectAllFromTable(TABLE_NAME, Order)
+        return self._selectAllFromTable(TABLE_NAME, Order)
 
+    #Gibt einen Eintrag anhand der ID zurück.
     def selectByID(self, id):
-       return self.selectByIDFromTable(TABLE_NAME, Order, id)
+       return self._selectByIDFromTable(TABLE_NAME, Order, id)
 
+    #Gibt alle Einträge mit einem bestimmten Status zurück.
     def selectByStatus(self, status):
-        return self.selectByStatusFromTable(TABLE_NAME, Order,status)
+        return self._selectByColoumnFromTable(TABLE_NAME,Order,'status',status)
     
+    #Aktualisiert den Status eines Eintrags anhand seiner ID.
     def updateStatus(self,id,newstatus):
-        self.updateStatusFromTable(id,newstatus,TABLE_NAME,)
+        self._updateStatusFromTable(id,newstatus,TABLE_NAME,)
 
-    def insertOrder(self,status,recipe_id,created_at,updated_at):
-        self.database.insert(TABLE_NAME, {'status': status, 'recipe_id': recipe_id, 'created_at': created_at, 'updated_at': updated_at})
+    #Fügt eine neue Bestellung in die Datenbank ein.
+    def insertOrder(self,status,recipe_id):
+        current_time = datetime.now()
+        self.database.insert(TABLE_NAME, {
+            'status': status,
+            'recipe_id': recipe_id, 
+            'created_at': current_time, 
+            'updated_at': current_time
+            })
