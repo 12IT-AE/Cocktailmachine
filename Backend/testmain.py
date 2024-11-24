@@ -1,8 +1,16 @@
-import time
+import time,logging
 from models import Order,Maintenance
 
 import executeorder
 import executemaintenance 
+
+from logging_config import get_logger
+
+logger = get_logger(__name__)
+
+running = True
+
+
 #Aktualisierung des Status für offene und laufende Einträge
 def abort_all_incomplete_entries():
     for status in (0, 1):  # Status 0 = offen, Status 1 = in Bearbeitung
@@ -16,12 +24,12 @@ def process_pending_or_processing(pending, processing, execute_function, update_
     if processing:  # Bearbeite die ersten Einträge, die bereits verarbeitet werden
         execute_function(processing[0])
     elif pending:  # Starte Bearbeitung der ersten offenen Einträge
-        print(f"Processing: {pending[0]}")
+        logger.info(f"Processing: {pending[0]}")
         update_function(pending[0].id, 1)  # Setze Status auf "in Bearbeitung"
 
-
 def check():
-    while True:
+    import testmain  # Modul importieren, um direkt auf die Modulvariable zuzugreifen
+    while testmain.running:  # Direkte Referenz auf das Modu
         # Lade Daten aus der Datenbank
         pending_orders = Order.Database().selectByStatus(0)
         processing_orders = Order.Database().selectByStatus(1)
@@ -51,7 +59,9 @@ def check():
 
 if __name__ == "__main__":
         abort_all_incomplete_entries()
-        Order.Database().insertOrder(0,4)
-        #Maintenance.Database().insertMaintenance(0,0)
+        Order.Database().insertOrder(0,6)
+        Maintenance.Database().insertMaintenance(0,10)
+        Maintenance.Database().insertMaintenance(0,1)
+        Maintenance.Database().insertMaintenance(0,-10)
         #Maintenance.Database().insertMaintenance(0,1)
         check()

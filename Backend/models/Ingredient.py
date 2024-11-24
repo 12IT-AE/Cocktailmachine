@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from operator import attrgetter
 from typing import Optional
 from datetime import datetime
 try:
