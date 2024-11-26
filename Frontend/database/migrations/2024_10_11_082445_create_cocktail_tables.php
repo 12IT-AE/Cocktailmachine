@@ -93,6 +93,7 @@ class CreateCocktailTables extends Migration
             $table->foreignId('liquid_id')->constrained()->onDelete('restrict');
             $table->string('step');
             $table->decimal('amount', 8, 2);
+            $table->integer('volume_percent')->nullable();
             $table->timestamps();
         });
 

@@ -52,11 +52,10 @@ body {
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.1);
     float: left;
-    margin-bottom: 5px;
+    margin-bottom: 15px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: wrap;
-    min-height: 25px;
 }
 
 .order_ingredient_name {

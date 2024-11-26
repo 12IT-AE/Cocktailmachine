@@ -17,7 +17,7 @@
                         <label for="glass_id">Glas</label>
                         <select class="form-control" id="glass_id" name="glass_id">
                             @foreach ($glasses as $glass)
-                                <option value="{{ $glass->id }}">{{ $glass->name }}</option>
+                                <option value="{{ $glass->id }}">{{ $glass->name }} ({{ $glass->volume }} ml)</option>
                             @endforeach
                         </select>
                     </div>

@@ -13,6 +13,7 @@ class OrderController extends Controller
         return view('order.index', ['recipes' => $recipes]);
     }
 
+
     // public function getData($id)
     // {
     //     $recipe = new Recipe();

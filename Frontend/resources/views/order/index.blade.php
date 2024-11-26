@@ -6,8 +6,8 @@
         <div style="width: 100%;">
             @foreach($recipes as $recipe)
                 <div data-bs-toggle="modal" data-bs-target="#modal-{{ $recipe->id }}" class="orderElement">
-                    <div class="imageBlock" style="border: solid">
-                        <img class="cooktailImg" style=" width: 100%; height: 100%; object-fit: cover; object-position: center;" src="{{ asset($recipe->image) }}" alt="">
+                    <div class="imageBlock">
+                        <img class="cooktailImg" style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px" src="{{ asset($recipe->image) }}" alt="">
                     </div>
                     <div class="infoBlock">
                         {{$recipe->name}}
