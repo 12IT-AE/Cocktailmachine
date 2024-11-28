@@ -31,7 +31,7 @@ body {
 }
 
 .order_image_div {
-    height: 300px; 
+    height: 260px; 
     width: 100%; 
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 15px;
@@ -52,7 +52,7 @@ body {
     border-radius: 15px;
     background-color: rgba(0, 0, 0, 0.1);
     float: left;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: wrap;
