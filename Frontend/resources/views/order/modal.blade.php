@@ -4,7 +4,7 @@
                     <div class="order-card shadow-sm">
                         <div class="card-body">
                             <div class="row">
-                                <div style="width: calc(3 / 12 * 100%); display: flex; flex-direction: column;">
+                                <div class="col-3 d-flex flex-column">
                                     <div class="order_image_div">
                                         <img onload="updateAmounts({{ $recipe->id }}, 0)"
                                             src="{{ asset($recipe->image) }}" class=""
@@ -68,7 +68,7 @@
                                             onclick="updateAmounts(+10)">+10</button>
                                     </div>
                                 </div>
-                                <div style="width: calc(6 / 12 * 100%);" class="d-flex flex-column">
+                                <div class="col-6 d-flex flex-column">
                                     <h1 class="order_h" style="font-size: 65px">{{ $recipe->name }}</h1>
 
                                     <h2 class="order_h" style="font-size: 40px">Beschreibung</h2>
@@ -90,8 +90,7 @@
                                             style="height: 100%; background-color: green; width: 47.5%; border-radius: 15px;">Produzieren</button>
                                     </div>
                                 </div>
-                                {{-- height:calc({{ (100 / $fullAmount) * $ingredient->amount }}% - 15px); --}}
-                                <div style="width: calc(3 / 12 * 100%);" style="border: none;">
+                                <div class="col-3" style="border: none;">
                                     <div class="order_ingredients" style="border: none; height: calc(100% + 5px);">
                                         @foreach ($recipe->ingredients as $ingredient)
                                             @if (!$small && $numberIng <= 5)
@@ -100,7 +99,7 @@
                                                                               {{ hexdec(substr($ingredient->liquid->color, 3, 2)) }}, 
                                                                               {{ hexdec(substr($ingredient->liquid->color, 5, 2)) }}, 
                                                                               0.5);">
-                                                    <span class="ord  er_ingredient_name">{{ $ingredient->liquid->name }}</span>
+                                                    <span class="order_ingredient_name">{{ $ingredient->liquid->name }}</span>
                                                     <span class="order_ingredient_amount">{{ $ingredient->amount }}
                                                         ml</span>
                                                 </div>
