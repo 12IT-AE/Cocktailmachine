@@ -81,7 +81,7 @@ def collect_pumps_from_containers(containers):
 def distribute_ingredient_among_pumps(pumps, amount, liquid_name):
     threads = []
     amount_per_pump = amount / len(pumps)
-    logger.info(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
+    logger.debug(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
     # Die maximale Zeit, die für das Abpumpen benötigt wird
     pumptime = getTime(amount_per_pump)
     for pump in pumps:

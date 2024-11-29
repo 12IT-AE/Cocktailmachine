@@ -24,7 +24,7 @@ def process_pending_or_processing(pending, processing, execute_function, update_
     if processing:  # Bearbeite die ersten Einträge, die bereits verarbeitet werden
         execute_function(processing[0])
     elif pending:  # Starte Bearbeitung der ersten offenen Einträge
-        logger.info(f"Processing: {pending[0]}")
+        logger.debug(f"Processing: {pending[0]}")
         update_function(pending[0].id, 1)  # Setze Status auf "in Bearbeitung"
 
 def check():
