@@ -1,53 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="container">
-        <h1 class="order_h" style="font-size: 70px; text-align:center;">DrinkPad</h1>
-        <div style="width: 100%;">
-            @foreach($recipes as $recipe)
-                <div class="orderElement" data-recipe-id="{{ $recipe->id }}">
-                    <div class="imageBlock">
-                        <img class="cooktailImg" style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px" src="{{ asset($recipe->image) }}" alt="">
-                    </div>
-                    <div class="infoBlock">
-                        {{$recipe->name}}
-                    </div>
+<div class="container">
+    <h1 class="order_h" style="font-size: 70px; text-align:center;">DrinkPad</h1>
+    <div style="width: 100%;">
+        @foreach($recipes as $recipe)
+            <div class="orderElement" data-recipe-id="{{ $recipe->id }}">
+                <div class="imageBlock">
+                    <img class="cooktailImg"
+                        style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px"
+                        src="{{ asset($recipe->image) }}" alt="">
                 </div>
-                <div id="ordermodal">
+                <div class="infoBlock">
+                    {{$recipe->name}}
                 </div>
-                
-            @endforeach
-        </div>
+            </div>
+
+            <div class="modal fade" id="modal">
+                <div class="modal-dialog modal-fullscreen" style="width: 90%; margin: 0 auto;">
+
+                </div>
+            </div>
+
+        @endforeach
     </div>
+</div>
 @endsection
 
 
 @push("scripts")
     <script>
-        $(function() {
-            $(document).on('click', '.orderElement', function() {
+        $(function () {
+            $(document).on('click', '.orderElement', function () {
                 var recipeId = $(this).data('recipe-id');
-                
+
                 $.ajax({
                     url: `/order/modal/${recipeId}`,
                     type: 'GET',
-                    success: function(response) {
-                        $('#ordermodal').html(response);
+                    success: function (response) {
+                        $('.modal-dialog').html(response);
                         $('#modal').modal('show');
 
                     },
-                    error: function(xhr) {
+                    error: function (xhr) {
                         console.error('Error fetching modal content:', xhr);
                     }
                 });
-                
+
             });
         })
 
 
 
         // Modal Functions
-        function updateAmounts(recipeId, delta) {
+        function updateAmounts(delta) {
             const modal = document.getElementById(`modal`);
             if (!modal) return; // Exit if the modal is not found
 
@@ -116,5 +122,4 @@
             }
         }
     </script>
-@endpush    
-    
+@endpush
