@@ -1,5 +1,5 @@
 {{-- <div class="modal fade" id="modal-{{ $recipe->id }}" aria-labelledby="modalLabel-{{ $recipe->id }}" aria-hidden="true"> --}}
-<div class="modal fade {{ session('modal') == 'modal-' . $recipe->id ? 'show' : '' }}" id="modal-{{ $recipe->id }}"
+<div class="modal {{ session('modal') == 'modal-' . $recipe->id ? 'show' : '' }}" id="modal-{{ $recipe->id }}"
     tabindex="-1" aria-labelledby="modalLabel-{{ $recipe->id }}"
     aria-hidden="{{ session('modal') == 'modal-' . $recipe->id ? 'false' : 'true' }}"
     style="{{ session('modal') == 'modal-' . $recipe->id ? 'display: block;' : '' }}">
