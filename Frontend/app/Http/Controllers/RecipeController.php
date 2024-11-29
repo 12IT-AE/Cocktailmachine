@@ -37,7 +37,7 @@ class RecipeController extends Controller
         'name' => 'required|string|max:255',
         'description' => 'nullable|string|max:255',
         'ice' => 'required|boolean',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
     ]);
     if (!$validatedRecipe) {
         return redirect()->route('recipe.create')->withErrors($validatedRecipe)->withInput();
@@ -101,7 +101,7 @@ public function edit($id)
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
             'ice' => 'required|boolean',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
     
         $recipe = Recipe::findOrFail($id);

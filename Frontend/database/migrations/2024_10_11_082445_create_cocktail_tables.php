@@ -23,12 +23,12 @@ class CreateCocktailTables extends Migration
             $table->string('name');
             $table->string('alternative_name')->nullable();
             $table->boolean('alcoholic');
+            $table->integer('volume_percent')->nullable();
+            $table->decimal('alcohol_percent', 5, 2)->nullable();
             $table->string('image')->nullable();
             $table->string('color');
             $table->timestamps();
         });
-
-
 
 
         // Create Recipes table
@@ -81,7 +81,7 @@ class CreateCocktailTables extends Migration
         Schema::create('pumps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('container_id')->constrained()->onDelete('cascade');
-            $table->int('pin');
+            $table->integer('pin');
             $table->timestamps();
         });
 
@@ -92,6 +92,8 @@ class CreateCocktailTables extends Migration
             $table->foreignId('liquid_id')->constrained()->onDelete('restrict');
             $table->string('step');
             $table->decimal('amount', 8, 2);
+            $table->integer('volume_percent')->nullable();
+            $table->decimal('alcohol_percent', 5, 2)->nullable();
             $table->timestamps();
         });
 

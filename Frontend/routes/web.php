@@ -14,7 +14,7 @@ use App\Http\Controllers\{
 };
 
 Route::get('/', function () {
-    return redirect()->route('recipe.index');
+    return redirect()->route('order.index');
 });
 
 Route::group(['prefix' => 'admin'], function () {

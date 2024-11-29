@@ -12,10 +12,79 @@ body {
 }
 
 .order-card {
-    background-color: rgba(34, 34, 34, 0.2);
+    background-color: rgba(255, 255, 255, 0.1);
     border-radius: 25px;
-    border: none;
 }
+
+.order_ingredients {
+    width: 100%;
+    height: 600px;
+}
+
+.order_h {
+    font-family: "Jaini Purva", system-ui;
+    font-weight: 400;
+    font-style: normal;
+    white-space: nowrap; /* Verhindert, dass das Label mehrzeilig wird */
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+
+.order_image_div {
+    height: 260px; 
+    width: 100%; 
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+}
+
+/* .order_ingredient {
+    height: 100%;
+    width: 100px;
+    border: solid 1px black;
+    float: left;
+} */
+
+.order_ingredient {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 3px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.1);
+    float: left;
+    margin-bottom: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: wrap;
+}
+
+.order_ingredient_name {
+    font-family: "Teko", sans-serif;
+    font-size: 30px;
+    font-weight: 300;
+    font-style: normal;
+    padding-left: 8px;
+    margin-top: 3.5px;
+    line-height: 30px;
+    white-space: wrap;       
+    overflow: hidden;        
+    text-overflow: ellipsis; 
+    flex-grow: 1;            
+    margin-right: 10px;      
+}
+
+.order_ingredient_amount {
+    font-family: "Teko", sans-serif;
+    font-optical-sizing: auto;
+    font-size: 30px;
+    font-weight: 300;
+    font-style: normal;
+    line-height: 30px;
+    padding-right: 8px;
+    margin-top: 3.5px;
+    flex-shrink: 0;            /* Minimale Breite bleibt erhalten */
+}
+
 
 .card-title {
     font-family: "Jaini Purva";
@@ -97,7 +166,7 @@ td {
 
 .cooktailImg {
     margin: 0%;
-    max-height: 90%;
+    max-height: 100%;
 }
 
 .infoBlock {
