@@ -15,14 +15,12 @@
                     {{$recipe->name}}
                 </div>
             </div>
-
-            <div class="modal fade" id="modal">
-                <div class="modal-dialog modal-fullscreen" style="width: 90%; margin: 0 auto;">
-
-                </div>
-            </div>
-
         @endforeach
+    </div>
+    <div class="modal fade" id="modal">
+        <div class="modal-dialog modal-fullscreen">
+
+        </div>
     </div>
 </div>
 @endsection
