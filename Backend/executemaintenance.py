@@ -2,9 +2,10 @@ import pumpcontrol,testmain
 from models import Maintenance,Pump
 
 
-from logging_config import get_logger
+from logging_config import Logger
 
-logger = get_logger(__name__)
+logger_singleton = Logger()
+logger = logger_singleton.get_logger(__name__)
 
 def executeMaintainence(job,pump_runtime=2):
         if job is None:

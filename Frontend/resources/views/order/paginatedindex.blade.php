@@ -2,24 +2,40 @@
 
 @section('content')
 <div class="container">
-    <h1 class="order_h" style="font-size: 70px; text-align:center;">DrinkPad</h1>
-    <div style="width: 100%;">
-        @foreach($recipes as $recipe)
-            <x-order-element :recipe="$recipe" />
-        @endforeach
+    <!-- <h1 class="ord er_h" style="font-size: 70px; text-align:center;">DrinkPad</h1> -->
+    <div id="recipes-container">
+        @include('order.partials.recipes', ['recipes' => $recipes])
     </div>
     <div class="modal fade" id="modal">
         <div class="modal-dialog modal-fullscreen">
 
         </div>
     </div>
+    
 </div>
 @endsection
 
-
 @push("scripts")
     <script>
-        $(function () {
+        $(document).ready(function() {
+            $(document).on('click', '.page-link', function(event) {
+                event.preventDefault();
+                var page = $(this).data('page');
+                fetchRecipes(page);
+            });
+
+            function fetchRecipes(page) {
+                $.ajax({
+                    url: "/orders?page=" + page,
+                    success: function(data) {
+                        $('#recipes-container').html(data);
+                    },
+                    error: function(xhr) {
+                        console.error('Error fetching recipes:', xhr);
+                    }
+                });
+            }
+
             $(document).on('click', '.orderElement', function () {
                 var recipeId = $(this).data('recipe-id');
 
@@ -29,22 +45,18 @@
                     success: function (response) {
                         $('.modal-dialog').html(response);
                         $('#modal').modal('show');
-
                     },
                     error: function (xhr) {
                         console.error('Error fetching modal content:', xhr);
                     }
                 });
-
             });
-        })
-
-
+        });
 
         // Modal Functions
         function updateAmounts(delta) {
             const modal = document.getElementById('modal');
-            if (!modal) return; // Exit if the modal is not found
+            if (!modal) return;
 
             const ingredientElements = Array.from(modal.querySelectorAll('.order_ingredient'));
             const numberIng = ingredientElements.length;
@@ -54,7 +66,6 @@
             let dif = 0;
             let anz = 0;
 
-            // Calculate height adjustments and update attributes
             ingredientElements.forEach(ingredient => {
                 let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
                 const currentHeight = (100 / fullAmount) * currentAmount;
@@ -69,7 +80,6 @@
 
             const add_dif = anz > 0 ? dif / anz : 0;
 
-            // Adjust heights based on the difference calculated
             ingredientElements.forEach(ingredient => {
                 const currentHeight = parseFloat(ingredient.getAttribute('height'));
                 if (currentHeight > 7) {
@@ -78,7 +88,6 @@
                 }
             });
 
-            // Update amounts and styles
             ingredientElements.forEach(ingredient => {
                 let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
                 const height = parseFloat(ingredient.getAttribute('height'));
@@ -109,7 +118,5 @@
                 volumePercentElement.textContent = Math.round(percent);
             }
         }
-
     </script>
-
 @endpush

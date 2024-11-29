@@ -54,4 +54,8 @@ Route::group(['prefix' => ''], function() {
     Route::resource('glass', GlassController::class);
     Route::resource('garnish', GarnishController::class);
     Route::resource("order", OrderController::class);
+    Route::get('order/modal/{id}', [OrderController::class, 'modal'])->name('order.modal');
+    Route::get('/orders', [OrderController::class, 'paginatedIndex'])->name('order.paginatedIndex');
 });
+
+    

@@ -4,9 +4,10 @@ from models import Order,Maintenance
 import executeorder
 import executemaintenance 
 
-from logging_config import get_logger
+from logging_config import Logger
 
-logger = get_logger(__name__)
+logger_singleton = Logger()
+logger = logger_singleton.get_logger(__name__)
 
 running = True
 
@@ -60,9 +61,8 @@ def check():
 if __name__ == "__main__":
         abort_all_incomplete_entries()
         Order.Database().insertOrder(0,1)
-        Order.Database().insertOrder(0,6)
-        Maintenance.Database().insertMaintenance(0,10)
-        Maintenance.Database().insertMaintenance(0,0)
-
+        # Maintenance.Database().insertMaintenance(0,10)
+        # Maintenance.Database().insertMaintenance(0,1)
+        # Maintenance.Database().insertMaintenance(0,-10)
         #Maintenance.Database().insertMaintenance(0,1)
         check()
