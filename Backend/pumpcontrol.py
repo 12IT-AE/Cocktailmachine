@@ -5,9 +5,10 @@ try:
 except ImportError:
     import Mock.GPIO as GPIO
 
-from logging_config import get_logger
+from logging_config import Logger
 
-logger = get_logger(__name__)
+logger_singleton = Logger()
+logger = logger_singleton.get_logger(__name__)
 
 # Initialisiere GPIO Pin
 def setup_gpio(pin, state):

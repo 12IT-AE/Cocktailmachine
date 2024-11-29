@@ -15,6 +15,7 @@ class Liquid(DBconfig.DBclass):
     name:str
     alternative_name:Optional[str]
     alcoholic:int
+    volume_percent:float
     image:Optional[str]
     color:str
     created_at:Optional[datetime]

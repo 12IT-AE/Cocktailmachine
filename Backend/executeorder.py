@@ -4,11 +4,10 @@ import logging,threading
 from threading import Thread
 
 
-from logging_config import get_logger
+from logging_config import Logger
 
-logger = get_logger(__name__)
-
-
+logger_singleton = Logger()
+logger = logger_singleton.get_logger(__name__)
 
 def executeOrders(order):
     recipe_id = order.recipe_id
@@ -22,7 +21,7 @@ def executeOrders(order):
     if not ingredients:
         logger.warning(f"Keine Zutaten für Rezept ID {recipe_id} gefunden.")
         return
-    maxstep =  max([int(ingredient.step) for ingredient in ingredients])
+    maxstep = max([int(ingredient.step) for ingredient in ingredients])
     # Schritte des Rezepts durchlaufen
     for step in range(maxstep+1):
         step = int(step)  # Sicherstellen, dass step ein Integer ist
