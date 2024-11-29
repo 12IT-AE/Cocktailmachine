@@ -29,7 +29,7 @@ def executeMaintainence(job,pump_runtime=2):
             pumpcontrol.start_pumpfor(pump.pin, pump_runtime)
         
 
-        logger.info("Maintenance Status aktualisiert")
+        logger.debug("Maintenance Status aktualisiert")
         # Status des Wartungsjobs aktualisieren
         Maintenance.Database().updateStatus(job.id,2) 
 

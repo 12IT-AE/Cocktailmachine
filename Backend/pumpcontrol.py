@@ -20,7 +20,7 @@ def setup_gpio(pin, state):
 # Startet die Pumpe
 def start_pump(gpio_pin):
     if gpio_pin is not None:
-        logger.info(f"GPIO {gpio_pin}: starting")
+        logger.debug(f"GPIO {gpio_pin}: starting")
         setup_gpio(gpio_pin, GPIO.LOW)
     else:
         logger.error(f"GPIO {gpio_pin} nicht gefunden!")
@@ -28,7 +28,7 @@ def start_pump(gpio_pin):
 # Stoppt die Pumpe
 def stop_pump(gpio_pin):
     if gpio_pin is not None:
-        logger.info(f"GPIO {gpio_pin}: stopping!")
+        logger.debug(f"GPIO {gpio_pin}: stopping!")
         setup_gpio(gpio_pin, GPIO.HIGH)
     else:
         logger.error(f"GPIO {gpio_pin} nicht gefunden!")
@@ -41,7 +41,7 @@ def cleanPumps(sec):
     logger.info("Starte Reinigung aller Pumpen...")
     for pump in all_pumps:
         if pump.pin is not None:
-            logger.info(f"Reinige Pumpe GPIO {pump.pin}")
+            logger.debug(f"Reinige Pumpe GPIO {pump.pin}")
             setup_gpio(pump.pin, GPIO.LOW)
         else:
             logger.error(f"GPIO {pump.pin} nicht gefunden!")
@@ -51,7 +51,7 @@ def cleanPumps(sec):
     for pump in all_pumps:
         if pump.pin is not None:
             setup_gpio(pump.pin, GPIO.HIGH)
-    logger.info(f"Reinigung abgeschlossen!")
+    logger.debug(f"Reinigung abgeschlossen!")
 
 # Startet eine Pumpe für eine bestimmte Dauer
 def start_pumpfor(gpio_pin, sec):
