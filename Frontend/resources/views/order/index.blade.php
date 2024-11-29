@@ -52,58 +52,57 @@
 
         // Modal Functions
         function updateAmounts(delta) {
-            const modal = document.getElementById(`modal`);
+            const modal = document.getElementById('modal');
             if (!modal) return; // Exit if the modal is not found
 
-            const ingredientElements = modal.querySelectorAll('.order_ingredient');
+            const ingredientElements = Array.from(modal.querySelectorAll('.order_ingredient'));
             const numberIng = ingredientElements.length;
-            const isSmall = Array.from(ingredientElements).some(ingredient =>
-                parseFloat(ingredient.getAttribute('data-amount')) < 10
-            );
 
             const fullAmount = getFullAmount(modal);
-            const newFullAmount = getFullAmount(modal) + delta;
+            const newFullAmount = fullAmount + delta;
             let dif = 0;
             let anz = 0;
 
-            ingredientElements.forEach((ingredient) => {
+            // Calculate height adjustments and update attributes
+            ingredientElements.forEach(ingredient => {
                 let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
                 const currentHeight = (100 / fullAmount) * currentAmount;
                 if (currentHeight <= 7) {
-                    dif = dif + 7 - currentHeight;
+                    dif += 7 - currentHeight;
                     ingredient.setAttribute("height", 7);
                 } else {
                     ingredient.setAttribute("height", currentHeight);
                     anz++;
                 }
             });
-            const add_dif = dif / anz;
-            ingredientElements.forEach((ingredient) => {
+
+            const add_dif = anz > 0 ? dif / anz : 0;
+
+            // Adjust heights based on the difference calculated
+            ingredientElements.forEach(ingredient => {
                 const currentHeight = parseFloat(ingredient.getAttribute('height'));
                 if (currentHeight > 7) {
-                    newHeight = currentHeight - add_dif;
+                    const newHeight = currentHeight - add_dif;
                     ingredient.setAttribute("height", newHeight);
                 }
             });
 
-            ingredientElements.forEach((ingredient) => {
-                const currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
+            // Update amounts and styles
+            ingredientElements.forEach(ingredient => {
+                let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
                 const height = parseFloat(ingredient.getAttribute('height'));
                 const newAmount = Math.max(0, currentAmount + (currentAmount / fullAmount) * delta);
                 ingredient.setAttribute('data-amount', newAmount);
                 ingredient.querySelector('.order_ingredient_amount').textContent = `${Math.round(newAmount)} ml`;
                 ingredient.style.height = `calc(${height}% - 5px)`;
             });
+
             updateFullAmount(modal);
         }
 
         function getFullAmount(modal) {
-            let total = 0;
-            const ingredientElements = modal.querySelectorAll('.order_ingredient');
-            ingredientElements.forEach((ingredient) => {
-                total += parseFloat(ingredient.getAttribute('data-amount'));
-            });
-            return total;
+            return Array.from(modal.querySelectorAll('.order_ingredient'))
+                .reduce((total, ingredient) => total + parseFloat(ingredient.getAttribute('data-amount')), 0);
         }
 
         function updateFullAmount(modal) {
@@ -119,5 +118,7 @@
                 volumePercentElement.textContent = Math.round(percent);
             }
         }
+
     </script>
+
 @endpush
