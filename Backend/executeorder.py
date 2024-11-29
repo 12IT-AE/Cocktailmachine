@@ -17,19 +17,30 @@ def executeOrders(order):
         logger.error(f"Rezept mit ID {recipe_id} nicht gefunden!")
         Order.Database().updateStatus(order.id,4)
         return
-    logger.info(f"{recipe.name} wird zubereitet")
-    ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
-    if not ingredients:
-        logger.warning(f"Keine Zutaten für Rezept ID {recipe_id} gefunden.")
+    
+    recipe = Ingredient.Database().selectByRecipe_id(recipe_id)
+    if not recipe:
+        logger.error(f"Keine Zutaten für Rezept ID {recipe_id} gefunden.")
+        Order.Database().updateStatus(order.id,4)
         return
-    maxstep =  max([int(ingredient.step) for ingredient in ingredients])
+    
+    if (check_ingredients_enough(recipe_id,order) == False):
+        return    
+    
+    # Berechne den maximalen Schritt des Rezepts
+    maxstep =  max([int(ingredient.step) for ingredient in recipe])
+
+    if (check_steps(maxstep,order,recipe) == False):
+        return   
+    
+            
+    logger.info(f"{recipe.name} wird zubereitet")
     # Schritte des Rezepts durchlaufen
     for step in range(maxstep+1):
         step = int(step)  # Sicherstellen, dass step ein Integer ist
         logger.info(f"Starte Schritt {step + 1} für {recipe.name}.")
         ingredient_step =  Ingredient.Database().selectByStepandRecipe_id(step,recipe_id)
         if not ingredient_step:
-            logger.warning(f"Keine Zutaten für Schritt {step + 1} gefunden. Überspringe.")
             continue
 
         Threadtimes = [] 
@@ -38,27 +49,15 @@ def executeOrders(order):
         for ingredient in ingredient_step:
             containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
             liquid = Liquid.Database().selectByID(ingredient.liquid_id)
-            if not liquid:
-                logger.error(f"Flüssigkeit mit ID {ingredient.liquid_id} nicht gefunden. Überspringe.")
-                continue
-            if not containers:
-                logger.error(f"Keine Container für Flüssigkeit '{liquid.name}' gefunden. Überspringe.")
-                continue
+
             pumps = collect_pumps_from_containers(containers)
-            
-            if not pumps:
-                logger.error(f"Keine Pumpen für Flüssigkeit '{liquid.name}' gefunden. Überspringe.")
-                continue
-            Threads = distribute_ingredient_among_pumps(pumps, ingredient.amount, liquid.name)
+            sorted_containers = sorted(containers, key=lambda obj: obj.current_volume)
+
+            Threads = distribute_ingredient_among_pumps(pumps, ingredient.amount, liquid.name,sorted_containers,Threadtimes)
             if Threads:
                 Threadtimes.extend(Threads)
 
-
-        # Warten, bis alle Pumpen abgeschlossen sind
-        #logger.info(f"{maxtime}")
-        #time.sleep(maxtime)
-        #print(maxtime)
-            # Warte darauf, dass alle Threads abgeschlossen sind
+        # Warte darauf, dass alle Threads abgeschlossen sind
         for thread in Threadtimes:
             thread.join()   
         logger.info(f"Step {step+1} von {maxstep+1} abgeschlossen")
@@ -78,10 +77,71 @@ def collect_pumps_from_containers(containers):
 
 
 #Verarbeitet die Verteilung einer Zutat auf mehrere Pumpen.
-def distribute_ingredient_among_pumps(pumps, amount, liquid_name):
-    threads = []
+def distribute_ingredient_among_pumps(pumps, amount, liquid_name,containers,threads):
+    # fehlt sortierung wenig zu viel 
+
+    # Berechne die Menge pro Pumpe
     amount_per_pump = amount / len(pumps)
-    logger.debug(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
+    if containers:
+    # Wähle den ersten Container
+        container = containers[0]
+    else:
+        return threads
+        
+    # Finde alle Pumpen, die mit dem aktuellen Container verbunden sind
+    container_pumps = [pump for pump in pumps if pump.container_id == container.id]
+
+    # Überprüfen, ob der Container fast leer ist (≤10 Einheiten verbleibend)
+    if container.current_volume <= 10:
+        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
+        remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
+        
+        # Entferne den aktuellen Container aus der Containernliste
+        remaining_containers = [item for item in containers if item != container]
+        
+        # Verteile die gesamte Menge auf die restlichen Pumpen und Container
+        distribute_ingredient_among_pumps(remaining_pumps, amount, liquid_name, remaining_containers,threads)
+    
+
+ # Berechne die benötigte Menge für alle Pumpen des Containers
+    container_amount_needed = len(container_pumps) * amount_per_pump
+    
+    # Überprüfen, ob das Verteilen den Container fast leeren würde (≤10 Einheiten verbleibend)
+    if container.current_volume - container_amount_needed <= 10:
+        # Passe die Menge pro Pumpe an, sodass nur bis 10 Einheiten Restvolumen gefüllt wird
+        amount_per_pump = (container.current_volume - 10) / len(container_pumps)
+        
+        # Gib die berechnete Menge an die Pumpen des Containers aus
+        threads.extend(ausgabe(amount_per_pump, container_pumps))
+
+        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
+        remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
+        
+        # Entferne den aktuellen Container aus der Containernliste
+        remaining_containers = [item for item in containers if item != container]
+        
+        # Verteile den Rest der Menge auf die restlichen Pumpen und Container
+        remaining_amount = amount - (container.current_volume - 10)
+        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, liquid_name, remaining_containers,threads)
+
+    else:
+        # Wenn genug Platz im Container ist, verteile die gesamte Menge pro Pumpe
+        threads.extend(ausgabe(amount_per_pump, container_pumps))
+        
+        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
+        remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
+        
+        # Entferne den aktuellen Container aus der Containernliste
+        remaining_containers = [item for item in containers if item != container]
+        
+        # Verteile den verbleibenden Teil der Menge
+        remaining_amount = amount - container_amount_needed
+        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, liquid_name, remaining_containers,threads)
+
+
+def ausgabe(pumps,amount_per_pump):
+    threads = []
+    #logger.debug(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
     # Die maximale Zeit, die für das Abpumpen benötigt wird
     pumptime = getTime(amount_per_pump)
     for pump in pumps:
@@ -98,14 +158,85 @@ def distribute_ingredient_among_pumps(pumps, amount, liquid_name):
         )
         volume_thread.start()
         threads.append(volume_thread)
-    return threads 
+    return threads     
 
 #Berechnet die Laufzeit der Pumpe basierend auf der Menge.
 def getTime(amount):
-    flow_rate = 20  # Durchflussrate in ml/s
+    flow_rate = 19  # Durchflussrate in ml/s
     return amount/flow_rate
 
 def update_volume(container_id, volume):
     with threading.Lock():  # Sicherstellen, dass immer nur ein Thread den Codeblock ausführt
         # Kritische Datenbankoperationen oder Änderungen
         Container.Database().updateCurrent_volume(container_id, volume)
+
+
+def check_ingredients_enough(recipe_id, order):
+    # Lade alle Zutaten des Rezepts
+    ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
+
+    # Erstelle ein Dictionary, um den Gesamtbedarf für jede Flüssigkeit zu berechnen
+    required_liquid_amounts = {}
+
+    # Berechne die Gesamtmenge jeder Flüssigkeit, die für das Rezept benötigt wird
+    for ingredient in ingredients:
+        if ingredient.liquid_id not in required_liquid_amounts:
+            required_liquid_amounts[ingredient.liquid_id] = 0
+        required_liquid_amounts[ingredient.liquid_id] += ingredient.amount
+
+    # Überprüfe, ob die vorhandene Menge ausreicht
+    for liquid_id, required_amount in required_liquid_amounts.items():
+        # Lade die Container mit der entsprechenden Flüssigkeit
+        containers = Container.Database().selectByLiquid_id(liquid_id)
+
+        # Berechne das gesamte verfügbare Volumen für diese Flüssigkeit
+        total_volume_container = sum(container.current_volume for container in containers)
+
+        # Mindestvolumen-Bedingung überprüfen
+        if total_volume_container - required_amount <= 10 * len(containers):
+            # Flüssigkeit reicht nicht aus
+            liquid_name = Liquid.Database().selectByID(liquid_id).name  # Name der Flüssigkeit holen
+            logger.info(f"Es ist zu wenig Flüssigkeit '{liquid_name}' vorhanden. Kann nicht zubereitet werden")
+            Order.Database().updateStatus(order.id, 4)  # Bestellung als fehlgeschlagen markieren
+            return False  # Prüfung fehlgeschlagen
+
+    # Alle Flüssigkeiten reichen aus
+    return True
+
+def check_steps(maxstep,order,recipe):
+        # Überprüfen, ob alle Schritte im Rezept Zutaten haben
+    for step in range(maxstep + 1):
+        logger.debug(f"Überprüfe Schritt {step + 1} für {recipe.name}.")
+        ingredient_step = Ingredient.Database().selectByStepandRecipe_id(step, recipe.id)
+        
+        # Überprüfen, ob Zutaten für diesen Schritt vorhanden sind
+        if not ingredient_step:
+            logger.warning(f"Keine Zutaten für Schritt {step + 1} gefunden. Überspringe.")
+            continue
+
+        # Überprüfen, ob Container für die Flüssigkeiten in diesem Schritt vorhanden sind
+        for ingredient in ingredient_step:
+            containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
+            liquid = Liquid.Database().selectByID(ingredient.liquid_id)
+
+            # Überprüfen, ob die Flüssigkeit existiert
+            if not liquid:
+                logger.error(f"Flüssigkeit mit ID {ingredient.liquid_id} nicht gefunden. Abbruch!")
+                Order.Database().updateStatus(order.id, 4)
+                return False
+
+            # Überprüfen, ob Container für die Flüssigkeit vorhanden sind
+            if not containers:
+                logger.error(f"Keine Container für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
+                Order.Database().updateStatus(order.id, 4)
+                return False
+
+            # Überprüfen, ob Pumpen für den Container existieren
+            pumps = collect_pumps_from_containers(containers)
+
+            if not pumps:
+                logger.error(f"Keine Pumpen für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
+                Order.Database().updateStatus(order.id, 4)
+                return False
+            
+            return True
