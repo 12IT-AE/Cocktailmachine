@@ -1,6 +1,6 @@
 from models import Ingredient,Order,Recipe,Container,Pump,Liquid
 import pumpcontrol,time
-import logging,threading
+import threading
 from threading import Thread
 
 
@@ -17,24 +17,19 @@ def executeOrders(order):
         Order.Database().updateStatus(order.id,4)
         return
     
-    recipe = Ingredient.Database().selectByRecipe_id(recipe_id)
-    if not recipe:
-        logger.error(f"Keine Zutaten für Rezept ID {recipe_id} gefunden.")
-        Order.Database().updateStatus(order.id,4)
-        return
-    
-    if (check_ingredients_enough(recipe_id,order) == False):
-        return    
-    
-    # Berechne den maximalen Schritt des Rezepts
-    maxstep =  max([int(ingredient.step) for ingredient in recipe])
+    logger.info(f"{recipe.name} wird zubereitet")
 
-    if (check_steps(maxstep,order,recipe) == False):
+    if (check_steps(order,recipe) == False):
         return   
     
-            
-    logger.info(f"{recipe.name} wird zubereitet")
-    maxstep = max([int(ingredient.step) for ingredient in recipe])
+    if (check_ingredients_enough(order) == False):
+        return
+
+
+
+    ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
+    # Berechne den maximalen Schritt des Rezepts
+    maxstep =  max([int(ingredient.step) for ingredient in ingredients])
     # Schritte des Rezepts durchlaufen
     for step in range(maxstep+1):
         step = int(step)  # Sicherstellen, dass step ein Integer ist
@@ -171,9 +166,9 @@ def update_volume(container_id, volume):
         Container.Database().updateCurrent_volume(container_id, volume)
 
 
-def check_ingredients_enough(recipe_id, order):
+def check_ingredients_enough(order):
     # Lade alle Zutaten des Rezepts
-    ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
+    ingredients = Ingredient.Database().selectByRecipe_id(order.recipe_id)
 
     # Erstelle ein Dictionary, um den Gesamtbedarf für jede Flüssigkeit zu berechnen
     required_liquid_amounts = {}
@@ -203,8 +198,14 @@ def check_ingredients_enough(recipe_id, order):
     # Alle Flüssigkeiten reichen aus
     return True
 
-def check_steps(maxstep,order,recipe):
-        # Überprüfen, ob alle Schritte im Rezept Zutaten haben
+def check_steps(order,recipe):
+    ingredients = Ingredient.Database().selectByRecipe_id(recipe.id)
+    if not ingredients:
+        logger.error(f"Keine Zutaten für Rezept ID {recipe.id} gefunden.")
+        Order.Database().updateStatus(order.id,4)
+        return False
+    maxstep =  max([int(ingredient.step) for ingredient in ingredients])   
+    # Überprüfen, ob alle Schritte im Rezept Zutaten haben
     for step in range(maxstep + 1):
         logger.debug(f"Überprüfe Schritt {step + 1} für {recipe.name}.")
         ingredient_step = Ingredient.Database().selectByStepandRecipe_id(step, recipe.id)
@@ -216,15 +217,15 @@ def check_steps(maxstep,order,recipe):
 
         # Überprüfen, ob Container für die Flüssigkeiten in diesem Schritt vorhanden sind
         for ingredient in ingredient_step:
-            containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
+            
             liquid = Liquid.Database().selectByID(ingredient.liquid_id)
-
             # Überprüfen, ob die Flüssigkeit existiert
             if not liquid:
                 logger.error(f"Flüssigkeit mit ID {ingredient.liquid_id} nicht gefunden. Abbruch!")
                 Order.Database().updateStatus(order.id, 4)
                 return False
-
+            
+            containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
             # Überprüfen, ob Container für die Flüssigkeit vorhanden sind
             if not containers:
                 logger.error(f"Keine Container für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
