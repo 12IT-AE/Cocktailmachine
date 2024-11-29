@@ -13,7 +13,10 @@
                         {{$recipe->name}}
                     </div>
                 </div>
+                <div id="ordermodal">
                 @include('order.modal')
+                </div>
+                
             @endforeach
         </div>
     </div>

@@ -3,6 +3,7 @@
     tabindex="-1" aria-labelledby="modalLabel-{{ $recipe->id }}"
     aria-hidden="{{ session('modal') == 'modal-' . $recipe->id ? 'false' : 'true' }}"
     style="{{ session('modal') == 'modal-' . $recipe->id ? 'display: block;' : '' }}">
+
     <div class="modal-dialog modal-fullscreen" style="width: 90%; margin: 0 auto;">
         <div class="modal-content" style='background-color: transparent; backdrop-filter: blur(6px);'>
             <div class="container mt-5">
@@ -132,78 +133,82 @@
                 </div>
             </div>
         </div>
+
+
     </div>
+    
 </div>
 
 
+@pushonce("scripts")
+    <script>
+        function updateAmounts(recipeId, delta) {
+            const modal = document.getElementById(`modal-${recipeId}`);
+            if (!modal) return; // Exit if the modal is not found
 
-<script>
-    function updateAmounts(recipeId, delta) {
-        const modal = document.getElementById(`modal-${recipeId}`);
-        if (!modal) return; // Exit if the modal is not found
+            const ingredientElements = modal.querySelectorAll('.order_ingredient');
+            const numberIng = ingredientElements.length;
+            const isSmall = Array.from(ingredientElements).some(ingredient =>
+                parseFloat(ingredient.getAttribute('data-amount')) < 10
+            );
 
-        const ingredientElements = modal.querySelectorAll('.order_ingredient');
-        const numberIng = ingredientElements.length;
-        const isSmall = Array.from(ingredientElements).some(ingredient =>
-            parseFloat(ingredient.getAttribute('data-amount')) < 10
-        );
+            const fullAmount = getFullAmount(modal);
+            const newFullAmount = getFullAmount(modal) + delta;
+            let dif = 0;
+            let anz = 0;
 
-        const fullAmount = getFullAmount(modal);
-        const newFullAmount = getFullAmount(modal) + delta;
-        let dif = 0;
-        let anz = 0;
+            ingredientElements.forEach((ingredient) => {
+                let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
+                const currentHeight = (100 / fullAmount) * currentAmount;
+                if (currentHeight <= 7) {
+                    dif = dif + 7 - currentHeight;
+                    ingredient.setAttribute("height", 7);
+                } else {
+                    ingredient.setAttribute("height", currentHeight);
+                    anz++;
+                }
+            });
+            const add_dif = dif / anz;
+            ingredientElements.forEach((ingredient) => {
+                const currentHeight = parseFloat(ingredient.getAttribute('height'));
+                if (currentHeight > 7) {
+                    newHeight = currentHeight - add_dif;
+                    ingredient.setAttribute("height", newHeight);
+                }
+            });
 
-        ingredientElements.forEach((ingredient) => {
-            let currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
-            const currentHeight = (100 / fullAmount) * currentAmount;
-            if (currentHeight <= 7) {
-                dif = dif + 7 - currentHeight;
-                ingredient.setAttribute("height", 7);
-            } else {
-                ingredient.setAttribute("height", currentHeight);
-                anz++;
-            }
-        });
-        const add_dif = dif / anz;
-        ingredientElements.forEach((ingredient) => {
-            const currentHeight = parseFloat(ingredient.getAttribute('height'));
-            if (currentHeight > 7) {
-                newHeight = currentHeight - add_dif;
-                ingredient.setAttribute("height", newHeight);
-            }
-        });
-
-        ingredientElements.forEach((ingredient) => {
-            const currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
-            const height = parseFloat(ingredient.getAttribute('height'));
-            const newAmount = Math.max(0, currentAmount + (currentAmount / fullAmount) * delta);
-            ingredient.setAttribute('data-amount', newAmount);
-            ingredient.querySelector('.order_ingredient_amount').textContent = `${Math.round(newAmount)} ml`;
-            ingredient.style.height = `calc(${height}% - 5px)`;
-        });
-        updateFullAmount(modal);
-    }
-
-    function getFullAmount(modal) {
-        let total = 0;
-        const ingredientElements = modal.querySelectorAll('.order_ingredient');
-        ingredientElements.forEach((ingredient) => {
-            total += parseFloat(ingredient.getAttribute('data-amount'));
-        });
-        return total;
-    }
-
-    function updateFullAmount(modal) {
-        const totalAmountElement = modal.querySelector('.totalAmount');
-        if (totalAmountElement) {
-            totalAmountElement.textContent = Math.round(getFullAmount(modal));
+            ingredientElements.forEach((ingredient) => {
+                const currentAmount = parseFloat(ingredient.getAttribute('data-amount'));
+                const height = parseFloat(ingredient.getAttribute('height'));
+                const newAmount = Math.max(0, currentAmount + (currentAmount / fullAmount) * delta);
+                ingredient.setAttribute('data-amount', newAmount);
+                ingredient.querySelector('.order_ingredient_amount').textContent = `${Math.round(newAmount)} ml`;
+                ingredient.style.height = `calc(${height}% - 5px)`;
+            });
+            updateFullAmount(modal);
         }
-    }
 
-    function updateTotalPercent(modal, percent) {
-        const volumePercentElement = modal.querySelector('.volumePercent');
-        if (volumePercentElement) {
-            volumePercentElement.textContent = Math.round(percent);
+        function getFullAmount(modal) {
+            let total = 0;
+            const ingredientElements = modal.querySelectorAll('.order_ingredient');
+            ingredientElements.forEach((ingredient) => {
+                total += parseFloat(ingredient.getAttribute('data-amount'));
+            });
+            return total;
         }
-    }
-</script>
+
+        function updateFullAmount(modal) {
+            const totalAmountElement = modal.querySelector('.totalAmount');
+            if (totalAmountElement) {
+                totalAmountElement.textContent = Math.round(getFullAmount(modal));
+            }
+        }
+
+        function updateTotalPercent(modal, percent) {
+            const volumePercentElement = modal.querySelector('.volumePercent');
+            if (volumePercentElement) {
+                volumePercentElement.textContent = Math.round(percent);
+            }
+        }
+    </script>
+@endpushonce
