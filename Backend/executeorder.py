@@ -1,8 +1,8 @@
 from models import Ingredient,Order,Recipe,Container,Pump,Liquid
-import pumpcontrol,time
+import pumpcontrol
 import threading
 from threading import Thread
-
+from collections import defaultdict
 
 from logging_config import Logger
 
@@ -36,17 +36,21 @@ def executeOrders(order):
         if not ingredient_step:
             continue
 
-        Threadtimes = [] 
-                    
-        # Bearbeite alle Zutaten im aktuellen Schritt
-        for ingredient in ingredient_step:
-            containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
-            liquid = Liquid.Database().selectByID(ingredient.liquid_id)       
+        # Gruppieren und summieren der Zutaten
+        grouped_ingredients = group_and_sum_ingredients(ingredient_step)
+
+        for grouped in grouped_ingredients:
+            liquid_id = grouped["liquid_id"]
+            total_amount = grouped["total_amount"]
+
+            Threadtimes = [] 
+            containers = Container.Database().selectByLiquid_id(liquid_id)
+            liquid = Liquid.Database().selectByID(liquid_id)       
             pumps = collect_pumps_from_containers(containers)
 
-            logger.debug(f"Verteile {ingredient.amount} ml Flüssigkeit '{liquid.name}' auf {len(pumps)} Pumpe(n).")
+            logger.debug(f"Verteile {total_amount} ml Flüssigkeit '{liquid.name}' auf {len(pumps)} Pumpe(n).")
             sorted_containers = sorted(containers, key=lambda obj: obj.current_volume)
-            Threads = distribute_ingredient_among_pumps(pumps, ingredient.amount,sorted_containers,Threadtimes)
+            Threads = distribute_ingredient_among_pumps(pumps, total_amount,sorted_containers,Threadtimes)
             if Threads:
                 Threadtimes.extend(Threads)
 
@@ -163,6 +167,29 @@ def update_volume(container_id, volume):
         # Kritische Datenbankoperationen oder Änderungen
         Container.Database().updateCurrent_volume(container_id, volume)
 
+def group_and_sum_ingredients(ingredients):
+    """
+    Gruppiert und summiert Zutaten basierend auf ihrem `liquid_id`.
+
+    Args:
+        ingredients (list): Liste von Zutaten (Objekte mit `liquid_id` und `amount`).
+
+    Returns:
+        list: Eine Liste von gruppierten Zutaten mit aggregierten Mengen.
+    """
+    grouped_ingredients = defaultdict(float)  # Verwende float für Summierung von Mengen
+
+    # Gruppiere und summiere
+    for ingredient in ingredients:
+        grouped_ingredients[ingredient.liquid_id] += ingredient.amount
+
+    # Erstelle eine Liste mit den aggregierten Ergebnissen
+    result = [
+        {"liquid_id": liquid_id, "total_amount": total_amount}
+        for liquid_id, total_amount in grouped_ingredients.items()
+    ]
+
+    return result
 
 def check_ingredients_enough(order):
     # Lade alle Zutaten des Rezepts
@@ -212,18 +239,21 @@ def check_steps(order,recipe):
         if not ingredient_step:
             logger.warning(f"Keine Zutaten für Schritt {step + 1} gefunden. Überspringe.")
             continue
+        
+        # Gruppieren und summieren der Zutaten
+        grouped_ingredients = group_and_sum_ingredients(ingredient_step)
 
-        # Überprüfen, ob Container für die Flüssigkeiten in diesem Schritt vorhanden sind
-        for ingredient in ingredient_step:
-            
-            liquid = Liquid.Database().selectByID(ingredient.liquid_id)
+        for grouped in grouped_ingredients:
+            liquid_id = grouped["liquid_id"]
+
+            liquid = Liquid.Database().selectByID(liquid_id)
             # Überprüfen, ob die Flüssigkeit existiert
             if not liquid:
-                logger.error(f"Flüssigkeit mit ID {ingredient.liquid_id} nicht gefunden. Abbruch!")
+                logger.error(f"Flüssigkeit mit ID {liquid_id} nicht gefunden. Abbruch!")
                 Order.Database().updateStatus(order.id, 4)
                 return False
             
-            containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
+            containers = Container.Database().selectByLiquid_id(liquid_id)
             # Überprüfen, ob Container für die Flüssigkeit vorhanden sind
             if not containers:
                 logger.error(f"Keine Container für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
@@ -239,5 +269,3 @@ def check_steps(order,recipe):
                 return False
             
     return True
-
-#zusammenrechnen von gleichen zutaten in einem step 
