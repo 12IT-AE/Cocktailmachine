@@ -38,7 +38,7 @@ class Database(DBconfig.DBconnect):
 
     #Fügt eine neue Bestellung in die Datenbank ein.
     def insertOrder(self,status,recipe_id):
-        current_time = datetime.now()
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.database.insert(TABLE_NAME, {
             'status': status,
             'recipe_id': recipe_id, 
