@@ -12,15 +12,18 @@ logger = logger_singleton.get_logger(__name__)
 
 # Initialisiere GPIO Pin
 def setup_gpio(pin, state):
-        GPIO.setup(pin, GPIO.OUT)
-        GPIO.output(pin, state)
+    try:
+        GPIO.setmode(GPIO.BCM)
+    except:
+        pass
+    GPIO.setup(pin, GPIO.OUT)
+    GPIO.output(pin, state)
 
 
 # Startet die Pumpe
 def start_pump(gpio_pin):
     if gpio_pin is not None:
         logger.debug(f"GPIO {gpio_pin}: starting")
-        GPIO.setmode(GPIO.BCM)
         setup_gpio(gpio_pin, GPIO.LOW)
     else:
         logger.error(f"GPIO {gpio_pin} nicht gefunden!")
@@ -29,7 +32,6 @@ def start_pump(gpio_pin):
 def stop_pump(gpio_pin):
     if gpio_pin is not None:
         logger.debug(f"GPIO {gpio_pin}: stopping!")
-        GPIO.setmode(GPIO.BCM)
         setup_gpio(gpio_pin, GPIO.HIGH)
     else:
         logger.error(f"GPIO {gpio_pin} nicht gefunden!")
@@ -39,7 +41,6 @@ def cleanPumps(sec):
     if not all_pumps:
         logger.warning("Keine Pumpen in der Datenbank gefunden!")
         return
-    GPIO.setmode(GPIO.BCM)
     logger.info("Starte Reinigung aller Pumpen...")
     for pump in all_pumps:
         if pump.pin is not None:
@@ -60,7 +61,6 @@ def start_pumpfor(gpio_pin, sec):
     if gpio_pin is None:
         logger.error("Ungültiger GPIO-Pin! Vorgang abgebrochen.")
         return
-    GPIO.setmode(GPIO.BCM)
     start_pump(gpio_pin)
     time.sleep(sec)
     stop_pump(gpio_pin)

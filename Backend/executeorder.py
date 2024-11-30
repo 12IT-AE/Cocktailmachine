@@ -25,8 +25,6 @@ def executeOrders(order):
     if (check_ingredients_enough(order) == False):
         return
 
-
-
     ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
     # Berechne den maximalen Schritt des Rezepts
     maxstep =  max([int(ingredient.step) for ingredient in ingredients])
@@ -43,12 +41,12 @@ def executeOrders(order):
         # Bearbeite alle Zutaten im aktuellen Schritt
         for ingredient in ingredient_step:
             containers = Container.Database().selectByLiquid_id(ingredient.liquid_id)
-            liquid = Liquid.Database().selectByID(ingredient.liquid_id)
-
+            liquid = Liquid.Database().selectByID(ingredient.liquid_id)       
             pumps = collect_pumps_from_containers(containers)
-            sorted_containers = sorted(containers, key=lambda obj: obj.current_volume)
 
-            Threads = distribute_ingredient_among_pumps(pumps, ingredient.amount, liquid.name,sorted_containers,Threadtimes)
+            logger.debug(f"Verteile {ingredient.amount} ml Flüssigkeit '{liquid.name}' auf {len(pumps)} Pumpe(n).")
+            sorted_containers = sorted(containers, key=lambda obj: obj.current_volume)
+            Threads = distribute_ingredient_among_pumps(pumps, ingredient.amount,sorted_containers,Threadtimes)
             if Threads:
                 Threadtimes.extend(Threads)
 
@@ -72,17 +70,18 @@ def collect_pumps_from_containers(containers):
 
 
 #Verarbeitet die Verteilung einer Zutat auf mehrere Pumpen.
-def distribute_ingredient_among_pumps(pumps, amount, liquid_name,containers,threads):
-    # fehlt sortierung wenig zu viel 
+def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
+    
+    
 
-    # Berechne die Menge pro Pumpe
-    amount_per_pump = amount / len(pumps)
-    if containers:
+    if containers and pumps:
     # Wähle den ersten Container
+        amount_per_pump = amount / len(pumps)
         container = containers[0]
     else:
         return threads
-        
+    
+    
     # Finde alle Pumpen, die mit dem aktuellen Container verbunden sind
     container_pumps = [pump for pump in pumps if pump.container_id == container.id]
 
@@ -95,7 +94,7 @@ def distribute_ingredient_among_pumps(pumps, amount, liquid_name,containers,thre
         remaining_containers = [item for item in containers if item != container]
         
         # Verteile die gesamte Menge auf die restlichen Pumpen und Container
-        distribute_ingredient_among_pumps(remaining_pumps, amount, liquid_name, remaining_containers,threads)
+        distribute_ingredient_among_pumps(remaining_pumps, amount, remaining_containers,threads)
     
 
  # Berechne die benötigte Menge für alle Pumpen des Containers
@@ -117,7 +116,7 @@ def distribute_ingredient_among_pumps(pumps, amount, liquid_name,containers,thre
         
         # Verteile den Rest der Menge auf die restlichen Pumpen und Container
         remaining_amount = amount - (container.current_volume - 10)
-        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, liquid_name, remaining_containers,threads)
+        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, remaining_containers,threads)
 
     else:
         # Wenn genug Platz im Container ist, verteile die gesamte Menge pro Pumpe
@@ -131,12 +130,11 @@ def distribute_ingredient_among_pumps(pumps, amount, liquid_name,containers,thre
         
         # Verteile den verbleibenden Teil der Menge
         remaining_amount = amount - container_amount_needed
-        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, liquid_name, remaining_containers,threads)
+        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, remaining_containers,threads)
 
 
-def ausgabe(pumps,amount_per_pump):
+def ausgabe(amount_per_pump,pumps):
     threads = []
-    #logger.debug(f"Verteile {amount} ml Flüssigkeit '{liquid_name}' auf {len(pumps)} Pumpe(n).")
     # Die maximale Zeit, die für das Abpumpen benötigt wird
     pumptime = getTime(amount_per_pump)
     for pump in pumps:
@@ -204,7 +202,7 @@ def check_steps(order,recipe):
         logger.error(f"Keine Zutaten für Rezept ID {recipe.id} gefunden.")
         Order.Database().updateStatus(order.id,4)
         return False
-    maxstep =  max([int(ingredient.step) for ingredient in ingredients])   
+    maxstep =  max([int(ingredient.step) for ingredient in ingredients])
     # Überprüfen, ob alle Schritte im Rezept Zutaten haben
     for step in range(maxstep + 1):
         logger.debug(f"Überprüfe Schritt {step + 1} für {recipe.name}.")
@@ -240,4 +238,6 @@ def check_steps(order,recipe):
                 Order.Database().updateStatus(order.id, 4)
                 return False
             
-            return True
+    return True
+
+#zusammenrechnen von gleichen zutaten in einem step 
