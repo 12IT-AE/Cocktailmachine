@@ -11,59 +11,45 @@ logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
 # Initialisiere GPIO Pin
-def setup_gpio(pin, state):
+def setup_gpio(gpio_pin, state):
+    if gpio_pin is not None:
+        GPIO.setup(gpio_pin, GPIO.OUT)
+        GPIO.output(gpio_pin, state)
+        action = "starting" if state == GPIO.LOW else "stopping"
+        logger.debug(f"GPIO {gpio_pin}: {action}")
+
+def cleanPumps(sec):
     try:
         GPIO.setmode(GPIO.BCM)
     except:
         pass
-    GPIO.setup(pin, GPIO.OUT)
-    GPIO.output(pin, state)
-
-
-# Startet die Pumpe
-def start_pump(gpio_pin):
-    if gpio_pin is not None:
-        logger.debug(f"GPIO {gpio_pin}: starting")
-        setup_gpio(gpio_pin, GPIO.LOW)
-    else:
-        logger.error(f"GPIO {gpio_pin} nicht gefunden!")
-
-# Stoppt die Pumpe
-def stop_pump(gpio_pin):
-    if gpio_pin is not None:
-        logger.debug(f"GPIO {gpio_pin}: stopping!")
-        setup_gpio(gpio_pin, GPIO.HIGH)
-    else:
-        logger.error(f"GPIO {gpio_pin} nicht gefunden!")
-
-def cleanPumps(sec):
     all_pumps = Pump.Database().selectAllFromDatabase()
     if not all_pumps:
         logger.warning("Keine Pumpen in der Datenbank gefunden!")
         return
     logger.info("Starte Reinigung aller Pumpen...")
     for pump in all_pumps:
-        if pump.pin is not None:
-            logger.debug(f"Reinige Pumpe GPIO {pump.pin}")
-            setup_gpio(pump.pin, GPIO.LOW)
-        else:
-            logger.error(f"GPIO {pump.pin} nicht gefunden!")
+        logger.debug(f"Reinige Pumpe GPIO {pump.pin}")
+        setup_gpio(pump.pin, GPIO.LOW)
 
     time.sleep(sec)
 
     for pump in all_pumps:
-        if pump.pin is not None:
-            setup_gpio(pump.pin, GPIO.HIGH)
+        setup_gpio(pump.pin, GPIO.HIGH)
     logger.debug(f"Reinigung abgeschlossen!")
 
 # Startet eine Pumpe für eine bestimmte Dauer
 def start_pumpfor(gpio_pin, sec):
+    try:
+        GPIO.setmode(GPIO.BCM)
+    except:
+        pass
     if gpio_pin is None:
         logger.error("Ungültiger GPIO-Pin! Vorgang abgebrochen.")
         return
-    start_pump(gpio_pin)
+    setup_gpio(gpio_pin, GPIO.LOW)
     time.sleep(sec)
-    stop_pump(gpio_pin)
+    setup_gpio(gpio_pin, GPIO.HIGH)
 
 
 if __name__ == "__main__":

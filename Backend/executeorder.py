@@ -9,6 +9,12 @@ from logging_config import Logger
 logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
+#Berechnet die Laufzeit der Pumpe basierend auf der Menge.
+def getTime(amount):
+    flow_rate = 19  # Durchflussrate in ml/s
+    return amount/flow_rate
+
+
 def executeOrders(order):
     recipe_id = order.recipe_id
     recipe = Recipe.Database().selectByID(recipe_id)
@@ -157,10 +163,7 @@ def ausgabe(amount_per_pump,pumps):
         threads.append(volume_thread)
     return threads     
 
-#Berechnet die Laufzeit der Pumpe basierend auf der Menge.
-def getTime(amount):
-    flow_rate = 19  # Durchflussrate in ml/s
-    return amount/flow_rate
+
 
 def update_volume(container_id, volume):
     with threading.Lock():  # Sicherstellen, dass immer nur ein Thread den Codeblock ausführt
@@ -269,3 +272,7 @@ def check_steps(order,recipe):
                 return False
             
     return True
+
+
+
+#überprüfen noch anpassen auf container die auch angeschlossen sind; keine Pumpen mit gleichem pin
