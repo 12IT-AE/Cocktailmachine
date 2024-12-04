@@ -1,5 +1,5 @@
 
-<div class="modal-content">
+<div class="modal-content" style='background-color: transparent; backdrop-filter: blur(6px);'>
     <div class="container mt-5">
         <div class="order-card shadow-sm">
             <div class="card-body">

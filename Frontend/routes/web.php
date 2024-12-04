@@ -10,7 +10,8 @@ use App\Http\Controllers\{
     IngredientController,
     GlassController,
     GarnishController,
-    OrderController
+    OrderController,
+    OrderPiController
 };
 
 Route::get('/', function () {
@@ -56,6 +57,7 @@ Route::group(['prefix' => ''], function() {
     Route::resource("order", OrderController::class);
     Route::get('order/modal/{id}', [OrderController::class, 'modal'])->name('order.modal');
     Route::get('/orders', [OrderController::class, 'paginatedIndex'])->name('order.paginatedIndex');
+    Route::get('/orderPi', [OrderController::class, 'orderPi'])->name('order.orderPi');
 });
 
     

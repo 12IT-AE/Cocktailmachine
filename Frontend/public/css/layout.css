@@ -201,10 +201,64 @@ td {
 
 .modal-content{
     
-        background: linear-gradient(180deg, #171717 0%, #3A1010 100%);
+        /* background: linear-gradient(180deg, #171717 0%, #3A1010 100%); */
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-size: cover;
         color: white;
     
 }
+
+
+
+
+
+
+/*  ----- TEST MAX ----- */
+
+.card-carousel {
+    position: fixed;
+    right: 0;
+  }
+  
+  .card-carousel .my-card {
+    position: relative;
+    -webkit-transform: scale(0.6) translateY(-2rem);
+    transform: scale(0.6) translateY(-2rem);
+    opacity: 0;
+    cursor: pointer;
+    pointer-events: none;
+    background: #2e5266;
+    background: linear-gradient(to top, #2e5266, #6e8898);
+    transition: 1s;
+    margin: 0 auto;
+    width: 400px;
+  }
+  
+  .card-carousel .my-card:after {
+    content: '';
+    position: absolute;
+    height: 2px;
+    width: 100%;
+    border-radius: 100%;
+    background-color: rgba(0,0,0,0.3);
+    bottom: -5rem;
+    -webkit-filter: blur(4px);
+    filter: blur(4px);
+  }
+  
+  .card-carousel .my-card.active {
+    -webkit-transform: scale(1) translateY(0) translateX(0);
+    transform: scale(1) translateY(0) translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+    transition: 1s;
+  }
+  
+  .card-carousel .my-card.prev, .card-carousel .my-card.next {
+    -webkit-transform: scale(0.8) translateY(-1rem) translateX(0);
+    transform: scale(0.8) translateY(-1rem) translateX(0);
+    opacity: 0.6;
+    pointer-events: auto;
+    transition: 1s;
+  }

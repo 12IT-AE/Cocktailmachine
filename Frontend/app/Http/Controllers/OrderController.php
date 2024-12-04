@@ -14,6 +14,13 @@ class OrderController extends Controller
         return view('order.index', ['recipes' => $recipes]);
     }
 
+    public function orderPi()
+    {
+        $recipes = Recipe::all();
+
+        return view('order.orderPi', ['recipes' => $recipes]);
+    }
+
     public function modal($id){
         $recipe = Recipe::find($id);
         return view('order.modal', ['recipe' => $recipe]);
