@@ -3,26 +3,40 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Order,Garnish, Recipe, Glass, Liquid, Ingredient};
+use App\Models\{Order, Garnish, DefaultRecipe, Glass, Liquid, Ingredient};
 
 class OrderController extends Controller
 {
     public function index()
     {
-        $recipes = Recipe::all();
+        return view('order.index', compact('recipes'));
+    }
 
-        return view('order.index', ['recipes' => $recipes]);
+    public function paginatedIndex(Request $request)
+    {
+        $recipes = DefaultRecipe::paginate(3);
+        
+        if ($request->ajax()) {
+            return view('order.partials.recipes', compact('recipes'))->render();
+        }
+
+        return view('order.paginatedindex', compact('recipes'));
     }
 
     public function orderPi()
     {
-        $recipes = Recipe::all();
+        $recipes = DefaultRecipe::all();
 
         return view('order.orderPi', ['recipes' => $recipes]);
     }
 
     public function modal($id){
-        $recipe = Recipe::find($id);
+        $recipe = DefaultRecipe::find($id);
         return view('order.modal', ['recipe' => $recipe]);
+    }
+
+    public function createOrder(Request $request)
+    {
+        
     }
 }
