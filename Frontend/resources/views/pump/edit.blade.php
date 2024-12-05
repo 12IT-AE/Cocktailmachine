@@ -31,5 +31,11 @@
 
             <button type="submit" class="btn btn-primary">Update Pump</button>
         </form>
+
+        <form action="{{ route('pump.destroy', $pump->id) }}" method="POST" class="mt-3">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger">Delete Pump</button>
+        </form>
     </div>
 @endsection
