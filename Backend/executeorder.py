@@ -171,15 +171,6 @@ def update_volume(container_id, volume):
         Container.Database().updateCurrent_volume(container_id, volume)
 
 def group_and_sum_ingredients(ingredients):
-    """
-    Gruppiert und summiert Zutaten basierend auf ihrem `liquid_id`.
-
-    Args:
-        ingredients (list): Liste von Zutaten (Objekte mit `liquid_id` und `amount`).
-
-    Returns:
-        list: Eine Liste von gruppierten Zutaten mit aggregierten Mengen.
-    """
     grouped_ingredients = defaultdict(float)  # Verwende float für Summierung von Mengen
 
     # Gruppiere und summiere
@@ -209,11 +200,17 @@ def check_ingredients_enough(order):
 
     # Überprüfe, ob die vorhandene Menge ausreicht
     for liquid_id, required_amount in required_liquid_amounts.items():
+        
         # Lade die Container mit der entsprechenden Flüssigkeit
         containers = Container.Database().selectByLiquid_id(liquid_id)
+        valid_containers = []
+        for container in containers:
+            container_pumps = Pump.Database().selectByContainerID(container.id)
+            if container_pumps:
+                valid_containers.append(container)
 
         # Berechne das gesamte verfügbare Volumen für diese Flüssigkeit
-        total_volume_container = sum(container.current_volume for container in containers)
+        total_volume_container = sum(container.current_volume for container in valid_containers)
 
         # Mindestvolumen-Bedingung überprüfen
         if total_volume_container - required_amount <= 10 * len(containers):
@@ -275,4 +272,4 @@ def check_steps(order,recipe):
 
 
 
-#überprüfen noch anpassen auf container die auch angeschlossen sind; keine Pumpen mit gleichem pin
+#überprüfen noch anpassen auf container die auch angeschlossen sind; 
