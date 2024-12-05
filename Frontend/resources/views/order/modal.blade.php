@@ -1,4 +1,3 @@
-
 <div class="modal-content" style='background-color: transparent; backdrop-filter: blur(6px);'>
     <div class="container mt-5">
         <div class="order-card shadow-sm">
@@ -82,15 +81,21 @@
                             <button class="btn btn-lg btn-block"
                                 style="height: 100%; background-color: grey; width: 47.5%; margin-right: 5%; border-radius: 15px;"
                                 data-bs-dismiss="modal">Abbrechen</button>
-                            <button class="btn btn-lg btn-block"
-                                style="height: 100%; background-color: green; width: 47.5%; border-radius: 15px;">Produzieren</button>
+                                {{-- FORM FOR CREATING ORDER --}}
+                                <form id="createOrderForm" action="{{ route('order.store') }}" class="text-center" method="POST" style="height: 100%; background-color: green; width: 47.5%; border-radius: 15px;">
+                                    @csrf
+                                    <input type="hidden" name="recipe_id" value="{{ $recipe->id }}">
+                                    <input type="hidden" name="ingredients" id="ingredientsInput">
+                                    <button class="btn btn-lg btn-block align-middle" onclick="createOrder()">Produzieren</button>
+                                </form>
+                            
                         </div>
                     </div>
                     <div class="col-3" style="border: none;">
                         <div class="order_ingredients" style="border: none; height: calc(100% + 5px);">
                             @foreach ($recipe->ingredients as $ingredient)
                                 @if (!$small && $numberIng <= 5)
-                                    <div class="order_ingredient" data-id="{{ $ingredient->id }}"
+                                    <div class="order_ingredient" data-id="{{ $ingredient->liquid->id }}"
                                         data-amount="{{ $ingredient->amount }}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 3, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 5, 2)) }}, 
@@ -100,7 +105,7 @@
                                             ml</span>
                                     </div>
                                 @else
-                                    <div class="order_ingredient" data-id="{{ $ingredient->id }}"
+                                    <div class="order_ingredient" data-id="{{ $ingredient->liquid->id }}"
                                         data-amount="{{ $ingredient->amount }}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 3, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 5, 2)) }}, 
@@ -118,3 +123,24 @@
         </div>
     </div>
 </div>
+
+<script>
+    function createOrder() {
+        const ingredients = [];
+        document.querySelectorAll('.order_ingredient').forEach(ingredientElement => {
+            const liquidId = ingredientElement.getAttribute('data-id');
+            const amount = ingredientElement.getAttribute('data-amount');
+            ingredients.push({
+                liquid_id: liquidId,
+                step: 0,
+                amount: amount
+            });
+        });
+        
+        
+        document.getElementById('ingredientsInput').value = JSON.stringify(ingredients);
+        console.log(ingredients);
+        console.log(document.getElementById('ingredientsInput').value);
+        // document.getElementById('createOrderForm').submit();
+    }
+</script>
