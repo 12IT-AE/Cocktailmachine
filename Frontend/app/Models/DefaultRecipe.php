@@ -27,8 +27,9 @@ class DefaultRecipe extends Model
         return $this->hasMany(Order::class);
     }
 
-    public function garnishes() {
-        return $this->belongsToMany(Garnish::class, 'recipe_garnish');
+    public function garnishes()
+    {
+        return $this->belongsToMany(Garnish::class, 'recipe_garnish', 'recipe_id', 'garnish_id');
     }
     public function ingredients()
     {

@@ -16,6 +16,6 @@ class Garnish extends Model
 
     public function recipes()
     {
-        return $this->belongsToMany(Recipe::class, 'recipe_garnish');
+        return $this->belongsToMany(DefaultRecipe::class, 'recipe_garnish');
     }
 }

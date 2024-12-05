@@ -8,15 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class RecipeGarnish extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        "recipe_id",
-        "garnish_id"
+        'recipe_id',
+        'garnish_id'
     ];
-    
-    public function recipe(){
-        return $this->belongsTo(Recipe::class);
+
+    public function recipe()
+    {
+        return $this->belongsTo(Recipe::class, 'recipe_id', 'id');
     }
-    public function garnish(){
-        return $this->belongsTo(Garnish::class);
+
+    public function garnish()
+    {
+        return $this->belongsTo(Garnish::class, 'garnish_id', 'id');
     }
 }
