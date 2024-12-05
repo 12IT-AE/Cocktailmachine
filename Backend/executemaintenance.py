@@ -1,4 +1,4 @@
-import pumpcontrol,testmain
+import pumpcontrol,main
 from models import Maintenance,Pump
 
 
@@ -15,10 +15,11 @@ def executeMaintainence(job,pump_runtime=2):
         # Überprüfen, ob pump_id gleich 0 ist
         if job.pump_id == 0:
             pumpcontrol.cleanPumps(pump_runtime)  # Du kannst die Dauer der Reinigung hier nach Bedarf anpassen
-        # Überprüfen, ob pump_id < 0 ist
-        elif job.pump_id < 0:
+        
+        # Überprüfen, ob pump_id gleich 66 ist
+        elif job.pump_id == 66:
             logger.info("stop running")
-            testmain.running=False
+            main.running=False
 
         else:
             # Pumpe starten

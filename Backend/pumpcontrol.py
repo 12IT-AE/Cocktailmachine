@@ -59,3 +59,7 @@ if __name__ == "__main__":
         pass
     cleanPumps(3)
     GPIO.cleanup()
+
+    
+#pump pins
+#4,17,27,22,23,24,13,19
