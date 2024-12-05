@@ -2,6 +2,7 @@
 
 namespace App\Enums;
 // pumps = [7, 11, 13, 15, 16, 18, 35, 37]
+// [4, 17, 27, 22, 23, 24, 13, 19]
 
 enum Pin: int
 {
@@ -23,4 +24,16 @@ enum Pin: int
     case PIN_21 = 21;
     case PIN_25 = 25;
 
+    public static function getActives(){
+        return [
+            self::PIN_4,
+            self::PIN_17,
+            self::PIN_27,
+            self::PIN_22,
+            self::PIN_23,
+            self::PIN_24,
+            self::PIN_13,
+            self::PIN_19
+        ];
+    }
 }
