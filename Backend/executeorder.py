@@ -9,12 +9,6 @@ from logging_config import Logger
 logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
-#Berechnet die Laufzeit der Pumpe basierend auf der Menge.
-def getTime(amount, pump: Pump):
-    return amount / pump.flowrate
-
-
-
 def executeOrders(order):
     recipe_id = order.recipe_id
     recipe = Recipe.Database().selectByID(recipe_id)
@@ -33,7 +27,7 @@ def executeOrders(order):
 
     ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
     # Berechne den maximalen Schritt des Rezepts
-    maxstep =  max([int(ingredient.step) for ingredient in ingredients])
+    maxstep = max([int(ingredient.step) for ingredient in ingredients])
     # Schritte des Rezepts durchlaufen
     for step in range(maxstep+1):
         step = int(step)  # Sicherstellen, dass step ein Integer ist
