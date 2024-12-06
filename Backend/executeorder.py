@@ -41,27 +41,26 @@ def executeOrders(order):
         ingredient_step =  Ingredient.Database().selectByStepandRecipe_id(step,recipe_id)
         if not ingredient_step:
             continue
-
+        all_threads = []
         # Gruppieren und summieren der Zutaten
         grouped_ingredients = group_and_sum_ingredients(ingredient_step)
-
+         
         for grouped in grouped_ingredients:
             liquid_id = grouped["liquid_id"]
             total_amount = grouped["total_amount"]
 
-            Threadtimes = [] 
+            
             containers = Container.Database().selectByLiquid_id(liquid_id)
             liquid = Liquid.Database().selectByID(liquid_id)       
             pumps = collect_pumps_from_containers(containers)
 
             logger.debug(f"Verteile {total_amount} ml Flüssigkeit '{liquid.name}' auf {len(pumps)} Pumpe(n).")
             sorted_containers = sorted(containers, key=lambda obj: obj.current_volume)
-            Threads = distribute_ingredient_among_pumps(pumps, total_amount,sorted_containers,Threadtimes)
-            if Threads:
-                Threadtimes.extend(Threads)
+            threads = distribute_ingredient_among_pumps(pumps, total_amount,sorted_containers,[])
+            all_threads.extend(threads)
 
         # Warte darauf, dass alle Threads abgeschlossen sind
-        for thread in Threadtimes:
+        for thread in all_threads:
             thread.join()   
         logger.info(f"Step {step+1} von {maxstep+1} abgeschlossen")
     
@@ -106,7 +105,7 @@ def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
     time_to_distribute  = amount / total_flowrate
 
      # Berechne die zu verteilende Menge für jede Pumpe basierend auf ihrer Flussrate
-    amount_per_pump = {pump: pump.flowrate * time_to_distribute  for pump in container_pumps}
+    amount_per_pump = {Pump: pump.flowrate * time_to_distribute  for pump in container_pumps}
 
     # Berechne die Gesamtmenge, die der aktuelle Container bereitstellen kann
     total_amount_needed = sum(amount_per_pump.values())
@@ -118,7 +117,7 @@ def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
     else:
         remaining_amount = amount - total_amount_needed
 
-    threads.extend(ausgabe(remaining_amount, container_pumps,time_to_distribute))
+    threads.extend(ausgabe((amount-remaining_amount), container_pumps,time_to_distribute))
 
     # Entferne die verbrauchten Pumpen und Container
     remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
@@ -129,10 +128,9 @@ def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
 
 
 
-def ausgabe(new_Volume,pumps,pumptime):
+def ausgabe(removedVolume,pumps,pumptime):
     threads = []
     # Die maximale Zeit, die für das Abpumpen benötigt wird
-    
     for pump in pumps:
         # Thread für das Starten der Pumpe
         pump_thread = Thread(target=pumpcontrol.start_pumpfor, args=(pump.pin, pumptime))
@@ -142,7 +140,7 @@ def ausgabe(new_Volume,pumps,pumptime):
         # Thread für das Aktualisieren des Volumens
         volume_thread = Thread(
             target=update_volume,
-            args=(pump.container_id, new_Volume)
+            args=(pump.container_id, removedVolume)
         )
         volume_thread.start()
         threads.append(volume_thread)
@@ -150,10 +148,10 @@ def ausgabe(new_Volume,pumps,pumptime):
 
 
 
-def update_volume(container_id, new_Volume):
+def update_volume(container_id, removedVolume):
     with threading.Lock():  # Sicherstellen, dass immer nur ein Thread den Codeblock ausführt
         # Kritische Datenbankoperationen oder Änderungen
-        Container.Database().updateCurrent_volume(container_id, new_Volume)
+        Container.Database().updateCurrent_volume(container_id, removedVolume)
 
 def group_and_sum_ingredients(ingredients):
     grouped_ingredients = defaultdict(float)  # Verwende float für Summierung von Mengen
