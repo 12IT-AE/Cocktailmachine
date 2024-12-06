@@ -82,72 +82,58 @@ def collect_pumps_from_containers(containers):
 #Verarbeitet die Verteilung einer Zutat auf mehrere Pumpen.
 def distribute_ingredient_among_pumps(pumps, amount,containers,threads):  
 
-    if containers and pumps:
-    # Wähle den ersten Container
-        amount_per_pump = amount / len(pumps)
-        container = containers[0]
-    else:
+    if not containers or not pumps:
         return threads
     
-    
+    # Wähle den ersten Container
+    container = containers[0]
+
     # Finde alle Pumpen, die mit dem aktuellen Container verbunden sind
     container_pumps = [pump for pump in pumps if pump.container_id == container.id]
 
-    # Überprüfen, ob der Container fast leer ist (≤10 Einheiten verbleibend)
-    if container.current_volume <= 10:
-        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
+    # Berechne die Gesamtflussrate der Pumpen
+    total_flowrate = sum(pump.flowrate for pump in container_pumps)
+
+    # Prüfe, ob der Container leer oder negativ ist
+    available_volume = max(container.current_volume-10, 0)
+    if total_flowrate <= 0 or available_volume == 0 :
+        # Wenn keine effektive Flussrate vorhanden ist, überspringe diesen Container
         remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
-        
-        # Entferne den aktuellen Container aus der Containernliste
         remaining_containers = [item for item in containers if item != container]
-        
-        # Verteile die gesamte Menge auf die restlichen Pumpen und Container
-        distribute_ingredient_among_pumps(remaining_pumps, amount, remaining_containers,threads)
+        return distribute_ingredient_among_pumps(remaining_pumps, amount, remaining_containers, threads)
     
+    # Berechne die Zeit, die alle Pumpen benötigen, um gleichzeitig fertig zu werden
+    time_to_distribute  = amount / total_flowrate
 
- # Berechne die benötigte Menge für alle Pumpen des Containers
-    container_amount_needed = len(container_pumps) * amount_per_pump
-    
-    # Überprüfen, ob das Verteilen den Container fast leeren würde (≤10 Einheiten verbleibend)
-    if container.current_volume - container_amount_needed <= 10:
-        # Passe die Menge pro Pumpe an, sodass nur bis 10 Einheiten Restvolumen gefüllt wird
-        amount_per_pump = (container.current_volume - 10) / len(container_pumps)
-        
-        # Gib die berechnete Menge an die Pumpen des Containers aus
-        threads.extend(ausgabe(amount_per_pump, container_pumps))
+     # Berechne die zu verteilende Menge für jede Pumpe basierend auf ihrer Flussrate
+    amount_per_pump = {pump: pump.flowrate * time_to_distribute  for pump in container_pumps}
 
-        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
-        remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
-        
-        # Entferne den aktuellen Container aus der Containernliste
-        remaining_containers = [item for item in containers if item != container]
-        
-        # Verteile den Rest der Menge auf die restlichen Pumpen und Container
-        remaining_amount = amount - (container.current_volume - 10)
-        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, remaining_containers,threads)
-
+    # Berechne die Gesamtmenge, die der aktuelle Container bereitstellen kann
+    total_amount_needed = sum(amount_per_pump.values())
+    if total_amount_needed > available_volume:
+        # Passe die Mengen an, um den Container nicht vollständig zu leeren
+        adjustment_factor = available_volume / total_amount_needed
+        amount_per_pump = {pump: amount * adjustment_factor for pump, amount in amount_per_pump.items()}
+        remaining_amount = amount - available_volume
     else:
-        # Wenn genug Platz im Container ist, verteile die gesamte Menge pro Pumpe
-        threads.extend(ausgabe(amount_per_pump, container_pumps))
-        
-        # Entferne die Pumpen des aktuellen Containers aus der Pumpenliste
-        remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
-        
-        # Entferne den aktuellen Container aus der Containernliste
-        remaining_containers = [item for item in containers if item != container]
-        
-        # Verteile den verbleibenden Teil der Menge
-        remaining_amount = amount - container_amount_needed
-        distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, remaining_containers,threads)
+        remaining_amount = amount - total_amount_needed
+
+    threads.extend(ausgabe(remaining_amount, container_pumps,time_to_distribute))
+
+    # Entferne die verbrauchten Pumpen und Container
+    remaining_pumps = [pump for pump in pumps if pump not in container_pumps]
+    remaining_containers = [item for item in containers if item != container]
+
+    # Verteile den Rest auf die verbleibenden Container und Pumpen
+    return distribute_ingredient_among_pumps(remaining_pumps, remaining_amount, remaining_containers, threads)
 
 
-def ausgabe(amount_per_pump,pumps):
+
+def ausgabe(new_Volume,pumps,pumptime):
     threads = []
     # Die maximale Zeit, die für das Abpumpen benötigt wird
     
     for pump in pumps:
-        pumptime = getTime(amount_per_pump,pump)
-
         # Thread für das Starten der Pumpe
         pump_thread = Thread(target=pumpcontrol.start_pumpfor, args=(pump.pin, pumptime))
         pump_thread.start()
@@ -156,7 +142,7 @@ def ausgabe(amount_per_pump,pumps):
         # Thread für das Aktualisieren des Volumens
         volume_thread = Thread(
             target=update_volume,
-            args=(pump.container_id, amount_per_pump)
+            args=(pump.container_id, new_Volume)
         )
         volume_thread.start()
         threads.append(volume_thread)
@@ -164,10 +150,10 @@ def ausgabe(amount_per_pump,pumps):
 
 
 
-def update_volume(container_id, volume):
+def update_volume(container_id, new_Volume):
     with threading.Lock():  # Sicherstellen, dass immer nur ein Thread den Codeblock ausführt
         # Kritische Datenbankoperationen oder Änderungen
-        Container.Database().updateCurrent_volume(container_id, volume)
+        Container.Database().updateCurrent_volume(container_id, new_Volume)
 
 def group_and_sum_ingredients(ingredients):
     grouped_ingredients = defaultdict(float)  # Verwende float für Summierung von Mengen

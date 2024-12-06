@@ -34,7 +34,6 @@ class Database(DBconfig.DBconnect):
         return self._selectByColoumnFromTable(TABLE_NAME,Container,'liquid_id',liquid_id)
 
     #Aktualisiert den aktuellen Füllstand eines Eintrags anhand seiner ID und dem ausgegeben Volumen.    
-    def updateCurrent_volume(self,id,dispensedVolume):
+    def updateCurrent_volume(self,id,new_Volume):
         curcontainer = self.selectByID(id)
-        newVolume = curcontainer.current_volume - dispensedVolume
-        self.database.update(TABLE_NAME, {"current_volume": f"{newVolume}","updated_at":f"{datetime.now()}"}, f"id = {id}")
+        self.database.update(TABLE_NAME, {"current_volume": f"{new_Volume}","updated_at":f"{datetime.now()}"}, f"id = {id}")
