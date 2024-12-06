@@ -31,11 +31,13 @@ class PumpController extends Controller
                     $fail('The selected pin is invalid.');
                 }
             }],
+            'flowrate' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
         ]);
 
         $pump = Pump::create([
             'container_id' => $validData['container_id'],
             'pin' => $validData['pin'],
+            'flowrate' => $validData['flowrate'],
         ]);
 
         return redirect()->route('pump.index');

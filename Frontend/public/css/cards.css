@@ -1,6 +1,7 @@
 
 .card {
     transition: transform 0.2s ease-in-out;
+    color: #ffffff;
 }
 
 /* .card:hover {   
@@ -13,6 +14,7 @@
 
 .card-title, .card-subtitle, .card-text {
     margin-bottom: 15px;
+    color: #ffffff;
 }
 
 .text-decoration-none {
