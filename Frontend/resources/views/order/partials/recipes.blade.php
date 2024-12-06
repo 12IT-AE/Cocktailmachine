@@ -15,6 +15,8 @@
     <div class="vertical-button right">
         @if ($recipes->nextPageUrl())
             <button class="page-link" data-page="{{ $recipes->currentPage() + 1 }}">></button>
+
         @endif
     </div>
 </div>
+

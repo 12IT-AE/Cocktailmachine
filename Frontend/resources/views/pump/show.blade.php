@@ -1,20 +1,16 @@
 @extends('layouts.app')
 
-@section('title', 'Show Recipe')
+@section('title', 'Show Pump')
 @section('content')
 <div class="container mt-5">
     <div class="card">
         <div class="card-header">
-            <h1>{{ $recipe->name }}</h1>
+            <h1>Pump Details</h1>
         </div>
         <div class="card-body">
-            <p class="card-text">{{ $recipe->description }}</p>
-            <h2>Ingredients</h2>
-            <ul class="list-group">
-                @foreach ($recipe->ingredients as $ingredient)
-                    <li class="list-group-item">{{ $ingredient->name }}</li>
-                @endforeach
-            </ul>
+            <p class="card-text">Container: {{ $pump->container->name }}</p>
+            <p class="card-text">Pin: {{ $pump->pin }}</p>
+            <a href="{{ route('pump.edit', $pump->id) }}" class="btn btn-primary">Edit Pump</a>
         </div>
     </div>
 </div>

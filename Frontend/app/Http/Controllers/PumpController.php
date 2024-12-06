@@ -19,6 +19,15 @@ class PumpController extends Controller
     {
         $containers = Container::all();
         $pins = Pin::cases();
+        $pumps = Pump::all();
+        $pins = array_filter($pins, function ($pin) use ($pumps) {
+            foreach ($pumps as $pump) {
+                if ($pump->pin === $pin->value) {
+                    return false;
+                }
+            }
+            return true;
+        });
         return view('pump.create', compact('containers', 'pins'));
     }
 
@@ -45,17 +54,45 @@ class PumpController extends Controller
 
     public function show($id)
     {
-        // Code to display a specific pump
+        $pump = Pump::find($id);
+        return view('pump.show', ['pump' => $pump]);
     }
 
     public function edit($id)
     {
-        // Code to show form to edit a pump
+        $pump = Pump::find($id);
+        $containers = Container::all();
+        $pins = Pin::cases();
+        $pumps = Pump::all();
+        $pins = array_filter($pins, function ($pin) use ($pumps, $pump) {
+            foreach ($pumps as $p) {
+                if ($p->pin === $pin->value && $p->id !== $pump->id) {
+                    return false;
+                }
+            }
+            return true;
+        });
+        return view('pump.edit', compact('pump', 'containers', 'pins'));
     }
 
     public function update(Request $request, $id)
     {
-        // Code to update a specific pump
+        $validData = $request->validate([
+            'container_id' => 'required|exists:containers,id',
+            'pin' => ['required', function ($attribute, $value, $fail) {
+                if (!Pin::tryFrom($value)) {
+                    $fail('The selected pin is invalid.');
+                }
+            }],
+        ]);
+
+        $pump = Pump::find($id);
+        $pump->update([
+            'container_id' => $validData['container_id'],
+            'pin' => $validData['pin'],
+        ]);
+
+        return redirect()->route('pump.index');
     }
 
     public function destroy($id)
