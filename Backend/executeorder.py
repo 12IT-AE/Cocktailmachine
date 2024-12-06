@@ -10,9 +10,9 @@ logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
 #Berechnet die Laufzeit der Pumpe basierend auf der Menge.
-def getTime(amount):
-    flow_rate = 19  # Durchflussrate in ml/s
-    return amount/flow_rate
+def getTime(amount, pump: Pump):
+    return amount / pump.flowrate
+
 
 
 def executeOrders(order):
@@ -80,9 +80,7 @@ def collect_pumps_from_containers(containers):
 
 
 #Verarbeitet die Verteilung einer Zutat auf mehrere Pumpen.
-def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
-    
-    
+def distribute_ingredient_among_pumps(pumps, amount,containers,threads):  
 
     if containers and pumps:
     # Wähle den ersten Container
@@ -146,8 +144,9 @@ def distribute_ingredient_among_pumps(pumps, amount,containers,threads):
 def ausgabe(amount_per_pump,pumps):
     threads = []
     # Die maximale Zeit, die für das Abpumpen benötigt wird
-    pumptime = getTime(amount_per_pump)
+    
     for pump in pumps:
+        pumptime = getTime(amount_per_pump,pump)
 
         # Thread für das Starten der Pumpe
         pump_thread = Thread(target=pumpcontrol.start_pumpfor, args=(pump.pin, pumptime))
