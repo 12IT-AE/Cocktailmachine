@@ -11,29 +11,29 @@ logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
 def executeOrders(order):
-    recipe_id = order.recipe_id
-    recipe = Default_Recipe.Database().selectByID(recipe_id)
-    if not recipe:
-        logger.error(f"Rezept mit ID {recipe_id} nicht gefunden!")
+    default_recipe_id = order.default_recipe_id
+    default_recipe = Default_Recipe.Database().selectByID(default_recipe_id)
+    if not default_recipe:
+        logger.error(f"Rezept mit ID {default_recipe_id} nicht gefunden!")
         Order.Database().updateStatus(order.id,4)
         return
     
-    logger.info(f"{recipe.name} wird zubereitet")
+    logger.info(f"{default_recipe.name} wird zubereitet")
 
-    if (check_steps(order,recipe) == False):
+    if (check_steps(default_recipe.name,order.id) == False):
         return   
     
     if (check_ingredients_enough(order) == False):
         return
 
-    ingredients = Ingredient.Database().selectByRecipe_id(recipe_id)
+    ingredients = Ingredient.Database().selectByOrder_id(order.id)
     # Berechne den maximalen Schritt des Rezepts
     maxstep = max([int(ingredient.step) for ingredient in ingredients])
     # Schritte des Rezepts durchlaufen
     for step in range(maxstep+1):
         step = int(step)  # Sicherstellen, dass step ein Integer ist
-        logger.info(f"Starte Schritt {step + 1} für {recipe.name}.")
-        ingredient_step =  Ingredient.Database().selectByStepandRecipe_id(step,recipe_id)
+        logger.info(f"Starte Schritt {step + 1} für {default_recipe.name}.")
+        ingredient_step =  Ingredient.Database().selectByStepandOrder_id(step,order.id)
         if not ingredient_step:
             continue
         all_threads = []
@@ -61,7 +61,7 @@ def executeOrders(order):
     
     # Bestellung abschließen
     Order.Database().updateStatus(order.id,2)
-    logger.info(f"{recipe.name} ist fertig")
+    logger.info(f"{default_recipe.name} ist fertig")
 
 #Sammelt alle Pumpen, die den angegebenen Containern zugeordnet sind.
 def collect_pumps_from_containers(containers):
@@ -160,7 +160,7 @@ def group_and_sum_ingredients(ingredients):
 
 def check_ingredients_enough(order):
     # Lade alle Zutaten des Rezepts
-    ingredients = Ingredient.Database().selectByRecipe_id(order.recipe_id)
+    ingredients = Ingredient.Database().selectByOrder_id(order.id)
 
     # Erstelle ein Dictionary, um den Gesamtbedarf für jede Flüssigkeit zu berechnen
     required_liquid_amounts = {}
@@ -196,17 +196,17 @@ def check_ingredients_enough(order):
     # Alle Flüssigkeiten reichen aus
     return True
 
-def check_steps(order,recipe):
-    ingredients = Ingredient.Database().selectByRecipe_id(recipe.id)
+def check_steps(recipe_name,orders_id):
+    ingredients = Ingredient.Database().selectByRecipe_id(orders_id)
     if not ingredients:
-        logger.error(f"Keine Zutaten für Rezept ID {recipe.id} gefunden.")
-        Order.Database().updateStatus(order.id,4)
+        logger.error(f"Keine Zutaten für Rezept ID {orders_id} gefunden.")
+        Order.Database().updateStatus(orders_id,4)
         return False
     maxstep =  max([int(ingredient.step) for ingredient in ingredients])
     # Überprüfen, ob alle Schritte im Rezept Zutaten haben
     for step in range(maxstep + 1):
-        logger.debug(f"Überprüfe Schritt {step + 1} für {recipe.name}.")
-        ingredient_step = Ingredient.Database().selectByStepandRecipe_id(step, recipe.id)
+        logger.debug(f"Überprüfe Schritt {step + 1} für {recipe_name}.")
+        ingredient_step = Ingredient.Database().selectByStepandRecipe_id(step, orders_id)
         
         # Überprüfen, ob Zutaten für diesen Schritt vorhanden sind
         if not ingredient_step:
@@ -223,14 +223,14 @@ def check_steps(order,recipe):
             # Überprüfen, ob die Flüssigkeit existiert
             if not liquid:
                 logger.error(f"Flüssigkeit mit ID {liquid_id} nicht gefunden. Abbruch!")
-                Order.Database().updateStatus(order.id, 4)
+                Order.Database().updateStatus(orders_id, 4)
                 return False
             
             containers = Container.Database().selectByLiquid_id(liquid_id)
             # Überprüfen, ob Container für die Flüssigkeit vorhanden sind
             if not containers:
                 logger.error(f"Keine Container für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
-                Order.Database().updateStatus(order.id, 4)
+                Order.Database().updateStatus(orders_id, 4)
                 return False
 
             # Überprüfen, ob Pumpen für den Container existieren
@@ -238,7 +238,7 @@ def check_steps(order,recipe):
 
             if not pumps:
                 logger.error(f"Keine Pumpen für Flüssigkeit '{liquid.name}' gefunden. Abbruch!")
-                Order.Database().updateStatus(order.id, 4)
+                Order.Database().updateStatus(orders_id, 4)
                 return False
             
     return True
