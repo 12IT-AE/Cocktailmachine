@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Garnish, Recipe, Glass, Liquid, Ingredient};
+use App\Models\{Garnish, DefaultRecipe, Glass, Liquid, Ingredient};
 class RecipeController extends Controller
 {
 
     public function index()
     {
-        $recipes = Recipe::all();
+        $recipes = DefaultRecipe::all();
         
 
         return view('recipe.index', ['recipes' => $recipes]);
@@ -25,13 +25,14 @@ class RecipeController extends Controller
 
     public function show($id)
     {
-        $recipe = new Recipe();
+        $recipe = new DefaultRecipe();
         $recipe = $recipe->find($id);
         return view('recipe/show', ['recipe' => $recipe]);
     }
 
     public function store(Request $request)
 {
+
     $validatedRecipe = $request->validate([
         'glass_id' => 'required|integer',
         'name' => 'required|string|max:255',
@@ -60,7 +61,7 @@ class RecipeController extends Controller
     $amounts = $request->amounts;
     $orders = $request->orders;
 
-    $recipe = Recipe::create($validatedRecipe);
+    $recipe = DefaultRecipe::create($validatedRecipe);
     $liquidAmountOrder = array_map(null, $liquids, $amounts, $orders);
 
     foreach ($liquidAmountOrder as [$liquid, $amount, $order]) {
@@ -87,7 +88,7 @@ class RecipeController extends Controller
 
 public function edit($id)
 {
-    $recipe = Recipe::findOrFail($id);
+    $recipe = DefaultRecipe::findOrFail($id);
     $glasses = Glass::all();
     $liquids = Liquid::all();
     $garnishes = Garnish::all();
@@ -104,7 +105,7 @@ public function edit($id)
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
     
-        $recipe = Recipe::findOrFail($id);
+        $recipe = DefaultRecipe::findOrFail($id);
     
         // Handle image upload
         if ($request->hasFile('image')) {
@@ -150,11 +151,11 @@ public function edit($id)
             }
         }
     
-        return redirect()->route('recipe.index')->with('success', 'Recipe successfully updated.');
+        return redirect()->route('recipe.index')->with('success', 'DefaultRecipe successfully updated.');
     }
     public function destroy($id)
     {
-        $recipe = Recipe::find($id);
+        $recipe = DefaultRecipe::find($id);
         $recipe->delete();
         return redirect()->route('recipe.index');
     }

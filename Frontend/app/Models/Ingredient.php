@@ -12,7 +12,7 @@ class Ingredient extends Model
     public $displayName = "Zutat";
 
     protected $fillable = [
-        'recipe_id',
+        'order_id',
         'liquid_id',
         'amount',
         'step'
@@ -20,7 +20,7 @@ class Ingredient extends Model
     public function liquid(){
         return $this->belongsTo(Liquid::class);
     }
-    public function recipe(){
-        return $this->belongsTo(Recipe::class);
+    public function order(){
+        return $this->belongsTo(Order::class);
     }
 }

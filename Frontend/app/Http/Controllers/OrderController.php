@@ -40,31 +40,22 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $defaultRecipe = DefaultRecipe::find($request->input('recipe_id'));
+        $order = new Order();
+        $order->default_recipe_id = $defaultRecipe->id;
+        $order->status = OrderStatus::PENDING;
+        $order->save();
         
-        // Create a new recipe based on the default recipe
-        $recipe = new Recipe();
-        $recipe->name = $defaultRecipe->name;
-        $recipe->description = $defaultRecipe->description;
-        $recipe->glass_id = $defaultRecipe->glass_id;
-        $recipe->ice = $defaultRecipe->ice;
-        $recipe->image = $defaultRecipe->image;
-        $recipe->save();
-
         // Create custom ingredients for the recipe
         $ingredients = json_decode($request->input('ingredients'), true);
         foreach ($ingredients as $ingredientData) {
             $ingredient = new Ingredient();
-            $ingredient->recipe_id = $recipe->id;
+            $ingredient->order_id = $order->id;
             $ingredient->liquid_id = $ingredientData['liquid_id'];
             $ingredient->step = $ingredientData['step'];
             $ingredient->amount = intval($ingredientData['amount']);
             $ingredient->save();
         }
-
-        $order = new Order();
-        $order->recipe_id = $recipe->id;
-        $order->status = OrderStatus::PENDING;
-        $order->save();
+        
 
         return redirect()->route('order.index')->with('success', 'Order created successfully.');
     }

@@ -96,7 +96,7 @@
                             @foreach ($recipe->ingredients as $ingredient)
                                 @if (!$small && $numberIng <= 5)
                                     <div class="order_ingredient" data-id="{{ $ingredient->liquid->id }}"
-                                        data-amount="{{ $ingredient->amount }}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
+                                        data-amount="{{ $ingredient->amount }}"  data-step="{{$ingredient->step}}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 3, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 5, 2)) }}, 
                                                                                       0.5);">
@@ -106,13 +106,14 @@
                                     </div>
                                 @else
                                     <div class="order_ingredient" data-id="{{ $ingredient->liquid->id }}"
-                                        data-amount="{{ $ingredient->amount }}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
+                                        data-amount="{{ $ingredient->amount }}" data-step="{{$ingredient->step}}" style="background-color: rgba({{ hexdec(substr($ingredient->liquid->color, 1, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 3, 2)) }}, 
                                                                                       {{ hexdec(substr($ingredient->liquid->color, 5, 2)) }}, 
                                                                                       0.5);">
                                         <span class="order_ingredient_name">{{ $ingredient->liquid->name }}</span>
                                         <span class="order_ingredient_amount">{{ $ingredient->amount }}
                                             ml</span>
+
                                     </div>
                                 @endif
                             @endforeach
@@ -130,9 +131,10 @@
         document.querySelectorAll('.order_ingredient').forEach(ingredientElement => {
             const liquidId = ingredientElement.getAttribute('data-id');
             const amount = ingredientElement.getAttribute('data-amount');
+            const step =ingredientElement.getAttribute('data-step');
             ingredients.push({
                 liquid_id: liquidId,
-                step: 0,
+                step: step,
                 amount: amount
             });
         });
