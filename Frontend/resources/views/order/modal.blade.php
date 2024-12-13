@@ -5,7 +5,7 @@
                 <div class="row">
                     <div class="col-3 d-flex flex-column">
                         <div class="order_image_div">
-                            <img onload="updateAmounts({{ $recipe->id }}, 0)" src="{{ asset($recipe->image) }}" class=""
+                            <img onload="updateAmounts(0)" src="{{ asset($recipe->image) }}" class=""
                                 style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 15px"
                                 alt="{{ $recipe->name }}">
                         </div>
