@@ -8,7 +8,7 @@ except:
     import DBconfig
 
 # Name der Tabelle in der Datenbank
-TABLE_NAME = 'recipes'
+TABLE_NAME = 'default_recipes'
 
 # Datenmodell für Recipe
 @dataclass

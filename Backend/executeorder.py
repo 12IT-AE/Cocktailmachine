@@ -1,4 +1,5 @@
-from models import Ingredient,Order,Recipe,Container,Pump,Liquid
+from Backend.models import Default_Recipe
+from models import Ingredient,Order,Container,Pump,Liquid
 import pumpcontrol
 import threading
 from threading import Thread
@@ -11,7 +12,7 @@ logger = logger_singleton.get_logger(__name__)
 
 def executeOrders(order):
     recipe_id = order.recipe_id
-    recipe = Recipe.Database().selectByID(recipe_id)
+    recipe = Default_Recipe.Database().selectByID(recipe_id)
     if not recipe:
         logger.error(f"Rezept mit ID {recipe_id} nicht gefunden!")
         Order.Database().updateStatus(order.id,4)

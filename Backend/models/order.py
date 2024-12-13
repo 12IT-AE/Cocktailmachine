@@ -12,7 +12,7 @@ TABLE_NAME = 'orders'
 # Datenmodell für Order
 @dataclass
 class Order(DBconfig.DBclass):
-    recipe_id:int
+    defaul_recipe_id:int
     status:int
     created_at:Optional[datetime]
     updated_at:Optional[datetime]
@@ -41,7 +41,7 @@ class Database(DBconfig.DBconnect):
         current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.database.insert(TABLE_NAME, {
             'status': status,
-            'recipe_id': recipe_id, 
+            'defaul_recipe_id': recipe_id, 
             'created_at': current_time, 
             'updated_at': current_time
             })

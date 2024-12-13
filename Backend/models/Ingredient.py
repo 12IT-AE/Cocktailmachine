@@ -12,7 +12,7 @@ TABLE_NAME = 'ingredients'
 # Datenmodell für Ingredient
 @dataclass
 class Ingredient(DBconfig.DBclass):
-    recipe_id:int
+    order_id:int
     liquid_id:int
     step:int
     amount:int
@@ -30,11 +30,11 @@ class Database(DBconfig.DBconnect):
         return self._selectByIDFromTable(TABLE_NAME, Ingredient, id)
     
     #Gibt alle Einträge mit einer bestimmten Recipe_id zurück.    
-    def selectByRecipe_id(self, recipe_id):
-        return self._selectByColoumnFromTable(TABLE_NAME,Ingredient,'recipe_id',recipe_id)
+    def selectByRecipe_id(self, order_id):
+        return self._selectByColoumnFromTable(TABLE_NAME,Ingredient,'recipe_id',order_id)
 
     #Gibt alle Einträge mit einer bestimmten Recipe_id und Step zurück.    
-    def selectByStepandRecipe_id(self, step,recipe_id):
-        data = self.database.select(TABLE_NAME,condition=f'step = {step} AND recipe_id ={recipe_id}')
-        return [Ingredient(id=row[0], recipe_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data]
+    def selectByStepandRecipe_id(self, step,order_id):
+        data = self.database.select(TABLE_NAME,condition=f'step = {step} AND order_id ={order_id}')
+        return [Ingredient(id=row[0], order_id=row[1], liquid_id=row[2],step=row[3],amount=row[4],created_at=[5],updated_at=[6]) for row in data]
         
