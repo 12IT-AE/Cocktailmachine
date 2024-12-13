@@ -64,12 +64,7 @@ def executeOrders(order):
 
 #Sammelt alle Pumpen, die den angegebenen Containern zugeordnet sind.
 def collect_pumps_from_containers(containers):
-    pumps = []
-    for container in containers:
-        container_pumps = Pump.Database().selectByContainerID(container.id)
-        if container_pumps:
-            pumps.extend(container_pumps)
-    return pumps
+    return [pump for container in containers for pump in Pump.Database().selectByContainerID(container.id)]
 
 
 #Verarbeitet die Verteilung einer Zutat auf mehrere Pumpen.
@@ -246,7 +241,3 @@ def check_steps(order,recipe):
                 return False
             
     return True
-
-
-
-#überprüfen noch anpassen auf container die auch angeschlossen sind; 
