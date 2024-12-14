@@ -1,4 +1,4 @@
-import time,logging
+import time
 from models import Order,Maintenance
 
 import executeorder

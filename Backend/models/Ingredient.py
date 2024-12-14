@@ -31,7 +31,7 @@ class Database(DBconfig.DBconnect):
     
     #Gibt alle Einträge mit einer bestimmten Recipe_id zurück.    
     def selectByOrder_id(self, order_id):
-        return self._selectByColoumnFromTable(TABLE_NAME,Ingredient,'recipe_id',order_id)
+        return self._selectByColoumnFromTable(TABLE_NAME,Ingredient,'order_id',order_id)
 
     #Gibt alle Einträge mit einer bestimmten Recipe_id und Step zurück.    
     def selectByStepandOrder_id(self, step,order_id):

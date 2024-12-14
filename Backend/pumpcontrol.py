@@ -1,4 +1,4 @@
-import time, logging
+import time
 from models import Pump
 try: 
     import RPi.GPIO as GPIO

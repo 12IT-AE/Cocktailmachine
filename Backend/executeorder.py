@@ -1,4 +1,4 @@
-from Backend.models import Default_Recipe
+from models import Default_Recipe
 from models import Ingredient,Order,Container,Pump,Liquid
 import pumpcontrol
 import threading
@@ -197,7 +197,7 @@ def check_ingredients_enough(order):
     return True
 
 def check_steps(recipe_name,orders_id):
-    ingredients = Ingredient.Database().selectByRecipe_id(orders_id)
+    ingredients = Ingredient.Database().selectByOrder_id(orders_id)
     if not ingredients:
         logger.error(f"Keine Zutaten für Rezept ID {orders_id} gefunden.")
         Order.Database().updateStatus(orders_id,4)
