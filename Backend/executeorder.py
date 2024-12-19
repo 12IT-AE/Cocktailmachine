@@ -206,7 +206,7 @@ def check_steps(recipe_name,orders_id):
     # Überprüfen, ob alle Schritte im Rezept Zutaten haben
     for step in range(maxstep + 1):
         logger.debug(f"Überprüfe Schritt {step + 1} für {recipe_name}.")
-        ingredient_step = Ingredient.Database().selectByStepandRecipe_id(step, orders_id)
+        ingredient_step = Ingredient.Database().selectByStepandOrder_id(step, orders_id)
         
         # Überprüfen, ob Zutaten für diesen Schritt vorhanden sind
         if not ingredient_step:
