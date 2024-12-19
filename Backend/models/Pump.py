@@ -14,9 +14,10 @@ TABLE_NAME = 'pumps'
 class Pump(DBconfig.DBclass):
     container_id:int
     pin:int
+    flowrate:float
     created_at:Optional[datetime]
     updated_at:Optional[datetime] 
-    flowrate:float
+    
 
 
 class Database(DBconfig.DBconnect):
@@ -34,11 +35,11 @@ class Database(DBconfig.DBconnect):
         return self._selectByColoumnFromTable(TABLE_NAME,Pump,'container_id',container_id)
     
     def insertPump(self,status,pump_id,flowrate):
-        current_time = datetime.now()
+        current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         self.database.insert(TABLE_NAME, {
             'container_id': pump_id,
             'pin': status,
+            'flowrate': flowrate,
             'created_at': current_time,
             'updated_at': current_time,
-            'flowrate': flowrate,
         })

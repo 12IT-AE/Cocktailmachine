@@ -66,7 +66,7 @@ class CreateCocktailTables extends Migration
         // Create Orders table
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('default_recipe_id');
+            $table->foreignId('default_recipe_id')->constrained()->onDelete('cascade');
             $table->tinyInteger('status'); // 0 = pending, 1 = in progress, 2 = done, 3 = error
             $table->timestamps();
         });
