@@ -28,7 +28,6 @@ class LiquidController extends Controller
             'alternative_name' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:255',
             'color' => 'required|string|max:255',
-            'alcoholic' => 'required|boolean',
             'volume_percent' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
         ]);
         if(!$validatedData){
@@ -36,7 +35,6 @@ class LiquidController extends Controller
         }
 
 
-        $validatedData['alcoholic'] = (bool) $validatedData['alcoholic'];
         
         $liquid = Liquid::create($validatedData);
 
@@ -60,14 +58,12 @@ class LiquidController extends Controller
             'alternative_name' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:255',
             'color' => 'required|string|max:255',
-            'alcoholic' => 'required|boolean',
             'volume_percent' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
         ]);
         if(!$validatedData){
             return redirect()->route('liquid.edit', ['liquid' => $liquid->id])->withErrors($validatedData)->withInput();
         }
 
-        $validatedData['alcoholic'] = (bool) $validatedData['alcoholic'];
         
         $liquid->update($validatedData);
 
