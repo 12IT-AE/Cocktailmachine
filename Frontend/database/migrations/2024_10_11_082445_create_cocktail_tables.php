@@ -22,17 +22,14 @@ class CreateCocktailTables extends Migration
             $table->id();
             $table->string('name');
             $table->string('alternative_name')->nullable();
-            $table->boolean('alcoholic');
-            $table->integer('volume_percent')->nullable();
-            $table->decimal('alcohol_percent', 5, 2)->nullable();
+            $table->decimal('volume_percent', 5, 2)->nullable();
             $table->string('image')->nullable();
             $table->string('color');
             $table->timestamps();
         });
 
-
         // Create Recipes table
-        Schema::create('recipes', function (Blueprint $table) {
+        Schema::create('default_recipes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('glass_id')->constrained()->onDelete('restrict');
             $table->text('name');
@@ -41,7 +38,6 @@ class CreateCocktailTables extends Migration
             $table->string('image');
             $table->timestamps();
         });
-
 
         // Create Garnish table
         Schema::create('garnishes', function (Blueprint $table) {
@@ -70,30 +66,36 @@ class CreateCocktailTables extends Migration
         // Create Orders table
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipe_id');
+            $table->foreignId('default_recipe_id');
             $table->tinyInteger('status'); // 0 = pending, 1 = in progress, 2 = done, 3 = error
             $table->timestamps();
         });
-
-
 
         // Create Pumps table
         Schema::create('pumps', function (Blueprint $table) {
             $table->id();
             $table->foreignId('container_id')->constrained()->onDelete('cascade');
             $table->integer('pin');
+            $table->decimal('flowrate', 5, 2)->nullable();
             $table->timestamps();
         });
 
         // Create Ingredients table
-        Schema::create('ingredients', function (Blueprint $table) {
+        Schema::create('default_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipe_id')->constrained()->onDelete('cascade');
+            $table->foreignId('default_recipe_id')->constrained("default_recipe", "id")->onDelete('cascade');
             $table->foreignId('liquid_id')->constrained()->onDelete('restrict');
             $table->string('step');
             $table->decimal('amount', 8, 2);
-            $table->integer('volume_percent')->nullable();
-            $table->decimal('alcohol_percent', 5, 2)->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('ingredients', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('order_id')->constrained("orders", "id")->onDelete('cascade');
+            $table->foreignId('liquid_id')->constrained()->onDelete('restrict');
+            $table->string('step');
+            $table->decimal('amount', 8, 2);
             $table->timestamps();
         });
 

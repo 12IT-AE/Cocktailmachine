@@ -14,13 +14,6 @@
             <input type="color" class="form-control" id="color" name="color" required>
         </div>
         <div class="form-group">
-            <label for="alcoholic">Alcoholic:</label>
-            <select class="form-control" id="alcoholic" name="alcoholic" required>
-                <option value="1">True</option>
-                <option value="0">False</option>
-            </select>
-        </div>
-        <div class="form-group">
             <label for="volume_percent">Alkoholgehalt:</label>
             <input type="number" class="form-control" id="volume_percent" name="volume_percent" value="0" required>
         </div>
