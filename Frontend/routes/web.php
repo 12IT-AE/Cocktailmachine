@@ -43,7 +43,7 @@ Route::post('/login', function (Request $request) {
 
 Route::post('/logout', function () {
     session(['admin' => false]);
-    return redirect()->route('recipe.index');
+    return redirect()->route('order.paginatedIndex');
 })->name('logout');
 
 Route::group(['prefix' => ''], function() {
