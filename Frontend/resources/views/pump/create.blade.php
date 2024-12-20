@@ -23,7 +23,7 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="flowrate">Flowrate:</label>
+                    <label for="flowrate">Flowrate (Ml/S)</label>
                     <input type="number" id="flowrate" name="flowrate" value="0" min="1" required>
                 </div>
                 <div class="col-12">

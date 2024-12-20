@@ -15,10 +15,11 @@ class Liquid extends Model
         'image',
         'color',
         'alcoholic',
-        
+        'volume_percent',
     ];
     protected $casts = [
         'alcoholic' => 'boolean',
+        'volume_percent' => 'float',
     ];
     public $displayName = "Flüssigkeit";
 

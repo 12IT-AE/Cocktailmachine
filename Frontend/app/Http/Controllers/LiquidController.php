@@ -28,7 +28,7 @@ class LiquidController extends Controller
             'alternative_name' => 'nullable|string|max:255',
             'image' => 'nullable|string|max:255',
             'color' => 'required|string|max:255',
-            'volume_percent' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'volume_percent' => 'required|numeric',
         ]);
         if(!$validatedData){
             return redirect()->route('liquid.create')->withErrors($validatedData)->withInput();

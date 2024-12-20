@@ -15,7 +15,7 @@
         </div>
         <div class="form-group">
             <label for="volume_percent">Alkoholgehalt:</label>
-            <input type="string" id="volume_percent" name="volume_percent" value="0.0" required>
+            <input type="decimal" id="volume_percent" name="volume_percent" value="0.0" required>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
