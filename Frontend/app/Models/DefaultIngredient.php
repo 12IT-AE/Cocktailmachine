@@ -12,7 +12,7 @@ class DefaultIngredient extends Model
     public $displayName = "Zutat";
 
     protected $fillable = [
-        'recipe_id',
+        'default_recipe_id',
         'liquid_id',
         'amount',
         'step'

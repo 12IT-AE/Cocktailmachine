@@ -33,7 +33,7 @@ class DefaultRecipe extends Model
     }
     public function ingredients()
     {
-        return $this->hasMany(DefaultIngredient::class, 'recipe_id');
+        return $this->hasMany(DefaultIngredient::class, 'default_recipe_id');
     }
 
    

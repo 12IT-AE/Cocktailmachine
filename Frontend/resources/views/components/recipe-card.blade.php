@@ -10,8 +10,8 @@
             <ul>
                 @foreach($recipe->ingredients as $ingredient)
                     <li>{{ $ingredient->liquid->name }} - {{ $ingredient->amount }} ml</li>
-                @endforeach
-                <li>{{ $ingredient->liquid->volume_percent }} - {{ $ingredient->amount }} ml</li>
+                    <li>{{ $ingredient->liquid->volume_percent }} - {{ $ingredient->amount }} ml</li>
+                    @endforeach
             </ul>
         </div>
     </div>

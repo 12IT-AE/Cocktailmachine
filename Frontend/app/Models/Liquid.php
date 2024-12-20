@@ -15,7 +15,7 @@ class Liquid extends Model
         'image',
         'color',
         'alcoholic',
-        'volume_percent',
+        
     ];
     protected $casts = [
         'alcoholic' => 'boolean',

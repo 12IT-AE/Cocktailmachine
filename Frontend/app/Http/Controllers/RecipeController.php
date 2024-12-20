@@ -70,7 +70,7 @@ class RecipeController extends Controller
             return redirect()->route('recipe.create')->withErrors('Bitte wählen Sie eine Flüssigkeit und Menge für das Rezept aus')->withInput();
         }
         DefaultIngredient::create([
-            'recipe_id' => $recipe->id,
+            'default_recipe_id' => $recipe->id,
             'liquid_id' => $liquid,
             'amount' => $amount,
             'step' => $order - 1 // Convert 1-indexed to 0-indexed

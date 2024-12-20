@@ -83,7 +83,7 @@ class CreateCocktailTables extends Migration
         // Create Ingredients table
         Schema::create('default_ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('default_recipe_id')->constrained("default_recipe", "id")->onDelete('cascade');
+            $table->foreignId('default_recipe_id')->constrained("default_recipes", "id")->onDelete('cascade');
             $table->foreignId('liquid_id')->constrained()->onDelete('restrict');
             $table->string('step');
             $table->decimal('amount', 8, 2);
