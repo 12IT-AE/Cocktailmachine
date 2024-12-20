@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Garnish, DefaultRecipe, Glass, Liquid, Ingredient};
+use App\Models\{Garnish, DefaultRecipe, Glass, Liquid, DefaultIngredient};
 class RecipeController extends Controller
 {
 
@@ -69,7 +69,7 @@ class RecipeController extends Controller
             $recipe->delete();
             return redirect()->route('recipe.create')->withErrors('Bitte wählen Sie eine Flüssigkeit und Menge für das Rezept aus')->withInput();
         }
-        Ingredient::create([
+        DefaultIngredient::create([
             'recipe_id' => $recipe->id,
             'liquid_id' => $liquid,
             'amount' => $amount,
@@ -133,7 +133,7 @@ public function edit($id)
     
             foreach ($liquidAmountOrder as [$liquid, $amount, $order]) {
                 if ($liquid != 0 && $amount != 0) {
-                    Ingredient::create([
+                    DefaultIngredient::create([
                         'recipe_id' => $recipe->id,
                         'liquid_id' => $liquid,
                         'amount' => $amount,
