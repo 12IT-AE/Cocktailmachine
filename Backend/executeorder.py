@@ -11,10 +11,10 @@ logger_singleton = Logger()
 logger = logger_singleton.get_logger(__name__)
 
 def executeOrders(order):
-    default_recipe_id = order.default_recipe_id
-    default_recipe = Default_Recipe.Database().selectByID(default_recipe_id)
+    odefault_recipe_id = order.default_recipe_id
+    default_recipe = Default_Recipe.Database().selectByID(odefault_recipe_id)
     if not default_recipe:
-        logger.error(f"Rezept mit ID {default_recipe_id} nicht gefunden!")
+        logger.error(f"Rezept mit ID {odefault_recipe_id} nicht gefunden!")
         Order.Database().updateStatus(order.id,4)
         return
     
