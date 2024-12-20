@@ -40,7 +40,7 @@ class PumpController extends Controller
                     $fail('The selected pin is invalid.');
                 }
             }],
-            'flowrate' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'flowrate' => 'required|numeric|min:1',
         ]);
 
         $pump = Pump::create([
