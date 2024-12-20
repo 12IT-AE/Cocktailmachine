@@ -24,7 +24,7 @@
                 </div>
                 <div class="form-group">
                     <label for="flowrate">Flowrate:</label>
-                    <input type="string" id="flowrate" name="flowrate" value="0.0" required>
+                    <input type="number" id="flowrate" name="flowrate" value="0" min="1" required>
                 </div>
                 <div class="col-12">
                 <button type="submit" class="btn btn-primary">Create</button>

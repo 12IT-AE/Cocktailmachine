@@ -16,7 +16,7 @@
         </div>
         <div class="col-3">
             <label for="amount">Menge (ml)</label>
-            <input type="number" class="form-control" id="amount" name="amounts[]" min="0" value="{{ $ingredient ? $ingredient->amount : '' }}">
+            <input type="number" class="form-control" id="amount" name="amounts[]" min="1" value="{{ $ingredient ? $ingredient->amount : '' }}" required>
         </div>
         <div class="col-4 d-flex align-items-end">
             <button type="button" class="btn btn-danger remove-liquid">Entfernen</button>
