@@ -30,8 +30,8 @@ class GlassController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('images'), $imageName);
-            $validData['image'] = 'images/' . $imageName;
+            $image->move(public_path('images/glasses'), $imageName);
+            $validData['image'] = 'images/glasses/' . $imageName;
         } else {
             $validData['image'] = "";
         }
