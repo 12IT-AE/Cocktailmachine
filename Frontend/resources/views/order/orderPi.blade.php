@@ -1,24 +1,230 @@
 @extends('layouts.app')
 
-@section('content')
-<div class="container">
+<section>
     <h1 class="order_h" style="font-size: 70px; text-align:center;">DrinkPad</h1>
-    <div style="width: 100%;">
-        @foreach($recipes as $recipe)
-            <x-order-element :recipe="$recipe" />
-        @endforeach
-    </div>
-    <div class="modal fade" id="modal">
-        <div class="modal-dialog modal-fullscreen">
-
+    <div id="cCarousel">
+      <div class="arrow" id="prev"><i class="fa-solid fa-chevron-left"><</i></div>
+      <div class="arrow" id="next"><i class="fa-solid fa-chevron-right">></i></div>
+  
+      <div id="carousel-vp">
+        <div id="cCarousel-inner">
+            @foreach($recipes as $recipe)
+                {{-- <article class="cCarousel-item">
+                    <div class="orderElement my-card" data-recipe-id="{{ $recipe->id }}">
+                        <div class="imageBlock">
+                            <img class="cooktailImg"
+                                style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px"
+                                src="{{ asset($recipe->image) }}" alt="">
+                        </div>
+                        <div class="infoBlock">
+                            {{$recipe->name}}
+                        </div>
+                    </div>
+                </article> --}}
+                <article class="cCarousel-item">
+                    <div style="width: 340px" class="orderElement" data-recipe-id="{{ $recipe->id }}">
+                        <div class="imageBlock">
+                            <img class="cooktailImg"
+                                style=" width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 10px"
+                                src="{{ asset($recipe->image) }}" alt="">
+                        </div>
+                        <div class="infoBlock">
+                            {{$recipe->name}}
+                        </div>
+                    </div>
+                </article>
+            @endforeach
+  
         </div>
+      </div>
     </div>
-</div>
-@endsection
+</section>
+  
+  <style>
+          *,
+      ::before,
+      ::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      }
+  
+      body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: #222;
+      }
+  
+      #cCarousel {
+      position: relative;
+      max-width: 1200px;
+      margin: auto;
+      }
+  
+      #cCarousel .arrow {
+      position: absolute;
+      top: 50%;
+      display: flex;
+      width: 45px;
+      height: 45px;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      z-index: 1;
+      font-size: 26px;
+      color: white;
+      background: #00000072;
+      cursor: pointer;
+      }
+  
+      #cCarousel #prev {
+      left: 0px;
+      }
+  
+      #cCarousel #next {
+      right: 0px;
+      }
+  
+      #carousel-vp {
+      width: 1080px;
+      height: 450px;
+      display: flex;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      margin: auto;
+      }
+  
+      @media (max-width: 770px) {
+      #carousel-vp {
+          width: 510px;
+      }
+      }
+  
+      @media (max-width: 510px) {
+      #carousel-vp {
+          width: 250px;
+      }
+      }
+  
+      #cCarousel #cCarousel-inner {
+      display: flex;
+      position: absolute;
+      transition: 0.3s ease-in-out;
+      gap: 10px;
+      left: 0px;
+      }
+  
+      .cCarousel-item {
+      width: 350px;
+      height: 400px;
+      border-radius: 15px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      }
+  
+      .cCarousel-item img {
+      width: 100%;
+      object-fit: cover;
+      min-height: 246px;
+      color: white;
+      }
+  
+      .cCarousel-item .infos {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-around;
+      background: white;
+      color: black;
+      }
+  
+      .cCarousel-item .infos button {
+      background: #222;
+      padding: 10px 30px;
+      border-radius: 15px;
+      color: white;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      }
+  
+  
+  
+  </style>
+
+  <script>
+    const prev = document.querySelector("#prev");
+const next = document.querySelector("#next");
+
+let carouselVp = document.querySelector("#carousel-vp");
+
+let cCarouselInner = document.querySelector("#cCarousel-inner");
+let carouselInnerWidth = cCarouselInner.getBoundingClientRect().width;
+
+let leftValue = 0;
+
+// Variable used to set the carousel movement value (card's width + gap)
+const totalMovementSize =
+  parseFloat(
+    document.querySelector(".cCarousel-item").getBoundingClientRect().width,
+    10
+  ) +
+  parseFloat(
+    window.getComputedStyle(cCarouselInner).getPropertyValue("gap"),
+    10
+  );
+
+prev.addEventListener("click", () => {
+  if (!leftValue == 0) {
+    leftValue -= -totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+  }
+});
+
+next.addEventListener("click", () => {
+  const carouselVpWidth = carouselVp.getBoundingClientRect().width;
+  if (carouselInnerWidth - Math.abs(leftValue) > carouselVpWidth) {
+    leftValue -= totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+  }
+});
+
+const mediaQuery510 = window.matchMedia("(max-width: 510px)");
+const mediaQuery770 = window.matchMedia("(max-width: 770px)");
+
+mediaQuery510.addEventListener("change", mediaManagement);
+mediaQuery770.addEventListener("change", mediaManagement);
+
+let oldViewportWidth = window.innerWidth;
+
+function mediaManagement() {
+  const newViewportWidth = window.innerWidth;
+
+  if (leftValue <= -totalMovementSize && oldViewportWidth < newViewportWidth) {
+    leftValue += totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+    oldViewportWidth = newViewportWidth;
+  } else if (
+    leftValue <= -totalMovementSize &&
+    oldViewportWidth > newViewportWidth
+  ) {
+    leftValue -= totalMovementSize;
+    cCarouselInner.style.left = leftValue + "px";
+    oldViewportWidth = newViewportWidth;
+  }
+}
+
+</script>
 
 
 @push("scripts")
     <script>
+
         $(function () {
             $(document).on('click', '.orderElement', function () {
                 var recipeId = $(this).data('recipe-id');
