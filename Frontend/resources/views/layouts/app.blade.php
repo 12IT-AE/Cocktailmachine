@@ -51,9 +51,6 @@
                         <a class="nav-link" href={{ route('pump.index') }}>Pumpen</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href={{ route('ingredient.index') }}>Zutaten</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href={{ route('glass.index') }}>Gläser</a>
                     </li>
                     <li class="nav-item">
