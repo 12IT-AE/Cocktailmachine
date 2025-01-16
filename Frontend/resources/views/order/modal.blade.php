@@ -29,10 +29,10 @@
                                 style="width: 100%; height: 100%; object-fit: cover; object-position: center; border-radius: 15px;">
                             <div class="image-text-overlay"
                                 style="position: absolute; bottom: 0; left: 0; width: 100%; background: rgba(0, 0, 0, 0.5); color: white; text-align: center; padding: 5px; font-size: 20px;">
-                                {{ $recipe->glass->name }} - {{ $recipe->glass->volume }} ml
+                                {{ $recipe->glass->name }} {{--  - {{ $recipe->glass->volume }} ml --}}
                             </div>
                         </div>
-                        <div class="order_image_div"
+                        {{-- <div class="order_image_div"
                             style="margin-top: 20px; flex: 1; position: relative; display: inline-block;">
                             <!-- Button für -1 -->
                             <div style="width: 30%; float: left;">
@@ -50,7 +50,7 @@
                                 <button class="btn btn-lg btn-block"
                                     style="height: 100%; background-color: grey; width: 100%; border-radius: 15px;">+1</button>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="order_image_div"
                             style="margin-top: 20px; flex: 1; position: relative; display: inline-block;">
