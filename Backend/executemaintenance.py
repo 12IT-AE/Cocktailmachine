@@ -17,7 +17,7 @@ def executeMaintainence(job,pump_runtime=2):
             pumpcontrol.cleanPumps(pump_runtime)  # Du kannst die Dauer der Reinigung hier nach Bedarf anpassen
         
         # Überprüfen, ob pump_id gleich 66 ist
-        elif job.pump_id == 66:
+        elif job.pump_id == -66:
             logger.info("stop running")
             main.running=False
 
