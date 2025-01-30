@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@300..700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <link href={{ asset('css/layout.css') }} rel="stylesheet">
     <link href={{ asset('css/cards.css') }} rel="stylesheet">
@@ -20,6 +21,11 @@
             position: fixed;
             bottom: 10px;
             right: 100px;
+        }
+        .admin-button-pin {
+            position: fixed;
+            bottom: 10px;
+            right: 200px;
         }
     </style>
 </head>
@@ -79,7 +85,8 @@
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>
         @else
-            <a href="{{ route('login_pin') }}" class="btn btn-primary admin-button">Admin</a>
+            <a href="{{ route('login') }}" class="btn btn-primary admin-button">Admin</a>
+            <a href="{{ route('login_pin') }}" class="btn btn-primary admin-button-pin">Admin (Pin)</a>
         @endif
 
         <!-- Errors -->
@@ -115,7 +122,7 @@
 </body>
 
 </html>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     var routeOrder = [
         "{{ route('recipe.index') }}",
