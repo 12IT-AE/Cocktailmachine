@@ -3,8 +3,8 @@
 <section>
     <h1 class="order_h" style="font-size: 70px; text-align:center;">DrinkPad</h1>
     <div id="cCarousel">
-      <div class="arrow" id="prev"><i class="fa-solid fa-chevron-left"><</i></div>
-      <div class="arrow" id="next"><i class="fa-solid fa-chevron-right">></i></div>
+      <div class="arrow" id="prev"><i class="fa-solid fa-chevron-left">&larr;</i></div>
+      <div class="arrow" id="next"><i class="fa-solid fa-chevron-right">&rarr;</i></div>
   
       <div id="carousel-vp">
         <div id="cCarousel-inner">
@@ -34,7 +34,11 @@
                     </div>
                 </article>
             @endforeach
-  
+            <div class="modal fade" id="modal">
+                <div class="modal-dialog modal-fullscreen">
+        
+                </div>
+            </div>
         </div>
       </div>
     </div>

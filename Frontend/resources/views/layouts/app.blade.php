@@ -79,7 +79,7 @@
                 <button type="submit" class="btn btn-danger">Logout</button>
             </form>
         @else
-            <a href="{{ route('login') }}" class="btn btn-primary admin-button">Admin</a>
+            <a href="{{ route('login_pin') }}" class="btn btn-primary admin-button">Admin</a>
         @endif
 
         <!-- Errors -->
@@ -135,7 +135,6 @@
         else{
             window.location.href = routeOrder[routeOrder.length - 1];
         }
-        
     }
 
     function nextRoute() {

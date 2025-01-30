@@ -41,10 +41,18 @@ Route::post('/login', function (Request $request) {
     return redirect()->route('login')->withErrors(['password' => 'Incorrect password']);
 })->name('login');
 
-Route::post('/logout', function () {
-    session(['admin' => false]);
-    return redirect()->route('order.paginatedIndex');
-})->name('logout');
+Route::get('/login_pin', function () {
+    return view('login_pin');
+})->name('login_pin');
+
+Route::post('/login_pin', function (Request $request) {
+    $password = $request->input('password_pin');
+    if ($password === env('ADMIN_PIN')) {
+        session(['admin' => true]);
+        return redirect()->route('recipe.index');
+    }
+    return redirect()->route('login_pin')->withErrors(['password_pin' => 'Incorrect Pin']);
+})->name('login_pin');
 
 Route::group(['prefix' => ''], function() {
     Route::resource('recipe', RecipeController::class);

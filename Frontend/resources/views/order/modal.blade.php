@@ -139,7 +139,6 @@
             });
         });
         
-        
         document.getElementById('ingredientsInput').value = JSON.stringify(ingredients);
         console.log(ingredients);
         console.log(document.getElementById('ingredientsInput').value);
