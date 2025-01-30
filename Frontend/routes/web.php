@@ -54,6 +54,11 @@ Route::post('/login_pin', function (Request $request) {
     return redirect()->route('login_pin')->withErrors(['password_pin' => 'Incorrect Pin']);
 })->name('login_pin');
 
+Route::post('/logout', function () {
+    session(['admin' => false]);
+    return redirect()->route('order.paginatedIndex');
+})->name('logout');
+
 Route::group(['prefix' => ''], function() {
     Route::resource('recipe', RecipeController::class);
     Route::resource('liquid', LiquidController::class);
