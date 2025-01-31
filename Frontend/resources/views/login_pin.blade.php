@@ -9,7 +9,7 @@
         
         <form action="{{ route('login_pin') }}" method="POST">
             @csrf
-            <input type="password" id="pin" name="password_pin" class="form-control text-center fs-1 mb-3 bg-dark" readonly>
+            <input type="password" id="pin" name="password_pin" class="form-control text-center fs-1 mb-3 bg-dark text-white" readonly>
             
             <!-- 3-Column Numeric Keypad -->
             <div class="container">
