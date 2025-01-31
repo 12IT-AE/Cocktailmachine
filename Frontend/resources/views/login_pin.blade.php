@@ -4,29 +4,29 @@
 
 @section('content')
 <div class="d-flex justify-content-center align-items-center vh-100">
-    <div class="card p-4 shadow-lg" style="width: 320px;">
-        <h2 class="text-center mb-3">Enter PIN to Login</h2>
+    <div class="" style="width: 500px;">
+        <h2 class="text-center mb-5 order_h" style='font-size: 75px !important;'>Enter PIN to Login</h2>
         
         <form action="{{ route('login_pin') }}" method="POST">
             @csrf
-            <input type="password" id="pin" name="password_pin" class="form-control text-center fs-4 mb-3" readonly>
+            <input type="password" id="pin" name="password_pin" class="form-control text-center fs-1 mb-3 bg-dark" readonly>
             
             <!-- 3-Column Numeric Keypad -->
             <div class="container">
-                <div class="row g-2">
+                <div class="row g-4">
                     @foreach([1, 2, 3, 4, 5, 6, 7, 8, 9] as $number)
                         <div class="col-4">
-                            <button type="button" class="num-btn btn btn-light w-100 py-3 fs-4">{{ $number }}</button>
+                            <button type="button" class="num-btn btn btn-light w-100 p-0 fs-4 order_h bg-dark text-white display-3" style='font-size: 75px !important;'>{{ $number }}</button>
                         </div>
                     @endforeach
                     <div class="col-4">
-                        <button type="button" class="clear-btn btn btn-danger w-100 py-3 fs-4">C</button>
+                        <button type="button" class="clear-btn btn btn-danger w-100 p-0 fs-4 order_h"style='font-size: 75px !important;'>C</button>
                     </div>
                     <div class="col-4">
-                        <button type="button" class="num-btn btn btn-light w-100 py-3 fs-4">0</button>
+                        <button type="button" class="num-btn btn btn-light w-100 p-0 fs-4 order_h bg-dark text-white" style='font-size: 75px !important;'>0</button>
                     </div>
                     <div class="col-4">
-                        <button type="submit" class="btn btn-primary w-100 py-3 fs-4">OK</button>
+                        <button type="submit" class="btn btn-primary w-100 p-0 fs-4 order_h" style='font-size: 75px !important;'>OK</button>
                     </div>
                 </div>
             </div>
