@@ -14,11 +14,11 @@
             <!-- 3-Column Numeric Keypad -->
             <div class="container">
                 <div class="row g-4">
-                    @foreach([1, 2, 3, 4, 5, 6, 7, 8, 9] as $number)
+                    @for($number = 1; $number <= 9; $number++)
                         <div class="col-4">
                             <button type="button" class="num-btn btn btn-light w-100 p-0 fs-4 order_h bg-dark text-white display-3" style='font-size: 75px !important;'>{{ $number }}</button>
                         </div>
-                    @endforeach
+                    @endfor
                     <div class="col-4">
                         <button type="button" class="clear-btn btn btn-danger w-100 p-0 fs-4 order_h"style='font-size: 75px !important;'>C</button>
                     </div>

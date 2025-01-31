@@ -79,15 +79,18 @@
         @endif
 
         <!-- Admin Button -->
-        @if (session('admin'))
+        @if (session('admin') || session('admin_pin'))
             <form method="POST" action="{{ route('logout') }}" class="admin-button">
                 @csrf
-                <button type="submit" class="btn btn-danger">Logout</button>
+                <button type="submit" class="btn btn-danger admin-button-pin">Logout</button>
             </form>
-        @else
-            <a href="{{ route('login') }}" class="btn btn-primary admin-button">Admin</a>
-            <a href="{{ route('login_pin') }}" class="btn btn-primary admin-button-pin">Admin (Pin)</a>
         @endif
+        @if (session('admin_pin') && !session('admin'))
+        <a href="{{ route('login') }}" class="btn btn-primary admin-button">Admin</a>
+        @elseif(!session('admin') && !session('admin_pin'))
+        <a href="{{ route('login_pin') }}" class="btn btn-primary admin-button">Admin (Pin)</a>
+        @endif
+        
 
         <!-- Errors -->
         @if ($errors->any())

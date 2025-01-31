@@ -48,15 +48,16 @@ Route::get('/login_pin', function () {
 Route::post('/login_pin', function (Request $request) {
     $password = $request->input('password_pin');
     if ($password === env('ADMIN_PIN')) {
-        session(['admin' => true]);
-        return redirect()->route('recipe.index');
+        session(['admin_pin' => true]);
+        return redirect()->route('container.index');
     }
     return redirect()->route('login_pin')->withErrors(['password_pin' => 'Incorrect Pin']);
 })->name('login_pin');
 
 Route::post('/logout', function () {
     session(['admin' => false]);
-    return redirect()->route('order.paginatedIndex');
+    session(['admin_pin' => false]);
+    return redirect()->route('order.index');
 })->name('logout');
 
 Route::group(['prefix' => ''], function() {
