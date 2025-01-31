@@ -60,7 +60,7 @@ Route::post('/logout', function () {
     return redirect()->route('order.index');
 })->name('logout');
 
-Route::group(['prefix' => ''], function() {
+Route::group(['prefix' => ''], function () {
     Route::resource('recipe', RecipeController::class);
     Route::resource('liquid', LiquidController::class);
     Route::resource('pump', PumpController::class);
@@ -73,5 +73,3 @@ Route::group(['prefix' => ''], function() {
     Route::get('/orders', [OrderController::class, 'paginatedIndex'])->name('order.paginatedIndex');
     Route::get('/orderPi', [OrderController::class, 'orderPi'])->name('order.orderPi');
 });
-
-    
