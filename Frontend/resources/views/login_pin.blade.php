@@ -3,9 +3,9 @@
 @section('title', 'Login')
 
 @section('content')
-<div class="d-flex justify-content-center align-items-center vh-100">
+<div class="d-flex justify-content-center align-items-center">
     <div class="" style="width: 500px;">
-        <h2 class="text-center mb-5 order_h" style='font-size: 75px !important;'>Enter PIN to Login</h2>
+        <h2 class="text-center mb-3 mt-0 order_h" style='font-size: 75px !important;'>Enter PIN to Login</h2>
         
         <form action="{{ route('login_pin') }}" method="POST">
             @csrf
